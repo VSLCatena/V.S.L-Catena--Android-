@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "657394662159",
+    "firebase_url": "https://vsl-catena.firebaseio.com",
+    "project_id": "vsl-catena",
+    "storage_bucket": "vsl-catena.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:657394662159:android:96733ef0882822d7",
+        "android_client_info": {
+          "package_name": "nl.vslcatena.vslcatena"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "657394662159-tkov9nmtj3o9774dcjv3rkahk70ekhbd.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "nl.vslcatena.vslcatena",
+            "certificate_hash": "0985cf8e7c707495b68bf1f69522f70673bd5b14"
+          }
+        },
+        {
+          "client_id": "657394662159-8edk1es2k657mls5gm7hdpau71c910cd.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAfFizwVbPra-yst4o5_8M6mSdP-lb84Lc"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "657394662159-8edk1es2k657mls5gm7hdpau71c910cd.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
