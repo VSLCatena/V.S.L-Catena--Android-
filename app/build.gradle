@@ -28,17 +28,32 @@ android {
 }
 
 dependencies {
+
+    def support_version = "27.1.1"
+    def nav_version = "1.0.0-alpha02"
+
+
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
-    implementation 'com.android.support:appcompat-v7:27.1.1'
+    implementation "com.android.support:appcompat-v7:$support_version"
     implementation 'com.android.support.constraint:constraint-layout:1.1.0'
-    implementation 'com.android.support:support-v4:27.1.1'
-    implementation 'com.android.support:design:27.1.1'
+    implementation "com.android.support:support-v4:$support_version"
+    implementation "com.android.support:design:$support_version"
     implementation 'com.google.firebase:firebase-database:15.0.0'
     implementation "android.arch.lifecycle:extensions:1.1.1"
+    implementation "com.android.support:recyclerview-v7:$support_version"
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+
+
+    implementation "android.arch.navigation:navigation-fragment-ktx:$nav_version"
+    implementation "android.arch.navigation:navigation-ui-ktx:$nav_version"
+    androidTestImplementation "android.arch.navigation:navigation-testing-ktx:$nav_version" // use -ktx for Kotlin
+
+//    implementation 'com.google.android.material:material:1.0.0-alpha3'
+
+    implementation 'com.android.support:cardview-v7:27.1.1'
 }
 
 
