@@ -4,10 +4,7 @@ import android.arch.lifecycle.*
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentActivity
 import android.util.Log
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.*
 import java.lang.ref.WeakReference
 
 /**
@@ -16,11 +13,11 @@ import java.lang.ref.WeakReference
 class LiveViewModel: ViewModel() {
     private val references = HashMap<String, Reference>()
 
-    fun get(reference: String): LiveData<DataSnapshot> {
-        if(!references.contains(reference)){
-            references[reference] = Reference(reference)
+    fun get(reference: Query): LiveData<DataSnapshot> {
+        if(!references.contains(reference.toString())){
+            references[reference.toString()] = Reference(reference)
         }
-        return references[reference]!!.liveData
+        return references[reference.toString()]!!.liveData
     }
 
     override fun onCleared() {
@@ -37,11 +34,31 @@ class LiveViewModel: ViewModel() {
         class Provider(_viewModel: LiveViewModel, lifecycleOwner: LifecycleOwner) {
             private val viewModel = WeakReference(_viewModel)
             private val lifecycleOwner = WeakReference(lifecycleOwner)
+            private var enabledOnly = false
+            private var filter: (DatabaseReference) -> Query = { it }
 
-            fun observeRaw(reference: String, observeOnce: Boolean = false, block: (DataSnapshot?) -> Unit) {
+            fun getViewModel() = viewModel.get()
+
+            private fun getReference(reference: String): Query {
+                val fbReference = FirebaseDatabase.getInstance().getReference(reference)
+                return if(enabledOnly) {
+                    fbReference.child("enabled").equalTo(true)
+                } else filter.invoke(fbReference)
+            }
+
+            fun filter(filter: (DatabaseReference) -> Query): Provider {
+                this.filter = filter
+                return this
+            }
+
+            fun observeRaw(reference: String,
+                           observeOnce: Boolean = false,
+                           enabledOnly: Boolean = false,
+                           block: (DataSnapshot?) -> Unit) {
+                this.enabledOnly = enabledOnly
                 viewModel.get()?.let { viewModel ->
                     lifecycleOwner.get()?.let { lifecycleOwner ->
-                        val liveData = viewModel.get(reference)
+                        val liveData = viewModel.get(getReference(reference))
                         liveData.observe(lifecycleOwner, object : Observer<DataSnapshot> {
                             override fun onChanged(dataSnapshot: DataSnapshot?) {
                                 block.invoke(dataSnapshot)
@@ -54,29 +71,49 @@ class LiveViewModel: ViewModel() {
                 }
             }
 
-            fun <T> observe(clazz: Class<T>, observeOnce: Boolean = false, block: (T?) -> Unit){
-                observeRaw(clazz.getAnnotation(FirebaseReference::class.java).singleReference, observeOnce){
-                    block.invoke(if(it == null) null else Deserializer.deserialize(it, clazz))
+            fun <T> observe(clazz: Class<T>,
+                            objectId: String? = null,
+                            reference: String = clazz.getAnnotation(FirebaseReference::class.java).singleReference,
+                            observeOnce: Boolean = false,
+                            block: (T?) -> Unit){
+                val iReference = if(objectId == null) reference else reference.format(objectId)
+                observeRaw(iReference, observeOnce){
+                    block.invoke(if(it == null || !it.exists()) null else Deserializer.deserialize(it, clazz))
                 }
             }
 
-            fun <T> observeList(clazz: Class<T>, observeOnce: Boolean = false, block: (List<T>) -> Unit){
-                observeRaw(clazz.getAnnotation(FirebaseReference::class.java).listReference, observeOnce){
-                    block.invoke(if(it == null) ArrayList() else Deserializer.deserializeList(it, clazz))
+            fun <T> observeMap(clazz: Class<T>,
+                               reference: String = clazz.getAnnotation(FirebaseReference::class.java).listReference,
+                               observeOnce: Boolean = false,
+                               enabledOnly: Boolean = false,
+                               block: (Map<String, T>) -> Unit){
+                this.enabledOnly = enabledOnly
+                observeRaw(reference, observeOnce){
+                    block.invoke(if(it == null || !it.exists()) HashMap() else Deserializer.deserializeMap(it, clazz))
+                }
+            }
+
+            fun <T> observeList(clazz: Class<T>,
+                                reference: String = clazz.getAnnotation(FirebaseReference::class.java).listReference,
+                                observeOnce: Boolean = false,
+                                enabledOnly: Boolean = false,
+                                block: (List<T>) -> Unit){
+                this.enabledOnly = enabledOnly
+                observeRaw(reference, observeOnce){
+                    block.invoke(if(it == null || !it.exists()) ArrayList() else Deserializer.deserializeList(it, clazz))
                 }
             }
         }
     }
 
-    inner class Reference(reference: String){
-        private val reference = FirebaseDatabase.getInstance().getReference(reference)
+    inner class Reference(private val reference: Query){
         val liveData = MutableLiveData<DataSnapshot>()
         private val listener = object: ValueEventListener {
-            override fun onCancelled(p0: DatabaseError?) {
-                Log.d(LOG_TAG, p0?.message+" "+p0?.details)
+            override fun onCancelled(p0: DatabaseError) {
+                Log.d(LOG_TAG, p0.message+" "+p0.details)
             }
 
-            override fun onDataChange(p0: DataSnapshot?) {
+            override fun onDataChange(p0: DataSnapshot) {
                 liveData.value = p0
             }
         }

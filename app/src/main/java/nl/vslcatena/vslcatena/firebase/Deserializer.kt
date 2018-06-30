@@ -18,33 +18,48 @@ object Deserializer {
                 }
 
                 field.isAccessible = true
-                field.set(obj, deserializeObject(it, field))
+                field.set(obj, deserializeObject(it, field.type, field))
             }
         }
 
         return obj
     }
 
-    fun <T> deserializeObject(dataSnapshot: DataSnapshot, field: Field): T {
+    fun <T> deserializeObject(dataSnapshot: DataSnapshot, clazz: Class<T>, field: Field? = null): T {
         return when {
-            List::class.java.isAssignableFrom(field.type) -> {
-                deserializeList(dataSnapshot, field.getAnnotation(ListType::class.java)?.value?.java ?: Any::class.java) as T
+            List::class.java.isAssignableFrom(clazz) -> {
+                deserializeList(dataSnapshot, field?.getAnnotation(ListType::class.java)?.value?.java ?: Any::class.java) as T
             }
-            Map::class.java.isAssignableFrom(field.type) -> {
-                deserializeMap(dataSnapshot.child(field.name), field.getAnnotation(ListType::class.java)?.value?.java ?: Any::class.java) as T
+            Map::class.java.isAssignableFrom(clazz) -> {
+                deserializeMap(dataSnapshot, field?.getAnnotation(ListType::class.java)?.value?.java ?: Any::class.java) as T
             }
-            BaseModel::class.java.isAssignableFrom(field.type) -> {
-                deserialize(dataSnapshot.child(field.name), field.type) as T
+            BaseModel::class.java.isAssignableFrom(clazz) -> {
+                deserialize(dataSnapshot, clazz)
             }
-            else -> dataSnapshot.getValue(field.type) as T
+            else -> dataSnapshot.getValue(clazz) as T
         }
     }
 
     fun <T> deserializeList(dataSnapshot: DataSnapshot, clazz: Class<T>): List<T> {
-        return dataSnapshot.children.map { deserialize(it, clazz) }.toList()
+        val list = dataSnapshot.children.map { deserializeObject(it, clazz) }.toMutableList()
+        try {
+            val orderField = clazz.getDeclaredField("orderNumber")
+            orderField.isAccessible = true
+            list.sortBy { orderField.get(it)?.toString() ?: "0" }
+        } catch(e: NoSuchFieldException){}
+
+        return list
     }
 
     fun <T> deserializeMap(dataSnapshot: DataSnapshot, clazz: Class<T>): Map<String, T> {
-        return dataSnapshot.children.map { it.key to deserialize(it, clazz) }.toMap()
+        val list = dataSnapshot.children.map { it.key!! to deserializeObject(it, clazz) }.toMutableList()
+
+        try {
+            val orderField = clazz.getDeclaredField("orderNumber")
+            orderField.isAccessible = true
+            list.sortBy { orderField.get(it.second)?.toString() ?: "0" }
+        } catch(e: NoSuchFieldException){}
+
+        return list.toMap().toMutableMap()
     }
 }
