@@ -1,21 +1,20 @@
-package nl.vslcatena.vslcatena.controllers
+package nl.vslcatena.vslcatena
 
 import android.os.Bundle
-import android.support.annotation.LayoutRes
 import android.support.design.widget.NavigationView
 import android.support.v4.view.GravityCompat
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
-import kotlinx.android.synthetic.main.activity_base.*
-import nl.vslcatena.vslcatena.R
+import androidx.navigation.Navigation.findNavController
+import kotlinx.android.synthetic.main.base.*
 
-abstract class BaseActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
+class BaseActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        super.setContentView(R.layout.activity_base)
+        super.setContentView(R.layout.base)
         setSupportActionBar(toolbar)
 
         val toggle = ActionBarDrawerToggle(
@@ -26,17 +25,8 @@ abstract class BaseActivity : AppCompatActivity(), NavigationView.OnNavigationIt
         nav_view.setNavigationItemSelectedListener(this)
     }
 
-    override fun setContentView(@LayoutRes layoutRes: Int){
-        layoutInflater.inflate(layoutRes, findViewById(R.id.container))
-    }
-
-    override fun onBackPressed() {
-        if (drawer_layout.isDrawerOpen(GravityCompat.START)) {
-            drawer_layout.closeDrawer(GravityCompat.START)
-        } else {
-            super.onBackPressed()
-        }
-    }
+    override fun onSupportNavigateUp()
+            = findNavController(this, R.id.nav_host).navigateUp()
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Inflate the menu; this adds items to the action bar if it is present.

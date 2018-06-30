@@ -71,7 +71,7 @@ class LiveViewModel: ViewModel() {
                 }
             }
 
-            fun <T> observe(clazz: Class<T>,
+            fun <T> observeSingle(clazz: Class<T>,
                             objectId: String? = null,
                             reference: String = clazz.getAnnotation(FirebaseReference::class.java).singleReference,
                             observeOnce: Boolean = false,
@@ -93,7 +93,7 @@ class LiveViewModel: ViewModel() {
                 }
             }
 
-            fun <T> observeList(clazz: Class<T>,
+            fun <T> observe(clazz: Class<T>,
                                 reference: String = clazz.getAnnotation(FirebaseReference::class.java).listReference,
                                 observeOnce: Boolean = false,
                                 enabledOnly: Boolean = false,
