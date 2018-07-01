@@ -3,8 +3,9 @@ package nl.vslcatena.vslcatena.controllers
 import android.view.View
 import nl.vslcatena.vslcatena.R
 import nl.vslcatena.vslcatena.controllers.dummy.DummyContent
+import nl.vslcatena.vslcatena.lists.normal.ListFragment
 import nl.vslcatena.vslcatena.models.PromoItem
-import nl.vslcatena.vslcatena.recyclerview.ListFragmentRecyclerViewAdapter
+import nl.vslcatena.vslcatena.lists.normal.ListFragmentRecyclerViewAdapter
 import nl.vslcatena.vslcatena.recyclerview.PromoViewHolder
 //todo this must be a firebase list fragment.
 class PromoFragment : ListFragment<PromoItem, PromoViewHolder>() {
