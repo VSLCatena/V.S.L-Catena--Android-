@@ -9,7 +9,7 @@ import nl.vslcatena.vslcatena.util.extensions.applyArguments
 /**
  * Abstract child of the ListFragment. Gets the items from firebase. Has option to use single observation.
  */
-abstract class FirebaseListFragment<T, VH: RecyclerView.ViewHolder>(val clazz: Class<T>): ListFragment<T, VH>() {
+abstract class FirebaseListFragment<T, VH: RecyclerView.ViewHolder>(private val clazz: Class<T>): ListFragment<T, VH>() {
     final override var mItems: List<T> = ArrayList()
 
     private var singleObservation: Boolean = true
@@ -22,7 +22,7 @@ abstract class FirebaseListFragment<T, VH: RecyclerView.ViewHolder>(val clazz: C
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        LiveViewModel.of(this).observeList(clazz, singleObservation) {
+        LiveViewModel.of(this).observe(clazz = clazz, observeOnce = singleObservation) {
             setItems(it)
         }
     }

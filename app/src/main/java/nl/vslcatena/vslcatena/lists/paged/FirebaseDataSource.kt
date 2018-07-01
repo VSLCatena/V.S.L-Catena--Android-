@@ -14,7 +14,7 @@ import nl.vslcatena.vslcatena.firebase.LiveViewModel
 
 class FirebaseDataSource<T: FirebaseModel>(private val clazz: Class<T>, private val provider: LiveViewModel.Companion.Provider): ItemKeyedDataSource<String, T>(){
     override fun loadInitial(params: LoadInitialParams<String>, callback: LoadInitialCallback<T>) {
-        provider.observeList(clazz, true){
+        provider.observe(clazz = clazz, observeOnce = true){
             Log.d("InitialListSize", it.size.toString())
             //callback.onResult(it)
         }

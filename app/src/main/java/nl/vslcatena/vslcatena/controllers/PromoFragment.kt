@@ -1,18 +1,17 @@
 package nl.vslcatena.vslcatena.controllers
 
+import android.support.v7.widget.RecyclerView
 import android.view.View
+import android.widget.TextView
+import kotlinx.android.synthetic.main.promo_item.view.*
 import nl.vslcatena.vslcatena.R
-import nl.vslcatena.vslcatena.controllers.dummy.DummyContent
-import nl.vslcatena.vslcatena.lists.normal.ListFragment
+import nl.vslcatena.vslcatena.lists.normal.FirebaseListFragment
 import nl.vslcatena.vslcatena.models.PromoItem
 import nl.vslcatena.vslcatena.lists.normal.ListFragmentRecyclerViewAdapter
-import nl.vslcatena.vslcatena.recyclerview.PromoViewHolder
-//todo this must be a firebase list fragment.
-class PromoFragment : ListFragment<PromoItem, PromoViewHolder>() {
 
-    override var mItems: List<PromoItem> = DummyContent.ITEMS
+class PromoFragment : FirebaseListFragment<PromoItem, PromoFragment.PromoViewHolder>(PromoItem::class.java) {
+
     override fun createAdapter(): ListFragmentRecyclerViewAdapter<PromoItem, PromoViewHolder> {
-
         return object : ListFragmentRecyclerViewAdapter<PromoItem, PromoViewHolder>(mItems, null, R.layout.promo_item){
 
             override fun createViewHolder(view: View): PromoViewHolder {
@@ -27,4 +26,15 @@ class PromoFragment : ListFragment<PromoItem, PromoViewHolder>() {
 
         }
     }
+
+    inner class PromoViewHolder(val mView: View) : RecyclerView.ViewHolder(mView) {
+        val mTitleView: TextView = mView.title
+        val mContentView: TextView = mView.content
+
+
+        override fun toString(): String {
+            return super.toString() + " '" + mContentView.text + "'"
+        }
+    }
+
 }
