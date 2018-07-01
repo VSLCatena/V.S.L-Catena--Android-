@@ -7,10 +7,13 @@ import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
+import androidx.navigation.NavController
 import androidx.navigation.Navigation.findNavController
 import kotlinx.android.synthetic.main.base.*
 
 class BaseActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
+
+    lateinit var navController: NavController
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -23,10 +26,11 @@ class BaseActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         toggle.syncState()
 
         nav_view.setNavigationItemSelectedListener(this)
+        navController = findNavController(this, R.id.nav_host)
     }
 
     override fun onSupportNavigateUp()
-            = findNavController(this, R.id.nav_host).navigateUp()
+            = navController.navigateUp()
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -47,24 +51,27 @@ class BaseActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         // Handle navigation view item clicks here.
         when (item.itemId) {
-//            R.id.nav_camera -> {
-//                // Handle the camera action
-//            }
-//            R.id.nav_gallery -> {
-//
-//            }
-//            R.id.nav_slideshow -> {
-//
-//            }
-//            R.id.nav_manage -> {
-//
-//            }
-//            R.id.nav_share -> {
-//
-//            }
-//            R.id.nav_send -> {
-//
-//            }
+            R.id.nav_news -> {
+                navController.navigate(R.id.homeFragment)
+            }
+            R.id.nav_promo -> {
+                navController.navigate(R.id.promoFragment)
+            }
+            R.id.nav_magazines -> {
+
+            }
+            R.id.nav_rules -> {
+
+            }
+            R.id.nav_faq -> {
+
+            }
+            R.id.nav_bingo -> {
+                navController.navigate(R.id.bingoFragment)
+            }
+            R.id.nav_crying_wall -> {
+
+            }
         }
 
         drawer_layout.closeDrawer(GravityCompat.START)
