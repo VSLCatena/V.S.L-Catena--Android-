@@ -14,11 +14,11 @@ import nl.vslcatena.vslcatena.firebase.BaseModel
  * //TODO add reference to person who placed the promo? And add when the post was made.
  *
  */
-data class PromoItem(val id: String,
+data class PromoItem(val id: Int,
                 val title: String,
                 val content: String,
                 val imageRef: String,
                 val tags: Array<String>,
                 val adventureId: String) :BaseModel{
-    constructor(): this("", "", "", "", arrayOf<String>(), "")
+    constructor(): this(-1, "", "", "", arrayOf<String>(), "")
 }

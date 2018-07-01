@@ -1,4 +1,4 @@
-package nl.vslcatena.vslcatena.controllers
+package nl.vslcatena.vslcatena.lists.normal
 
 import android.os.Bundle
 import android.support.v7.widget.RecyclerView
@@ -29,7 +29,7 @@ abstract class FirebaseListFragment<T, VH: RecyclerView.ViewHolder>(val clazz: C
     companion object {
         protected const val ARG_SINGLE_OBSERVATION = "singleObservation"
 
-        fun applyArguments(instance: ListFragment<*,*>,
+        fun applyArguments(instance: ListFragment<*, *>,
                            columnCount: Int = 1,
                            singleObservation: Boolean = true){
             ListFragment.applyArguments(instance, columnCount)
