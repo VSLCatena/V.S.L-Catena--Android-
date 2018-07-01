@@ -6,7 +6,6 @@ import android.arch.paging.PagedList
 import android.os.Bundle
 import android.support.v7.widget.RecyclerView
 import android.view.View
-import nl.vslcatena.vslcatena.firebase.FirebaseModel
 import nl.vslcatena.vslcatena.firebase.LiveViewModel
 import nl.vslcatena.vslcatena.lists.normal.ListFragment
 import nl.vslcatena.vslcatena.util.extensions.applyArguments

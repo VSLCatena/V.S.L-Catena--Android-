@@ -9,7 +9,6 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import nl.vslcatena.vslcatena.firebase.Deserializer
-import nl.vslcatena.vslcatena.firebase.FirebaseModel
 import nl.vslcatena.vslcatena.firebase.FirebaseReference
 import nl.vslcatena.vslcatena.firebase.LiveViewModel
 
@@ -48,7 +47,7 @@ class FirebaseDataSource<T: FirebaseModel>(private val clazz: Class<T>, private 
         //TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
-    override fun getKey(item: T) = item.id1
+    override fun getKey(item: T) = item.id
 
 }
 
