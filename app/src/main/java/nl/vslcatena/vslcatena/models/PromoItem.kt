@@ -16,11 +16,11 @@ import nl.vslcatena.vslcatena.firebase.FirebaseReference
  *
  */
 @FirebaseReference("promo")
-data class PromoItem(val id: Int,
+data class PromoItem(override val id: String,
                 val title: String,
                 val content: String,
                 val imageRef: String,
                 val tags: List<String>,
                 val adventureId: Int) :BaseModel{
-    constructor(): this(-1, "", "", "", listOf<String>(), -1)
+    constructor(): this("", "", "", "", listOf<String>(), -1)
 }

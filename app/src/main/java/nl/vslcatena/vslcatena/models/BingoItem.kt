@@ -8,7 +8,7 @@ import nl.vslcatena.vslcatena.firebase.FirebaseReference
  * @param content The situation (described with text) that needs to happen to cross the item of a bingo list
  */
 @FirebaseReference("")
-data class BingoItem(val id: String,
+data class BingoItem(override val id: String,
                      val content: String): BaseModel {
     constructor(): this("", "")
 }

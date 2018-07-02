@@ -20,11 +20,11 @@ class FirebaseDataSource<T: FirebaseModel>(private val clazz: Class<T>, private 
         }
 
         FirebaseDatabase.getInstance().getReference(clazz.getAnnotation(FirebaseReference::class.java).listReference).limitToFirst(params.requestedLoadSize).addListenerForSingleValueEvent(object: ValueEventListener{
-            override fun onCancelled(p0: DatabaseError?) {
+            override fun onCancelled(p0: DatabaseError) {
                 TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
             }
 
-            override fun onDataChange(p0: DataSnapshot?) {
+            override fun onDataChange(p0: DataSnapshot) {
                 val list = if(p0 == null) ArrayList() else Deserializer.deserializeList(p0, clazz)
                 Log.d("InitialListSize", list.size.toString())
 
