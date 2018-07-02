@@ -10,4 +10,15 @@
         android:name="nl.vslcatena.vslcatena.controllers.HomeFragment"
         android:label="home_fragment"
         tools:layout="@layout/home" />
+    <fragment
+        android:id="@+id/promoFragment"
+        android:name="nl.vslcatena.vslcatena.controllers.PromoFragment"
+        android:label="fragment_list"
+        tools:layout="@layout/fragment_list" />
+    <fragment
+        android:id="@+id/bingoFragment"
+        android:name="nl.vslcatena.vslcatena.controllers.BingoFragment"
+        android:label="BingoFragment" />
+
+
 </navigation>
