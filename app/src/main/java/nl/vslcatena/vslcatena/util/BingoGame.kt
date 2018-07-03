@@ -20,7 +20,7 @@ class BingoGame(private val boardSize: Int, private val onGameWon: (winningField
      * @param content String that identify when the player should mark this field.
      * @param marked True: field is marked, False: field is not marked.
      */
-    data class BingoField(val content: String, var marked: Boolean)
+    data class BingoField(var content: String, var marked: Boolean)
 
     //The board. Board is a 2d array of BingoField objects.
     private val board = Array(boardSize) { y ->
@@ -91,6 +91,13 @@ class BingoGame(private val boardSize: Int, private val onGameWon: (winningField
         }
 
         return checkHorizontalWins() + checkVerticalWins() + checkDiagonalWins()
+    }
+
+
+    fun getFieldsAsList(): ArrayList<BingoField> {
+        val tiles = ArrayList<BingoField>()
+        board.forEach { it.forEach { tiles.add(it)} }
+        return tiles
     }
 
 }
