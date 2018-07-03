@@ -4,10 +4,11 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import nl.vslcatena.vslcatena.lists.OnListItemClickedListener
 
 abstract class ListFragmentRecyclerViewAdapter<T, VH: RecyclerView.ViewHolder>(
         private var mItems: List<T>,
-        private val mListener: ListFragment.OnListItemClickedListener<T>?,
+        private val mListener: OnListItemClickedListener<T>?,
         private val mViewId: Int)
     : RecyclerView.Adapter<VH>() {
 

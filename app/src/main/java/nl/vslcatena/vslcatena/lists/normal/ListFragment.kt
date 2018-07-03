@@ -10,6 +10,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import nl.vslcatena.vslcatena.R
+import nl.vslcatena.vslcatena.lists.OnListItemClickedListener
 import nl.vslcatena.vslcatena.util.extensions.applyArguments
 
 /**
@@ -73,9 +74,7 @@ abstract class ListFragment<T, VH: RecyclerView.ViewHolder> : Fragment() {
     }
 
 
-    interface OnListItemClickedListener<T> {
-        fun onListItemClicked(item: T)
-    }
+
 
     companion object {
         protected const val ARG_COLUMN_COUNT = "column-count"

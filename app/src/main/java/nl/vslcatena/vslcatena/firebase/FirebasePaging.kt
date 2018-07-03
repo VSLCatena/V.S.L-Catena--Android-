@@ -14,7 +14,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.google.firebase.database.*
 
-abstract class FirebasePagingAdapter<T: BaseModel>(private val context: Context) : PagedListAdapter<T, FirebasePagingAdapter<T>.ItemViewHolder>(object: DiffUtil.ItemCallback<T>(){
+abstract class FirebasePagingAdapter<T: BaseModel, VH: RecyclerView.ViewHolder>(private val context: Context) : PagedListAdapter<T, VH>(object: DiffUtil.ItemCallback<T>(){
     // This is just used for checking if two items are the same
     override fun areItemsTheSame(oldItem: T, newItem: T) =
             oldItem.id == newItem.id
@@ -23,15 +23,16 @@ abstract class FirebasePagingAdapter<T: BaseModel>(private val context: Context)
     override fun areContentsTheSame(oldItem: T, newItem: T) =
         oldItem.toString() == newItem.toString()
 }) {
-    inner class ItemViewHolder(v: View) : RecyclerView.ViewHolder(v)
+    //inner class ItemViewHolder(v: View) : RecyclerView.ViewHolder(v)
 
     // To make everything as easy as possible, I have chosen to create the viewholder automatically
     // and let you override getView and onBindViewHolder yourself
     @LayoutRes
     abstract fun getView(): Int
+    abstract fun createViewHolder(view: View): VH
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
-            ItemViewHolder(LayoutInflater.from(context).inflate(getView(), parent, false))
+            createViewHolder(LayoutInflater.from(context).inflate(getView(), parent, false))
 
 
     /* Recyclerview binders */
