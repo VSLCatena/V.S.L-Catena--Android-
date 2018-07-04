@@ -1,103 +1,121 @@
 package nl.vslcatena.vslcatena.util
 
+import java.util.Random
+import kotlin.collections.HashSet
+
+typealias BingoItem = String
+
 /**
- * Bingo game instance used for the Bingo page. This is the backend of the bingo game, where the logics are defined.
+ * This is an ease of use class that handles all the BingoGame mechanics for us.
  *
- * @param boardSize The length and width of the board
- * @param onGameWon Action that should be run when the game is won.
+ * @param size the gridsize of the bingo game you want to create
+ * @param textList a list of all possible texts to fill the bingo with
  *
- * When field is marked:
- *  Check for winconditions
- *      1. Horizontal
- *      2. Vertical
- *      3. Diagonal
- *     Return all winconditions
+ * Make sure the {@link #textList} is bigger than the size squared! D:
  */
-class BingoGame(private val boardSize: Int, private val onGameWon: (winningFields: Set<BingoField>) -> Unit ={}){
+class BingoGame(val size: Int = 5, textList: List<BingoItem>) {
+    /**
+     * Contains a list of which text is at which position.
+     * We keep this separated from {@link #marked} to speed up search time
+     */
+    val cellText: Array<BingoItem>
 
     /**
-     * A field of the bingo board
-     * @param content String that identify when the player should mark this field.
-     * @param marked True: field is marked, False: field is not marked.
+     * Contains a list of if which items are marked and which are not.
+     * We keep this separated from {@link #cellText} to speed up search time
      */
-    data class BingoField(var content: String, var marked: Boolean)
+    val marked: Array<Boolean>
 
-    //The board. Board is a 2d array of BingoField objects.
-    private val board = Array(boardSize) { y ->
-        Array(boardSize){ x ->
-            BingoField("$y-$x", false)
-        }
+    init {
+        val mutableTextList = textList.toMutableList()
+        cellText = Array(size*size){ mutableTextList.removeAt(Random().nextInt(mutableTextList.size)) }
+        marked = Array(cellText.size){ false }
     }
 
-    //Marks (or unmarks) the field at the given x and y values. If the field gets marked, it checks if the game is won. If so the onGameWon action gets performed.
-    fun markField(x: Int, y: Int, mark: Boolean = true){
-        getField(x,y).marked = mark
-        if (mark){
-            val set = checkIfWon()
-            if (set.isNotEmpty())
-                onGameWon(set)
-        }
+    /**
+     * Checks if a field is marked
+     */
+    fun isFieldMarked(x: Int, y: Int) = marked[x*size+y]
+
+    /**
+     * A convinience method to get the text of a certain field
+     */
+    fun getFieldText(x: Int, y: Int) = cellText[x*size+y]
+
+    /**
+     * A convinience method to toggle a certain field
+     */
+    fun toggleField(x: Int, y: Int){
+        marked[x*size+y] = !marked[x*size+y]
     }
 
-    //Toggles the mark of a field.
-    fun toggleMark(x: Int, y: Int): Boolean {
-        val newValue = !getField(x, y).marked
-        markField(x, y, newValue)
-        return newValue
-    }
+    /**
+     * Receives which cells are part of a row/column/diagonal
+     */
+    fun getWinningCells() = getColumns() + getRows() + getDiagonals()
 
-    //Gets a field for a given x and y.
-    fun getField(x: Int, y: Int) = board[y][x]
+    /**
+     * A convinience method to check if we won
+     */
+    fun hasWon() = getWinningCells().isNotEmpty()
 
-    //Checks if the game is won. If so, all the tiles that result in the win get returned, so that something fancy can be done in the front end.
-    fun checkIfWon(): Set<BingoField> {
-        fun checkHorizontalWins(): Set<BingoField> {
-            val winingFields = HashSet<BingoField>()
-            board.forEach{ row ->
-                if (row.all { it.marked })
-                    winingFields.addAll(row)
-            }
-            return winingFields
-        }
-        fun checkVerticalWins(): Set<BingoField> {
-            val winingFields = HashSet<BingoField>()
-            for (x in 0 until boardSize){
-                val column = ArrayList<BingoField>()
-                for (y in 0 until boardSize){
-                    column.add(board[y][x])
-                }
-                if(column.all { it.marked })
-                    winingFields.addAll(column)
-            }
-            return winingFields
-        }
-        fun checkDiagonalWins(): Set<BingoField> {
-            val winingFields = HashSet<BingoField>()
-            val diag1 = ArrayList<BingoField>()
-            val diag2 = ArrayList<BingoField>()
+    /**
+     * Returns all the cells that are part of a diagonal, if any.
+     *
+     * if the size is an even number, this will always return an empty list
+     * as there is no middle.
+     */
+    fun getDiagonals(): Set<Int> {
+        val cellSet = HashSet<Int>()
+        // If size is dividable in 2, then there is no middle, dummy!
+        if(size.rem(2) == 0) return cellSet
 
-            for(i in 0 until boardSize){
-                diag1.add(board[i][i])
-                diag2.add(board[i][boardSize-1-i])
-            }
-
-            if(diag1.all { it.marked })
-                winingFields.addAll(diag1)
-            if(diag2.all { it.marked })
-                winingFields.addAll(diag2)
-
-
-            return winingFields
+        run next@{
+            for(x in 0 until size) if(!marked[x*size+x]) return@next
+            // If we did manage to win one we add it to the list
+            for(x in 0 until size) cellSet.add(x*size+x)
         }
 
-        return checkHorizontalWins() + checkVerticalWins() + checkDiagonalWins()
+        run next@{
+            for(x in 0 until size) if(!marked[x*size+size-x-1]) return@next
+            // If we did manage to win one we add it to the list
+            for(x in 0 until size) cellSet.add(x*size+size-x-1)
+        }
+
+        // At last we return a complete list with all the cells we found
+        return cellSet
     }
 
+    /**
+     * Returns all the cells that are part of a column, if any.
+     */
+    fun getColumns(): Set<Int> {
+        val cellSet = HashSet<Int>()
+        next@for(x in 0 until size){
+            // We go down the rows and if one is not checked we immediately continue to the next
+            for(y in 0 until size) if(!marked[x+y*size]) continue@next
 
-    fun getFieldsAsList(): ArrayList<BingoField> {
-        val tiles = ArrayList<BingoField>()
-        board.forEach { it.forEach { tiles.add(it)} }
-        return tiles
+            // If we did manage to win one we add it to the list
+            for(y in 0 until size) cellSet.add(x+y*size)
+        }
+        // At last we return a complete list with all the cells we found
+        return cellSet
     }
 
+    /**
+     * Returns all the cells that are part of a row, if any.
+     */
+    fun getRows(): Set<Int> {
+        val cellSet = HashSet<Int>()
+
+        next@for(x in 0 until size){
+            // We go down the column and if one is not checked we immediately continue to the next
+            for(y in 0 until size) if(!marked[x*size+y]) continue@next
+
+            // If we did manage to win one we add it to the list
+            for(y in 0 until size) cellSet.add(x*size+y)
+        }
+        // At last we return a complete list with all the cells we found
+        return cellSet
+    }
 }
