@@ -17,10 +17,8 @@ import nl.vslcatena.vslcatena.firebase.FirebaseReference
  */
 @FirebaseReference("promo")
 data class PromoItem(override val id: String,
-                val title: String,
-                val content: String,
-                val imageRef: String,
-                val tags: List<String>,
-                val adventureId: Int) :BaseModel{
-    constructor(): this("", "", "", "", listOf<String>(), -1)
+                     val imageRef: String,
+                     val adventureId: Int,
+                     val metaData: PostMetaData) :BaseModel{
+    constructor(): this("", "", -1, PostMetaData())
 }
