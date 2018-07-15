@@ -7,6 +7,7 @@ import android.support.annotation.LayoutRes
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentActivity
 import android.support.v7.util.DiffUtil
+import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
@@ -14,7 +15,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.google.firebase.database.*
 
-abstract class FirebasePagingAdapter<T: BaseModel, VH: RecyclerView.ViewHolder>(private val context: Context) : PagedListAdapter<T, VH>(object: DiffUtil.ItemCallback<T>(){
+abstract class FirebasePagingAdapter<T: BaseModel, VH: RecyclerView.ViewHolder>(private val context: Context, private val columnCount: Int = 1) : PagedListAdapter<T, VH>(object: DiffUtil.ItemCallback<T>(){
     // This is just used for checking if two items are the same
     override fun areItemsTheSame(oldItem: T, newItem: T) =
             oldItem.id == newItem.id
@@ -47,7 +48,13 @@ abstract class FirebasePagingAdapter<T: BaseModel, VH: RecyclerView.ViewHolder>(
 
     fun bindTo(lifecycleOwner: LifecycleOwner, firebaseViewModel: FirebaseViewModel<T>, recyclerView: RecyclerView, klass: Class<T>, pageSize: Int = 20){
         recyclerView.adapter = this
-        recyclerView.layoutManager = LinearLayoutManager(context)
+        //todo make option for grid
+        if (columnCount > 1){
+            recyclerView.layoutManager = GridLayoutManager(context, columnCount)
+        } else {
+            recyclerView.layoutManager = LinearLayoutManager(context)
+        }
+
 
         // Here we grab the FirebaseReference that we also use for the liveviewmodel
         // This way we have a single workflow for both of them

@@ -58,7 +58,7 @@ abstract class ListFragment<T, VH: RecyclerView.ViewHolder> : Fragment() {
             @Suppress("UNCHECKED_CAST")
             mListener = context  as OnListItemClickedListener<T>
         }catch (e: ClassCastException){
-            //todo check if we want this
+            //check if we want this
 //            throw RuntimeException(context.toString() + " must implement OnListItemClickedListener with the correct type")
         }
     }

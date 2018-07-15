@@ -24,6 +24,17 @@ abstract class PagedFirebaseListFragment<T:BaseModel, VH: RecyclerView.ViewHolde
         }
     }
 
+    private var columnCount = 1
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        arguments?.let {
+            columnCount = it.getInt("columnCount")
+        }
+    }
+
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_list, container, false)
@@ -33,7 +44,7 @@ abstract class PagedFirebaseListFragment<T:BaseModel, VH: RecyclerView.ViewHolde
         super.onViewCreated(view, savedInstanceState)
 
         // We create a new FirebasePagingAdapter object which will do all the loading of objects for us
-        object: FirebasePagingAdapter<T, VH>(context!!){
+        object: FirebasePagingAdapter<T, VH>(context!!, columnCount){
             override fun getView()=  itemView
             override fun createViewHolder(view: View): VH = this@PagedFirebaseListFragment.createViewHolder(view)
 

@@ -19,6 +19,15 @@
         android:id="@+id/bingoFragment"
         android:name="nl.vslcatena.vslcatena.controllers.BingoFragment"
         android:label="BingoFragment" />
+    <fragment
+        android:id="@+id/magazineFragment"
+        android:name="nl.vslcatena.vslcatena.controllers.MagazineFragment"
+        android:label="MagazineFragment" >
+        <argument
+            android:name="columnCount"
+            android:defaultValue="2"
+            app:type="integer" />
+    </fragment>
 
 
 </navigation>

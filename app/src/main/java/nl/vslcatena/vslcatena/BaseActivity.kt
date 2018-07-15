@@ -58,7 +58,7 @@ class BaseActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 navController.navigate(R.id.promoFragment)
             }
             R.id.nav_magazines -> {
-
+                navController.navigate(R.id.magazineFragment)
             }
             R.id.nav_rules -> {
 
