@@ -8,13 +8,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import kotlinx.android.synthetic.main.home.*
-import kotlinx.android.synthetic.main.promo_item.view.*
 import nl.vslcatena.vslcatena.R
-import nl.vslcatena.vslcatena.firebase.FirebasePagingAdapter
+import nl.vslcatena.vslcatena.abstraction.firebase.FirebasePagingAdapter
+import nl.vslcatena.vslcatena.abstraction.fragment.BaseFragment
+import nl.vslcatena.vslcatena.abstraction.fragment.NeedsAuthentication
 import nl.vslcatena.vslcatena.models.News
 
-
-class HomeFragment : Fragment() {
+@NeedsAuthentication
+class HomeFragment : BaseFragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.home, container, false)

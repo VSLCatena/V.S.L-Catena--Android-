@@ -13,13 +13,16 @@ import android.widget.TextView
 import android.widget.Toast
 import kotlinx.android.synthetic.main.fragment_bingo.*
 import nl.vslcatena.vslcatena.R
+import nl.vslcatena.vslcatena.abstraction.fragment.BaseFragment
+import nl.vslcatena.vslcatena.abstraction.fragment.NeedsAuthentication
 import nl.vslcatena.vslcatena.util.BingoGame
 
 /**
  * A simple [Fragment] subclass.
  *
  */
-class BingoFragment : Fragment() {
+@NeedsAuthentication
+class BingoFragment : BaseFragment() {
     private val bingoGame = BingoGame(boardSize, Array(50){ "test: $it" }.toList())
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,

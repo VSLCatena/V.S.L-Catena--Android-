@@ -1,9 +1,9 @@
-package nl.vslcatena.vslcatena.lists.normal
+package nl.vslcatena.vslcatena.abstraction.lists.normal
 
 import android.os.Bundle
 import android.support.v7.widget.RecyclerView
 import android.view.View
-import nl.vslcatena.vslcatena.firebase.LiveViewModel
+import nl.vslcatena.vslcatena.abstraction.firebase.LiveViewModel
 import nl.vslcatena.vslcatena.util.extensions.applyArguments
 
 /**

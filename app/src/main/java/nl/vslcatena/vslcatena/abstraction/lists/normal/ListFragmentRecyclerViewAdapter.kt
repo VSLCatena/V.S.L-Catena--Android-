@@ -1,10 +1,10 @@
-package nl.vslcatena.vslcatena.lists.normal
+package nl.vslcatena.vslcatena.abstraction.lists.normal
 
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import nl.vslcatena.vslcatena.lists.OnListItemClickedListener
+import nl.vslcatena.vslcatena.abstraction.lists.OnListItemClickedListener
 
 abstract class ListFragmentRecyclerViewAdapter<T, VH: RecyclerView.ViewHolder>(
         private var mItems: List<T>,

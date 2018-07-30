@@ -8,4 +8,12 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_login">Log in</string>
+    <!-- Strings related to login -->
+    <string name="prompt_email">Gebruikersnaam</string>
+    <string name="prompt_password">Wachtwoord</string>
+    <string name="action_sign_in">Log in</string>
+    <string name="action_sign_in_short">Log in</string>
+    <string name="error_incorrect_password">Onjuist wachtwoord</string>
+    <string name="error_field_required">Dit veld is vereist</string>
 </resources>

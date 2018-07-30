@@ -1,7 +1,7 @@
 package nl.vslcatena.vslcatena.models
 
-import nl.vslcatena.vslcatena.firebase.BaseModel
-import nl.vslcatena.vslcatena.firebase.FirebaseReference
+import nl.vslcatena.vslcatena.abstraction.firebase.BaseModel
+import nl.vslcatena.vslcatena.abstraction.firebase.FirebaseReference
 
 /**
  * Created by Thomas van den Bulk on 14-5-2018.

@@ -8,9 +8,9 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
-import nl.vslcatena.vslcatena.firebase.BaseModel
-import nl.vslcatena.vslcatena.firebase.Deserializer
-import nl.vslcatena.vslcatena.firebase.FirebaseReference
+import nl.vslcatena.vslcatena.abstraction.firebase.BaseModel
+import nl.vslcatena.vslcatena.abstraction.firebase.Deserializer
+import nl.vslcatena.vslcatena.abstraction.firebase.FirebaseReference
 
 //If this gets to big, split in multiple files.
 

@@ -1,4 +1,4 @@
-package nl.vslcatena.vslcatena.firebase
+package nl.vslcatena.vslcatena.abstraction.firebase
 
 import android.arch.lifecycle.LifecycleOwner
 import android.arch.lifecycle.LiveData

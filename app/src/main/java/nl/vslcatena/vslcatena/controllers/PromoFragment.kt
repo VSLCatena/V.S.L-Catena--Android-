@@ -1,7 +1,6 @@
 package nl.vslcatena.vslcatena.controllers
 
 import android.arch.lifecycle.Observer
-import android.arch.paging.PagedList
 import android.os.Bundle
 import android.support.v7.widget.RecyclerView
 import android.view.View
@@ -9,8 +8,8 @@ import android.widget.TextView
 import android.widget.Toast
 import com.google.firebase.storage.FirebaseStorage
 import nl.vslcatena.vslcatena.R
-import nl.vslcatena.vslcatena.firebase.ItemLoader
-import nl.vslcatena.vslcatena.lists.PagedFirebaseListFragment
+import nl.vslcatena.vslcatena.abstraction.firebase.ItemLoader
+import nl.vslcatena.vslcatena.abstraction.lists.PagedFirebaseListFragment
 import nl.vslcatena.vslcatena.models.PromoItem
 import nl.vslcatena.vslcatena.models.User
 import nl.vslcatena.vslcatena.util.GlideApp

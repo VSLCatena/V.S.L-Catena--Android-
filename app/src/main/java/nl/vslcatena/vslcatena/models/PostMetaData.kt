@@ -1,6 +1,6 @@
 package nl.vslcatena.vslcatena.models
 
-import nl.vslcatena.vslcatena.firebase.BaseModel
+import nl.vslcatena.vslcatena.abstraction.firebase.BaseModel
 
 /**
  * Meta-data that a post should contain:

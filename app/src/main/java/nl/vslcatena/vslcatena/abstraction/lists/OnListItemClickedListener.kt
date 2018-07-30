@@ -1,4 +1,4 @@
-package nl.vslcatena.vslcatena.lists
+package nl.vslcatena.vslcatena.abstraction.lists
 
 interface OnListItemClickedListener<T> {
         fun onListItemClicked(item: T)

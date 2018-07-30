@@ -1,4 +1,4 @@
-package nl.vslcatena.vslcatena.firebase
+package nl.vslcatena.vslcatena.abstraction.firebase
 
 import android.arch.lifecycle.*
 import android.arch.paging.*

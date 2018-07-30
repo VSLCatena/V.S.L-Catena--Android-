@@ -27,6 +27,7 @@ class BaseActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         nav_view.setNavigationItemSelectedListener(this)
         navController = findNavController(this, R.id.nav_host)
+
     }
 
     override fun onSupportNavigateUp()

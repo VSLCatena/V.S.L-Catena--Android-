@@ -4,9 +4,8 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
-import nl.vslcatena.vslcatena.firebase.Deserializer
-import nl.vslcatena.vslcatena.firebase.FirebaseReference
-import kotlin.properties.Delegates
+import nl.vslcatena.vslcatena.abstraction.firebase.Deserializer
+import nl.vslcatena.vslcatena.abstraction.firebase.FirebaseReference
 import kotlin.properties.ReadOnlyProperty
 import kotlin.reflect.KProperty
 

@@ -2,8 +2,6 @@ package nl.vslcatena.vslcatena.controllers
 
 import android.Manifest
 import android.annotation.SuppressLint
-import android.content.pm.PackageManager
-import android.support.v4.content.ContextCompat
 import android.support.v7.widget.RecyclerView
 import android.view.View
 import android.widget.ImageView
@@ -11,12 +9,11 @@ import android.widget.TextView
 import android.widget.Toast
 import com.google.firebase.storage.FirebaseStorage
 import nl.vslcatena.vslcatena.R
-import nl.vslcatena.vslcatena.lists.PagedFirebaseListFragment
+import nl.vslcatena.vslcatena.abstraction.lists.PagedFirebaseListFragment
 import nl.vslcatena.vslcatena.models.Magazine
 import nl.vslcatena.vslcatena.util.GlideApp
 import nl.vslcatena.vslcatena.util.PermissionRequestHelper
 import nl.vslcatena.vslcatena.util.downloadingFiles.downloadFileFromUrl
-import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -56,7 +53,7 @@ class MagazineFragment : PagedFirebaseListFragment<Magazine, MagazineFragment.Ma
         with(holder){
             mTitleView.text = item.name
             mDateView.text = item.publishDate.toString() //todo convert
-            mDateView.text =  SimpleDateFormat("MMMM YYYY").format(Date(item.publishDate))
+            mDateView.text =  SimpleDateFormat("MMMM yyyy").format(Date(item.publishDate))
             GlideApp.with(this@MagazineFragment)
                                 .load(FirebaseStorage.getInstance().getReference(item.getCoverPictureRef()).apply { println("path is $path") })
                                 .into(mCoverImageView)

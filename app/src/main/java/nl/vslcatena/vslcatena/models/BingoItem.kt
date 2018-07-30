@@ -1,7 +1,7 @@
 package nl.vslcatena.vslcatena.models
 
-import nl.vslcatena.vslcatena.firebase.BaseModel
-import nl.vslcatena.vslcatena.firebase.FirebaseReference
+import nl.vslcatena.vslcatena.abstraction.firebase.BaseModel
+import nl.vslcatena.vslcatena.abstraction.firebase.FirebaseReference
 /**
  * Model item for the ALV bingo.
  * @param id The id of the item

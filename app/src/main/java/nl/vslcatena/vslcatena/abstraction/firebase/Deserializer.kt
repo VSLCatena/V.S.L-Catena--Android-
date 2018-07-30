@@ -1,4 +1,4 @@
-package nl.vslcatena.vslcatena.firebase
+package nl.vslcatena.vslcatena.abstraction.firebase
 
 import com.google.firebase.database.DataSnapshot
 import java.lang.reflect.Field

@@ -1,18 +1,17 @@
-package nl.vslcatena.vslcatena.lists
+package nl.vslcatena.vslcatena.abstraction.lists
 
 import android.os.Bundle
-import android.support.annotation.LayoutRes
-import android.support.v4.app.Fragment
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import kotlinx.android.synthetic.main.fragment_list.*
 import nl.vslcatena.vslcatena.R
-import nl.vslcatena.vslcatena.firebase.BaseModel
-import nl.vslcatena.vslcatena.firebase.FirebasePagingAdapter
+import nl.vslcatena.vslcatena.abstraction.firebase.BaseModel
+import nl.vslcatena.vslcatena.abstraction.firebase.FirebasePagingAdapter
+import nl.vslcatena.vslcatena.abstraction.fragment.BaseFragment
 
-abstract class PagedFirebaseListFragment<T:BaseModel, VH: RecyclerView.ViewHolder>(private val clazz: Class<T>) : Fragment(), OnListItemClickedListener<T> {
+abstract class PagedFirebaseListFragment<T:BaseModel, VH: RecyclerView.ViewHolder>(private val clazz: Class<T>) : BaseFragment(), OnListItemClickedListener<T> {
 
     //The click listener in which the ListFragments listener and a adapter level listener get called.
     private val mOnClickListener: View.OnClickListener
