@@ -3,31 +3,85 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/homeFragment">
+    app:startDestination="@id/newsFragment">
 
     <fragment
-        android:id="@+id/homeFragment"
-        android:name="nl.vslcatena.vslcatena.controllers.HomeFragment"
-        android:label="home_fragment"
-        tools:layout="@layout/home" />
+        android:id="@+id/newsFragment"
+        android:name="nl.vslcatena.vslcatena.controllers.NewsListFragment"
+        android:label="news_fragment"
+        tools:layout="@layout/home" >
+        <action
+            android:id="@+id/action_newsFragment_to_newsItemFragment"
+            app:destination="@id/newsItemFragment" />
+    </fragment>
     <fragment
         android:id="@+id/promoFragment"
-        android:name="nl.vslcatena.vslcatena.controllers.PromoFragment"
+        android:name="nl.vslcatena.vslcatena.controllers.PromoListFragment"
         android:label="fragment_list"
-        tools:layout="@layout/fragment_list" />
+        tools:layout="@layout/fragment_list" >
+        <action
+            android:id="@+id/action_promoFragment_to_promoItemFragment"
+            app:destination="@+id/promoItemFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"
+            />
+    </fragment>
     <fragment
         android:id="@+id/bingoFragment"
         android:name="nl.vslcatena.vslcatena.controllers.BingoFragment"
-        android:label="BingoFragment" />
+        android:label="BingoFragment" ></fragment>
     <fragment
         android:id="@+id/magazineFragment"
-        android:name="nl.vslcatena.vslcatena.controllers.MagazineFragment"
+        android:name="nl.vslcatena.vslcatena.controllers.MagazineListFragment"
         android:label="MagazineFragment" >
         <argument
             android:name="columnCount"
-            android:defaultValue="2"
-            app:type="integer" />
+            app:argType="integer" />
     </fragment>
-
+    <fragment
+        android:id="@+id/promoItemFragment"
+        android:name="nl.vslcatena.vslcatena.controllers.PromoItemFragment"
+        android:label="fragment_promo_item"
+        tools:layout="@layout/fragment_promo_item" >
+        <argument
+            android:name="itemId"
+            app:argType="string" />
+        <action
+            android:id="@+id/action_promoItemFragment_to_adventureItemFragment"
+            app:destination="@id/adventureItemFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/newsItemFragment"
+        android:name="nl.vslcatena.vslcatena.controllers.NewsItemFragment"
+        android:label="fragment_news_item"
+        tools:layout="@layout/fragment_news_item">
+        <argument
+            android:name="itemId"
+            app:argType="string" />
+    </fragment>
+    <fragment
+        android:id="@+id/adventureItemFragment"
+        android:name="nl.vslcatena.vslcatena.controllers.AdventureItemFragment"
+        android:label="fragment_adventure_item"
+        tools:layout="@layout/fragment_adventure_item" >
+        <argument
+            android:name="itemId"
+            app:argType="string"/>
+    </fragment>
+    <activity
+        android:id="@+id/baseActivity"
+        android:name="nl.vslcatena.vslcatena.BaseActivity"
+        android:label="BaseActivity" /><action android:id="@+id/action_global_magazineFragment" app:destination="@id/magazineFragment" app:enterAnim="@anim/nav_default_enter_anim" app:exitAnim="@anim/nav_default_exit_anim" app:popEnterAnim="@anim/nav_default_pop_enter_anim" app:popExitAnim="@anim/nav_default_pop_exit_anim"/>
+    <fragment
+        android:id="@+id/loginFragment"
+        android:name="nl.vslcatena.vslcatena.LoginFragment"
+        android:label="LoginFragment" /><action android:id="@+id/action_global_loginFragment" app:destination="@id/loginFragment" app:enterAnim="@anim/nav_default_enter_anim" app:exitAnim="@anim/nav_default_pop_exit_anim" app:popEnterAnim="@anim/nav_default_pop_enter_anim" app:popExitAnim="@anim/nav_default_pop_exit_anim"/>
+    <fragment
+        android:id="@+id/userSettingsFragment"
+        android:name="nl.vslcatena.vslcatena.controllers.UserSettingsFragment"
+        android:label="fragment_user_settings"
+        tools:layout="@layout/fragment_user_settings" />
 
 </navigation>

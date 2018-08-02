@@ -12,10 +12,8 @@ import nl.vslcatena.vslcatena.abstraction.firebase.FirebaseReference
  * @param tags The tags that are connected to the promo item
  * @param adventureId The id referring to the adventure (activity) that the promo is for.
  * //TODO maybe change content from string to a new Content class (or an array) that can contain text and references to images. If this happens imageRef can be removed.
- * //TODO add reference to person who placed the promo? And add when the post was made.
- *
  */
-@FirebaseReference("promo")
+@FirebaseReference("promo", "promo/%s")
 data class PromoItem(override val id: String,
                      val imageRef: String,
                      val adventureId: Int,

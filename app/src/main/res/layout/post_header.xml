@@ -13,7 +13,7 @@
         android:layout_marginEnd="8dp"
         android:layout_marginTop="8dp"
         android:adjustViewBounds="true"
-        android:src="@drawable/placeholder_thumbnail_128"
+        tools:src="@drawable/placeholder_thumbnail_128"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/postHeaderUserName"
         app:layout_constraintHorizontal_chainStyle="spread"
@@ -34,7 +34,7 @@
         app:layout_constraintHorizontal_weight="8"
         app:layout_constraintStart_toEndOf="@+id/postHeaderUserImage"
         app:layout_constraintTop_toTopOf="parent"
-        android:text="Naam van persoon" />
+        tools:text="Naam van persoon" />
 
     <TextView
         android:id="@+id/postHeaderPostDate"
@@ -42,7 +42,7 @@
         android:layout_height="16dp"
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
-        android:text="Datum van plaatsen"
+        tools:text="Datum van plaatsen"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"

@@ -10,6 +10,7 @@ import android.view.MenuItem
 import androidx.navigation.NavController
 import androidx.navigation.Navigation.findNavController
 import kotlinx.android.synthetic.main.base.*
+import nl.vslcatena.vslcatena.controllers.MagazineListFragment
 
 class BaseActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
@@ -53,13 +54,13 @@ class BaseActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         // Handle navigation view item clicks here.
         when (item.itemId) {
             R.id.nav_news -> {
-                navController.navigate(R.id.homeFragment)
+                navController.navigate(R.id.newsFragment)
             }
             R.id.nav_promo -> {
                 navController.navigate(R.id.promoFragment)
             }
             R.id.nav_magazines -> {
-                navController.navigate(R.id.magazineFragment)
+                navController.navigate(Nav_graphDirections.actionGlobalMagazineFragment(resources.getInteger(R.integer.magazineColumnCount)))
             }
             R.id.nav_rules -> {
 
@@ -72,6 +73,9 @@ class BaseActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             }
             R.id.nav_crying_wall -> {
 
+            }
+            R.id.nav_user_settings -> {
+                navController.navigate(R.id.userSettingsFragment)
             }
         }
 

@@ -5,6 +5,8 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 
 apply plugin: 'kotlin-kapt'
+
+apply plugin: 'androidx.navigation.safeargs'
 android {
     compileSdkVersion 27
     defaultConfig {
@@ -31,7 +33,7 @@ android {
 dependencies {
 
     def support_version = "27.1.1"
-    def nav_version = "1.0.0-alpha02"
+    def nav_version = "1.0.0-alpha04"
     def paging_version = "1.0.1"
     def firebase_version = "16.0.1"
 

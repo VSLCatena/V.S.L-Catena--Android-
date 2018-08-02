@@ -21,6 +21,7 @@ import nl.vslcatena.vslcatena.util.BingoGame
  * A simple [Fragment] subclass.
  *
  */
+
 @NeedsAuthentication
 class BingoFragment : BaseFragment() {
     private val bingoGame = BingoGame(boardSize, Array(50){ "test: $it" }.toList())

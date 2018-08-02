@@ -48,7 +48,6 @@ abstract class FirebasePagingAdapter<T: BaseModel, VH: RecyclerView.ViewHolder>(
 
     fun bindTo(lifecycleOwner: LifecycleOwner, firebaseViewModel: FirebaseViewModel<T>, recyclerView: RecyclerView, klass: Class<T>, pageSize: Int = 20){
         recyclerView.adapter = this
-        //todo make option for grid
         if (columnCount > 1){
             recyclerView.layoutManager = GridLayoutManager(context, columnCount)
         } else {

@@ -1,34 +1,43 @@
 package nl.vslcatena.vslcatena
 
+
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
-import android.annotation.TargetApi
-import android.content.Intent
-import android.support.v7.app.AppCompatActivity
+import android.content.Context
 import android.os.AsyncTask
-import android.os.Build
 import android.os.Bundle
+import android.support.v4.app.Fragment
 import android.text.TextUtils
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
+import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
 import android.widget.Toast
-import kotlinx.android.synthetic.main.activity_login.*
+import kotlinx.android.synthetic.main.fragment_login.*
+import nl.vslcatena.vslcatena.util.TempLogInProvider
+
 
 /**
- * A login screen that offers login via email/password.
+ * Fragment that handles the Login.
+ *
  */
-class LoginActivity : AppCompatActivity(){
+class LoginFragment : Fragment() {
     /**
      * Keep track of the login task to ensure we can cancel it if requested.
      */
     private var mAuthTask: UserLoginTask? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_login)
-        // Set up the login form.
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
+                              savedInstanceState: Bundle?): View? {
+        return inflater.inflate(R.layout.fragment_login, container, false)
+    }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        //TODO make util to make forms that go to the next input.
         username.setOnEditorActionListener(TextView.OnEditorActionListener { _, id, _ ->
             if (id == EditorInfo.IME_ACTION_DONE || id == EditorInfo.IME_NULL) {
                 password.requestFocus()
@@ -45,10 +54,9 @@ class LoginActivity : AppCompatActivity(){
         })
 
         sign_in_button.setOnClickListener { attemptLogin() }
-        forgot_password_button.setOnClickListener{ Toast.makeText(this@LoginActivity, "Moet nog geimplementeerd worden", Toast.LENGTH_SHORT).show()}
-        Toast.makeText(this@LoginActivity, "Username: test, Password: test", Toast.LENGTH_LONG).show()
+        forgot_password_button.setOnClickListener{ Toast.makeText(context, "Moet nog geimplementeerd worden", Toast.LENGTH_SHORT).show()}
+        Toast.makeText(context, "Username: test, Password: test", Toast.LENGTH_LONG).show()
     }
-
 
     /**
      * Attempts to sign in or register the account specified by the login form.
@@ -102,7 +110,8 @@ class LoginActivity : AppCompatActivity(){
                 .alpha((if (show) 1 else 0).toFloat())
                 .setListener(object : AnimatorListenerAdapter() {
                     override fun onAnimationEnd(animation: Animator) {
-                        login_progress.visibility = if (show) View.VISIBLE else View.GONE
+                        if(login_progress!=null)
+                            login_progress.visibility = if (show) View.VISIBLE else View.GONE
                     }
                 })
     }
@@ -125,14 +134,7 @@ class LoginActivity : AppCompatActivity(){
                 return false
             }
 
-            return DUMMY_CREDENTIALS
-                    .map { it.split(":") }
-                    .firstOrNull { it[0] == mEmail }
-                    ?.let {
-                        // Account exists, return true if the password matches.
-                        it[1] == mPassword
-                    }
-                    ?: true
+            return TempLogInProvider.authenticate(mEmail, mPassword)
         }
 
         override fun onPostExecute(success: Boolean?) {
@@ -140,7 +142,11 @@ class LoginActivity : AppCompatActivity(){
             showProgress(false)
 
             if (success!!) {
-                startActivity(Intent(this@LoginActivity, BaseActivity::class.java))
+                activity?.supportFragmentManager?.popBackStack()
+
+                //close the keyboard
+                val imm = activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                imm.hideSoftInputFromWindow(view?.windowToken, 0)
             } else {
                 password.error = getString(R.string.error_incorrect_password)
                 password.requestFocus()
@@ -151,13 +157,5 @@ class LoginActivity : AppCompatActivity(){
             mAuthTask = null
             showProgress(false)
         }
-    }
-
-    companion object {
-        /**
-         * A dummy authentication store containing known user names and passwords.
-         * TODO: remove after connecting to a real authentication system.
-         */
-        private val DUMMY_CREDENTIALS = arrayOf("foo@example.com:hello", "bar@example.com:world", "test:test")
     }
 }

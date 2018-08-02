@@ -6,9 +6,11 @@ import android.support.v7.widget.RecyclerView
 import android.view.View
 import android.widget.TextView
 import android.widget.Toast
+import androidx.navigation.fragment.findNavController
 import com.google.firebase.storage.FirebaseStorage
 import nl.vslcatena.vslcatena.R
 import nl.vslcatena.vslcatena.abstraction.firebase.ItemLoader
+import nl.vslcatena.vslcatena.abstraction.fragment.NeedsAuthentication
 import nl.vslcatena.vslcatena.abstraction.lists.PagedFirebaseListFragment
 import nl.vslcatena.vslcatena.models.PromoItem
 import nl.vslcatena.vslcatena.models.User
@@ -17,8 +19,10 @@ import nl.vslcatena.vslcatena.util.compenentHolders.PostHeaderViewHolder
 import java.text.DateFormat.getDateInstance
 import java.util.*
 import nl.vslcatena.vslcatena.util.extensions.observeOnce
+import nl.vslcatena.vslcatena.util.extensions.setImageFromFirebaseStorage
 
-class PromoFragment : PagedFirebaseListFragment<PromoItem, PromoFragment.PromoViewHolder>(PromoItem::class.java) {
+@NeedsAuthentication
+class PromoListFragment : PagedFirebaseListFragment<PromoItem, PromoListFragment.PromoViewHolder>(PromoItem::class.java) {
     override val itemView = R.layout.promo_item
     private lateinit var userLoader : ItemLoader<User>
 
@@ -29,7 +33,7 @@ class PromoFragment : PagedFirebaseListFragment<PromoItem, PromoFragment.PromoVi
 
 
     override fun onListItemClicked(item: PromoItem) {
-        Toast.makeText(context, "Clicked on ${item.metaData.title} with id: ${item.id}", Toast.LENGTH_SHORT).show()
+        findNavController().navigate(PromoListFragmentDirections.actionPromoFragmentToPromoItemFragment(item.id))
     }
 
     override fun createViewHolder(view: View) = PromoViewHolder(view)
@@ -40,9 +44,7 @@ class PromoFragment : PagedFirebaseListFragment<PromoItem, PromoFragment.PromoVi
                 it.observeOnce(Observer {
                     it?.let{
                         mUserNameView.text = it.name
-                        GlideApp.with(this@PromoFragment)
-                                .load(FirebaseStorage.getInstance().getReference(it.getThumbnailRef()).apply { println("path is $path") })
-                                .into(mThumbnailView)
+                        mThumbnailView.setImageFromFirebaseStorage(context!!, it.getThumbnailRef())
                     }
                 })
             }

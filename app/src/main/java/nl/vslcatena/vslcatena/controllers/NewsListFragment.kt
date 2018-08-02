@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.navigation.fragment.findNavController
 import kotlinx.android.synthetic.main.home.*
 import nl.vslcatena.vslcatena.R
 import nl.vslcatena.vslcatena.abstraction.firebase.FirebasePagingAdapter
@@ -15,7 +16,7 @@ import nl.vslcatena.vslcatena.abstraction.fragment.NeedsAuthentication
 import nl.vslcatena.vslcatena.models.News
 
 @NeedsAuthentication
-class HomeFragment : BaseFragment() {
+class NewsListFragment : BaseFragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.home, container, false)
@@ -40,6 +41,9 @@ class HomeFragment : BaseFragment() {
                         mSubTitleView.apply {
                             visibility = View.VISIBLE
                             text = news.content
+                        }
+                        itemView.setOnClickListener {
+                            findNavController().navigate(NewsListFragmentDirections.actionNewsFragmentToNewsItemFragment(news.id))
                         }
                     }
                 } ?: holder.apply {
