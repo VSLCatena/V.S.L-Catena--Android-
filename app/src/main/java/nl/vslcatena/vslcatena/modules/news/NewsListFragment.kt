@@ -1,19 +1,18 @@
-package nl.vslcatena.vslcatena.controllers
+package nl.vslcatena.vslcatena.modules.news
 
 import android.os.Bundle
-import android.support.v4.app.Fragment
-import android.support.v7.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.navigation.fragment.findNavController
-import kotlinx.android.synthetic.main.home.*
 import nl.vslcatena.vslcatena.R
+import kotlinx.android.synthetic.main.home.*
 import nl.vslcatena.vslcatena.abstraction.firebase.FirebasePagingAdapter
 import nl.vslcatena.vslcatena.abstraction.fragment.BaseFragment
 import nl.vslcatena.vslcatena.abstraction.fragment.NeedsAuthentication
-import nl.vslcatena.vslcatena.models.News
+import nl.vslcatena.vslcatena.controllers.NewsListFragmentDirections
 
 @NeedsAuthentication
 class NewsListFragment : BaseFragment() {
@@ -31,7 +30,8 @@ class NewsListFragment : BaseFragment() {
             // The View the ViewHolder should display
             override fun getView() = R.layout.list_item
             // How the ViewHolder is created
-            override fun createViewHolder(view: View): NewsViewHolder = NewsViewHolder(view)
+            override fun createViewHolder(view: View): NewsViewHolder =
+                NewsViewHolder(view)
 
             // Then we bind the item to the viewholder
             override fun onBindViewHolder(holder: NewsViewHolder, position: Int) {
@@ -43,7 +43,11 @@ class NewsListFragment : BaseFragment() {
                             text = news.content
                         }
                         itemView.setOnClickListener {
-                            findNavController().navigate(NewsListFragmentDirections.actionNewsFragmentToNewsItemFragment(news.id))
+                            findNavController().navigate(
+                                NewsListFragmentDirections.actionNewsFragmentToNewsItemFragment(
+                                    news.id
+                                )
+                            )
                         }
                     }
                 } ?: holder.apply {

@@ -5,4 +5,4 @@ package nl.vslcatena.vslcatena.abstraction.firebase
  */
 @Target(AnnotationTarget.CLASS)
 @Retention(AnnotationRetention.RUNTIME)
-annotation class FirebaseReference(val listReference: String = "", val singleReference: String = "")
+annotation class DataReference(val listReference: String = "", val singleReference: String = "")

@@ -1,8 +1,8 @@
 package nl.vslcatena.vslcatena.util
 
-import android.support.v4.app.ActivityCompat
-import android.support.v4.app.Fragment
-import android.support.v4.app.FragmentActivity
+import androidx.core.app.ActivityCompat
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
 
 /**
  * Helper to call an action when requesting a permission

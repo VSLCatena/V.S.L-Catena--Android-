@@ -1,16 +1,15 @@
 package nl.vslcatena.vslcatena
 
 import android.os.Bundle
-import android.support.design.widget.NavigationView
-import android.support.v4.view.GravityCompat
-import android.support.v7.app.ActionBarDrawerToggle
-import android.support.v7.app.AppCompatActivity
+import com.google.android.material.navigation.NavigationView
+import androidx.core.view.GravityCompat
+import androidx.appcompat.app.ActionBarDrawerToggle
+import androidx.appcompat.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
 import androidx.navigation.NavController
 import androidx.navigation.Navigation.findNavController
 import kotlinx.android.synthetic.main.base.*
-import nl.vslcatena.vslcatena.controllers.MagazineListFragment
 
 class BaseActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
@@ -60,7 +59,7 @@ class BaseActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 navController.navigate(R.id.promoFragment)
             }
             R.id.nav_magazines -> {
-                navController.navigate(Nav_graphDirections.actionGlobalMagazineFragment(resources.getInteger(R.integer.magazineColumnCount)))
+                navController.navigate(NavGraphDirections.actionGlobalMagazineFragment(resources.getInteger(R.integer.magazineColumnCount)))
             }
             R.id.nav_rules -> {
 

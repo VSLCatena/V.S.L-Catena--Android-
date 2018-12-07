@@ -1,6 +1,6 @@
 package nl.vslcatena.vslcatena
 
-import nl.vslcatena.vslcatena.util.BingoGame
+import nl.vslcatena.vslcatena.modules.bingo.BingoGame
 import org.junit.Test
 
 import org.junit.Assert.*
@@ -14,7 +14,7 @@ class BingoUnitTest {
 
     @Test
     fun `check horizontal win 1`() {
-        val game = BingoGame(5, Array(50){ "test: $it" }.toList()).apply {
+        val game = BingoGame(5, Array(50) { "test: $it" }.toList()).apply {
             toggleField(0,0)
             toggleField(1,0)
             toggleField(2,0)
@@ -28,7 +28,7 @@ class BingoUnitTest {
 
     @Test
     fun `check horizontal win 2`() {
-        val game = BingoGame(5, Array(50){ "test: $it" }.toList()).apply {
+        val game = BingoGame(5, Array(50) { "test: $it" }.toList()).apply {
             toggleField(0,0)
             toggleField(1,0)
             toggleField(2,0)
@@ -42,7 +42,7 @@ class BingoUnitTest {
 
     @Test
     fun `check horizontal win 3`() {
-        val game = BingoGame(5, Array(50){ "test: $it" }.toList()).apply {
+        val game = BingoGame(5, Array(50) { "test: $it" }.toList()).apply {
             toggleField(0,0)
             toggleField(1,0)
             toggleField(2,0)
@@ -62,7 +62,7 @@ class BingoUnitTest {
 
     @Test
     fun `check vertical win 1`() {
-        val game = BingoGame(5, Array(50){ "test: $it" }.toList()).apply {
+        val game = BingoGame(5, Array(50) { "test: $it" }.toList()).apply {
             toggleField(0,0)
             toggleField(0,1)
             toggleField(0,2)
@@ -75,7 +75,7 @@ class BingoUnitTest {
     }
     @Test
     fun `check vertical win 2`() {
-        val game = BingoGame(5, Array(50){ "test: $it" }.toList()).apply {
+        val game = BingoGame(5, Array(50) { "test: $it" }.toList()).apply {
             toggleField(0,0)
             toggleField(0,1)
             toggleField(0,2)
@@ -89,7 +89,7 @@ class BingoUnitTest {
 
     @Test
     fun `check vertical win 3`() {
-        val game = BingoGame(5, Array(50){ "test: $it" }.toList()).apply {
+        val game = BingoGame(5, Array(50) { "test: $it" }.toList()).apply {
             toggleField(0,0)
             toggleField(0,1)
             toggleField(0,2)
@@ -109,7 +109,7 @@ class BingoUnitTest {
 
     @Test
     fun `check diagonal win 1`() {
-        val game = BingoGame(5, Array(50){ "test: $it" }.toList()).apply {
+        val game = BingoGame(5, Array(50) { "test: $it" }.toList()).apply {
             toggleField(0,0)
             toggleField(1,1)
             toggleField(2,2)
@@ -124,7 +124,7 @@ class BingoUnitTest {
 
     @Test
     fun `check diagonal win 2`() {
-        val game = BingoGame(5, Array(50){ "test: $it" }.toList()).apply {
+        val game = BingoGame(5, Array(50) { "test: $it" }.toList()).apply {
             toggleField(0,4)
             toggleField(1,3)
             toggleField(2,2)
@@ -138,7 +138,7 @@ class BingoUnitTest {
     }
     @Test
     fun `check diagonal win 3`() {
-        val game = BingoGame(5, Array(50){ "test: $it" }.toList()).apply {
+        val game = BingoGame(5, Array(50) { "test: $it" }.toList()).apply {
             toggleField(0,0)
             toggleField(1,1)
 //            toggleField(2,2)
@@ -161,7 +161,7 @@ class BingoUnitTest {
 
     @Test
     fun `check horizontal and vertical win 1`() {
-        val game = BingoGame(5, Array(50){ "test: $it" }.toList()).apply {
+        val game = BingoGame(5, Array(50) { "test: $it" }.toList()).apply {
             toggleField(0,0)
             toggleField(0,1)
             toggleField(0,2)
@@ -181,7 +181,7 @@ class BingoUnitTest {
 
     @Test
     fun `check horizontal, vertical and diagonal win 1`() {
-        val game = BingoGame(5, Array(50){ "test: $it" }.toList()).apply {
+        val game = BingoGame(5, Array(50) { "test: $it" }.toList()).apply {
             toggleField(0,0)
             toggleField(0,1)
             toggleField(0,2)

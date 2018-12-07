@@ -1,10 +1,12 @@
 package nl.vslcatena.vslcatena.abstraction.lists.normal
 
 import android.os.Bundle
-import android.support.v7.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView
 import android.view.View
+import androidx.lifecycle.Observer
 import nl.vslcatena.vslcatena.abstraction.firebase.LiveViewModel
 import nl.vslcatena.vslcatena.util.extensions.applyArguments
+import nl.vslcatena.vslcatena.util.extensions.observeOnce
 
 /**
  * Abstract child of the ListFragment. Gets the items from firebase. Has option to use single observation.
@@ -22,8 +24,14 @@ abstract class FirebaseListFragment<T, VH: RecyclerView.ViewHolder>(private val 
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        LiveViewModel.of(this).observe(clazz = clazz, observeOnce = singleObservation) {
-            setItems(it)
+        val liveData = LiveViewModel.of(this)
+            .getReference(LiveViewModel.getCollectionReference(clazz)!!)
+            .toTypedList(clazz)
+
+        if(singleObservation) {
+            liveData.observeOnce(this, Observer { setItems(it) })
+        } else {
+            liveData.observe(this, Observer { setItems(it) })
         }
     }
     companion object {

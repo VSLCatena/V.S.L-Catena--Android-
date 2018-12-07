@@ -1,11 +1,11 @@
-package nl.vslcatena.vslcatena.controllers
+package nl.vslcatena.vslcatena.modules.bingo
 
 
 import android.graphics.Color
 import android.os.Bundle
-import android.support.v4.app.Fragment
-import android.support.v7.widget.GridLayoutManager
-import android.support.v7.widget.RecyclerView
+import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,7 +15,6 @@ import kotlinx.android.synthetic.main.fragment_bingo.*
 import nl.vslcatena.vslcatena.R
 import nl.vslcatena.vslcatena.abstraction.fragment.BaseFragment
 import nl.vslcatena.vslcatena.abstraction.fragment.NeedsAuthentication
-import nl.vslcatena.vslcatena.util.BingoGame
 
 /**
  * A simple [Fragment] subclass.
@@ -24,7 +23,7 @@ import nl.vslcatena.vslcatena.util.BingoGame
 
 @NeedsAuthentication
 class BingoFragment : BaseFragment() {
-    private val bingoGame = BingoGame(boardSize, Array(50){ "test: $it" }.toList())
+    private val bingoGame = BingoGame(boardSize, Array(50) { "test: $it" }.toList())
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?) =

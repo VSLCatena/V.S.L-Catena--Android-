@@ -1,27 +1,26 @@
-package nl.vslcatena.vslcatena.controllers
+package nl.vslcatena.vslcatena.modules.magazine
 
 import android.Manifest
 import android.annotation.SuppressLint
 import android.content.DialogInterface
-import android.support.v7.app.AlertDialog
-import android.support.v7.widget.RecyclerView
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
+import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.google.firebase.storage.FirebaseStorage
 import nl.vslcatena.vslcatena.R
 import nl.vslcatena.vslcatena.abstraction.fragment.NeedsAuthentication
 import nl.vslcatena.vslcatena.abstraction.lists.PagedFirebaseListFragment
-import nl.vslcatena.vslcatena.models.Magazine
-import nl.vslcatena.vslcatena.util.GlideApp
 import nl.vslcatena.vslcatena.util.PermissionRequestHelper
 import nl.vslcatena.vslcatena.util.downloadingFiles.downloadFileFromUrl
 import java.text.SimpleDateFormat
 import java.util.*
 
 @NeedsAuthentication
-class MagazineListFragment : PagedFirebaseListFragment<Magazine, MagazineListFragment.MagazineViewHolder>(Magazine::class.java) {
+class MagazineListFragment : PagedFirebaseListFragment<Magazine, MagazineListFragment.MagazineViewHolder>(
+    Magazine::class.java) {
     override val itemView = R.layout.magazine_item
     private var permissionRequestHelper: PermissionRequestHelper? = null
 
@@ -65,9 +64,9 @@ class MagazineListFragment : PagedFirebaseListFragment<Magazine, MagazineListFra
         with(holder){
             mTitleView.text = item.name
            mDateView.text =  SimpleDateFormat("MMMM yyyy").format(Date(item.publishDate))
-            GlideApp.with(this@MagazineListFragment)
-                                .load(FirebaseStorage.getInstance().getReference(item.getCoverPictureRef()).apply { println("path is $path") })
-                                .into(mCoverImageView)
+            Glide.with(this@MagazineListFragment)
+                .load(FirebaseStorage.getInstance().getReference(item.getCoverPictureRef()).apply { println("path is $path") })
+                .into(mCoverImageView)
         }
     }
 

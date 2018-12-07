@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/newsFragment"
-        android:name="nl.vslcatena.vslcatena.controllers.NewsListFragment"
+        android:name="nl.vslcatena.vslcatena.modules.news.NewsListFragment"
         android:label="news_fragment"
         tools:layout="@layout/home" >
         <action
@@ -16,7 +16,7 @@
     </fragment>
     <fragment
         android:id="@+id/promoFragment"
-        android:name="nl.vslcatena.vslcatena.controllers.PromoListFragment"
+        android:name="nl.vslcatena.vslcatena.modules.promo.PromoListFragment"
         android:label="fragment_list"
         tools:layout="@layout/fragment_list" >
         <action
@@ -30,11 +30,11 @@
     </fragment>
     <fragment
         android:id="@+id/bingoFragment"
-        android:name="nl.vslcatena.vslcatena.controllers.BingoFragment"
+        android:name="nl.vslcatena.vslcatena.modules.bingo.BingoFragment"
         android:label="BingoFragment" ></fragment>
     <fragment
         android:id="@+id/magazineFragment"
-        android:name="nl.vslcatena.vslcatena.controllers.MagazineListFragment"
+        android:name="nl.vslcatena.vslcatena.modules.magazine.MagazineListFragment"
         android:label="MagazineFragment" >
         <argument
             android:name="columnCount"
@@ -42,7 +42,7 @@
     </fragment>
     <fragment
         android:id="@+id/promoItemFragment"
-        android:name="nl.vslcatena.vslcatena.controllers.PromoItemFragment"
+        android:name="nl.vslcatena.vslcatena.modules.promo.PromoItemFragment"
         android:label="fragment_promo_item"
         tools:layout="@layout/fragment_promo_item" >
         <argument
@@ -54,7 +54,7 @@
     </fragment>
     <fragment
         android:id="@+id/newsItemFragment"
-        android:name="nl.vslcatena.vslcatena.controllers.NewsItemFragment"
+        android:name="nl.vslcatena.vslcatena.modules.news.NewsItemFragment"
         android:label="fragment_news_item"
         tools:layout="@layout/fragment_news_item">
         <argument
@@ -63,7 +63,7 @@
     </fragment>
     <fragment
         android:id="@+id/adventureItemFragment"
-        android:name="nl.vslcatena.vslcatena.controllers.AdventureItemFragment"
+        android:name="nl.vslcatena.vslcatena.modules.adventure.AdventureItemFragment"
         android:label="fragment_adventure_item"
         tools:layout="@layout/fragment_adventure_item" >
         <argument
@@ -76,11 +76,11 @@
         android:label="BaseActivity" /><action android:id="@+id/action_global_magazineFragment" app:destination="@id/magazineFragment" app:enterAnim="@anim/nav_default_enter_anim" app:exitAnim="@anim/nav_default_exit_anim" app:popEnterAnim="@anim/nav_default_pop_enter_anim" app:popExitAnim="@anim/nav_default_pop_exit_anim"/>
     <fragment
         android:id="@+id/loginFragment"
-        android:name="nl.vslcatena.vslcatena.LoginFragment"
+        android:name="nl.vslcatena.vslcatena.modules.login.LoginFragment"
         android:label="LoginFragment" /><action android:id="@+id/action_global_loginFragment" app:destination="@id/loginFragment" app:enterAnim="@anim/nav_default_enter_anim" app:exitAnim="@anim/nav_default_pop_exit_anim" app:popEnterAnim="@anim/nav_default_pop_enter_anim" app:popExitAnim="@anim/nav_default_pop_exit_anim"/>
     <fragment
         android:id="@+id/userSettingsFragment"
-        android:name="nl.vslcatena.vslcatena.controllers.UserSettingsFragment"
+        android:name="nl.vslcatena.vslcatena.modules.settings.UserSettingsFragment"
         android:label="fragment_user_settings"
         tools:layout="@layout/fragment_user_settings" />
 

@@ -2,10 +2,10 @@ package nl.vslcatena.vslcatena.abstraction.fragment
 
 
 import android.os.Bundle
-import android.support.v4.app.Fragment
+import androidx.fragment.app.Fragment
 import android.util.Log
 import androidx.navigation.fragment.findNavController
-import nl.vslcatena.vslcatena.Nav_graphDirections
+import nl.vslcatena.vslcatena.NavGraphDirections
 import nl.vslcatena.vslcatena.util.TempLogInProvider
 
 abstract class BaseFragment : Fragment() {
@@ -32,7 +32,7 @@ abstract class BaseFragment : Fragment() {
         if(needsAuth) {
             Log.d("Auth", "This fragment (${this::class.java}) needs auth")
             if (!userIsAuthenticated()) {
-                findNavController().navigate(Nav_graphDirections.actionGlobalLoginFragment())
+                findNavController().navigate(NavGraphDirections.actionGlobalLoginFragment())
             }
         }
         else

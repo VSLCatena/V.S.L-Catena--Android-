@@ -1,4 +1,4 @@
-package nl.vslcatena.vslcatena
+package nl.vslcatena.vslcatena.modules.login
 
 
 import android.animation.Animator
@@ -6,7 +6,7 @@ import android.animation.AnimatorListenerAdapter
 import android.content.Context
 import android.os.AsyncTask
 import android.os.Bundle
-import android.support.v4.app.Fragment
+import androidx.fragment.app.Fragment
 import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
@@ -16,6 +16,7 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
 import android.widget.Toast
 import kotlinx.android.synthetic.main.fragment_login.*
+import nl.vslcatena.vslcatena.R
 import nl.vslcatena.vslcatena.util.TempLogInProvider
 
 

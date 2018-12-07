@@ -1,7 +1,8 @@
-package nl.vslcatena.vslcatena.models
+package nl.vslcatena.vslcatena.modules.promo
 
 import nl.vslcatena.vslcatena.abstraction.firebase.BaseModel
-import nl.vslcatena.vslcatena.abstraction.firebase.FirebaseReference
+import nl.vslcatena.vslcatena.abstraction.firebase.DataReference
+import nl.vslcatena.vslcatena.models.PostMetaData
 
 /**
  * Model item for promo
@@ -13,10 +14,11 @@ import nl.vslcatena.vslcatena.abstraction.firebase.FirebaseReference
  * @param adventureId The id referring to the adventure (activity) that the promo is for.
  * //TODO maybe change content from string to a new Content class (or an array) that can contain text and references to images. If this happens imageRef can be removed.
  */
-@FirebaseReference("promo", "promo/%s")
+@DataReference("promo", "promo/%s")
 data class PromoItem(override val id: String,
                      val imageRef: String,
                      val adventureId: Int,
-                     val metaData: PostMetaData) :BaseModel{
+                     val metaData: PostMetaData
+) :BaseModel{
     constructor(): this("", "", -1, PostMetaData())
 }

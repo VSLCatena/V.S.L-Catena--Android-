@@ -1,21 +1,18 @@
 apply plugin: 'com.android.application'
-
 apply plugin: 'kotlin-android'
-
 apply plugin: 'kotlin-android-extensions'
-
 apply plugin: 'kotlin-kapt'
-
 apply plugin: 'androidx.navigation.safeargs'
+
 android {
-    compileSdkVersion 27
+    compileSdkVersion 28
     defaultConfig {
         applicationId "nl.vslcatena.vslcatena"
         minSdkVersion 19
-        targetSdkVersion 27
+        targetSdkVersion 28
         versionCode 1
         versionName "1.0"
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
         release {
@@ -28,33 +25,35 @@ android {
             }
         }
     }
+
+    dataBinding {
+        enabled = true
+    }
 }
 
 dependencies {
-
-    def support_version = "27.1.1"
-    def nav_version = "1.0.0-alpha04"
-    def paging_version = "1.0.1"
-    def firebase_version = "16.0.1"
-
-
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
-    implementation "com.android.support:appcompat-v7:$support_version"
-    implementation "com.android.support:support-v4:$support_version"
-    implementation "com.android.support:recyclerview-v7:$support_version"
-    implementation "com.android.support:cardview-v7:$support_version"
-    implementation "com.android.support:design:$support_version"
+    implementation 'com.google.android.material:material:1.1.0-alpha01'
 
-    implementation 'com.android.support.constraint:constraint-layout:1.1.2'
-    implementation "com.google.firebase:firebase-core:$firebase_version"
-    implementation "com.google.firebase:firebase-database:$firebase_version"
-    implementation "com.google.firebase:firebase-storage:$firebase_version"
-    implementation "com.google.firebase:firebase-auth:$firebase_version"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:0.27.0-eap13"
 
+    implementation 'androidx.appcompat:appcompat:1.0.2'
+    implementation 'androidx.recyclerview:recyclerview:1.0.0'
+    implementation 'androidx.cardview:cardview:1.0.0'
+    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
+
+    implementation 'com.google.firebase:firebase-core:16.0.6'
+    implementation 'com.google.firebase:firebase-database:16.0.5'
+    implementation 'com.google.firebase:firebase-storage:16.0.5'
+    implementation 'com.google.firebase:firebase-auth:16.0.5'
     implementation 'com.firebaseui:firebase-ui-storage:4.1.0'
-    implementation "android.arch.lifecycle:extensions:1.1.1"
+
+    implementation 'androidx.lifecycle:lifecycle-extensions:2.0.0'
+    implementation 'android.arch.navigation:navigation-fragment-ktx:1.0.0-alpha06'
+    implementation 'android.arch.navigation:navigation-ui-ktx:1.0.0-alpha06'
+    implementation 'androidx.paging:paging-runtime:2.0.0'
 
 
     implementation 'com.github.bumptech.glide:glide:4.7.1'
@@ -62,28 +61,15 @@ dependencies {
     kapt 'com.github.bumptech.glide:compiler:4.7.1'
 
 
-    implementation 'com.android.support:support-v4:27.1.1'
     testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'com.android.support.test:runner:1.0.2'
-    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
-
-
-    implementation "android.arch.navigation:navigation-fragment-ktx:$nav_version"
-    implementation "android.arch.navigation:navigation-ui-ktx:$nav_version"
-    androidTestImplementation "android.arch.navigation:navigation-testing-ktx:$nav_version"
+    androidTestImplementation 'androidx.test:runner:1.1.0'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.0'
+    testImplementation 'android.arch.navigation:navigation-testing-ktx:1.0.0-alpha06'
     // use -ktx for Kotlin
 
-    implementation "android.arch.paging:runtime:$paging_version"
-    testImplementation "android.arch.paging:common:$paging_version"
 
-//    implementation 'com.google.android.material:material:1.0.0-alpha3'
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:0.22.5"
+    testImplementation 'androidx.paging:paging-common:2.0.0'
+
 }
-
 
 apply plugin: 'com.google.gms.google-services'
-kotlin {
-    experimental {
-        coroutines "enable"
-    }
-}

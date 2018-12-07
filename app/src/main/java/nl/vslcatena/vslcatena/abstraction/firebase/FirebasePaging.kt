@@ -1,15 +1,15 @@
 package nl.vslcatena.vslcatena.abstraction.firebase
 
-import android.arch.lifecycle.*
-import android.arch.paging.*
+import androidx.lifecycle.*
+import androidx.paging.*
 import android.content.Context
-import android.support.annotation.LayoutRes
-import android.support.v4.app.Fragment
-import android.support.v4.app.FragmentActivity
-import android.support.v7.util.DiffUtil
-import android.support.v7.widget.GridLayoutManager
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
+import androidx.annotation.LayoutRes
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -55,9 +55,9 @@ abstract class FirebasePagingAdapter<T: BaseModel, VH: RecyclerView.ViewHolder>(
         }
 
 
-        // Here we grab the FirebaseReference that we also use for the liveviewmodel
+        // Here we grab the DataReference that we also use for the liveviewmodel
         // This way we have a single workflow for both of them
-        val reference = FirebaseDatabase.getInstance().getReference(klass.getAnnotation(FirebaseReference::class.java).listReference)
+        val reference = FirebaseDatabase.getInstance().getReference(klass.getAnnotation(DataReference::class.java).listReference)
 
         // Here we build our model list and when we observe a change in the list we submit it
         // to the PagedListAdapter

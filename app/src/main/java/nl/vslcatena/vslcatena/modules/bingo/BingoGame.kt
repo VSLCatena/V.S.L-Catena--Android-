@@ -1,9 +1,7 @@
-package nl.vslcatena.vslcatena.util
+package nl.vslcatena.vslcatena.modules.bingo
 
 import java.util.Random
 import kotlin.collections.HashSet
-
-typealias BingoItem = String
 
 /**
  * This is an ease of use class that handles all the BingoGame mechanics for us.
@@ -13,12 +11,12 @@ typealias BingoItem = String
  *
  * Make sure the {@link #textList} is bigger than the size squared! D:
  */
-class BingoGame(val size: Int = 5, textList: List<BingoItem>) {
+class BingoGame(val size: Int = 5, textList: List<String>) {
     /**
      * Contains a list of which text is at which position.
      * We keep this separated from {@link #marked} to speed up search time
      */
-    val cellText: Array<BingoItem>
+    val cellText: Array<String>
 
     /**
      * Contains a list of if which items are marked and which are not.

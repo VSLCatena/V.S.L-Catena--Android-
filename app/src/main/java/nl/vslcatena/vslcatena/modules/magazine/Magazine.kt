@@ -1,10 +1,10 @@
-package nl.vslcatena.vslcatena.models
+package nl.vslcatena.vslcatena.modules.magazine
 
 import nl.vslcatena.vslcatena.abstraction.firebase.BaseModel
-import nl.vslcatena.vslcatena.abstraction.firebase.FirebaseReference
+import nl.vslcatena.vslcatena.abstraction.firebase.DataReference
 import nl.vslcatena.vslcatena.util.Paths
 
-@FirebaseReference("magazines")
+@DataReference("magazines")
 data class Magazine(
         override val id: String,
         val name: String,
