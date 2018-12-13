@@ -1,18 +1,17 @@
 package nl.vslcatena.vslcatena.modules.news
 
 import android.os.Bundle
-import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.navigation.fragment.findNavController
-import nl.vslcatena.vslcatena.R
+import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.home.*
+import nl.vslcatena.vslcatena.R
 import nl.vslcatena.vslcatena.abstraction.firebase.FirebasePagingAdapter
 import nl.vslcatena.vslcatena.abstraction.fragment.BaseFragment
 import nl.vslcatena.vslcatena.abstraction.fragment.NeedsAuthentication
-import nl.vslcatena.vslcatena.controllers.NewsListFragmentDirections
 
 @NeedsAuthentication
 class NewsListFragment : BaseFragment() {

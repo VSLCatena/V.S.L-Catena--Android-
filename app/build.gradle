@@ -35,7 +35,7 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
-    implementation 'com.google.android.material:material:1.1.0-alpha01'
+    implementation 'com.google.android.material:material:1.1.0-alpha02'
 
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:0.27.0-eap13"
 
@@ -51,8 +51,8 @@ dependencies {
     implementation 'com.firebaseui:firebase-ui-storage:4.1.0'
 
     implementation 'androidx.lifecycle:lifecycle-extensions:2.0.0'
-    implementation 'android.arch.navigation:navigation-fragment-ktx:1.0.0-alpha06'
-    implementation 'android.arch.navigation:navigation-ui-ktx:1.0.0-alpha06'
+    implementation 'android.arch.navigation:navigation-fragment-ktx:1.0.0-alpha08'
+    implementation 'android.arch.navigation:navigation-ui-ktx:1.0.0-alpha08'
     implementation 'androidx.paging:paging-runtime:2.0.0'
 
 
@@ -64,6 +64,7 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test:runner:1.1.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.0'
+    testImplementation 'android.arch.core:core-testing:2.0.0'
     testImplementation 'android.arch.navigation:navigation-testing-ktx:1.0.0-alpha06'
     // use -ktx for Kotlin
 

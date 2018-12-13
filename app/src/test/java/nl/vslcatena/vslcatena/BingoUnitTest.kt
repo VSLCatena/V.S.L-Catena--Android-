@@ -1,9 +1,13 @@
 package nl.vslcatena.vslcatena
 
-import nl.vslcatena.vslcatena.modules.bingo.BingoGame
+import nl.vslcatena.vslcatena.modules.bingo.BingoViewModel
+import org.junit.Assert.assertEquals
+import org.junit.Before
 import org.junit.Test
+import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import org.junit.rules.TestRule
+import org.junit.Rule
 
-import org.junit.Assert.*
 
 /**
  * Example local unit test, which will execute on the development machine (host).
@@ -12,193 +16,217 @@ import org.junit.Assert.*
  */
 class BingoUnitTest {
 
+    lateinit var bingoViewModel: BingoViewModel
+
+    @Rule
+    @JvmField
+    public var rule: TestRule = InstantTaskExecutorRule()
+
+    @Before
+    fun initTest() {
+        bingoViewModel = BingoViewModel()
+        bingoViewModel.initialize(Array(50) { "test $it" }.toList(), 5)
+    }
+
+    fun clear() {
+        bingoViewModel.grid.forEach {
+            it.forEach { cell ->
+                cell.setChecked(false)
+            }
+        }
+    }
+
+    fun setCell(x: Int, y: Int, checked: Boolean = true) {
+        bingoViewModel.grid[x][y].setChecked(checked)
+    }
+
+    fun hasWon() = bingoViewModel.won.value ?: false
+
+
     @Test
     fun `check horizontal win 1`() {
-        val game = BingoGame(5, Array(50) { "test: $it" }.toList()).apply {
-            toggleField(0,0)
-            toggleField(1,0)
-            toggleField(2,0)
-            toggleField(3,0)
-            toggleField(4,0)
-        }
-        val winningTiles = game.getWinningCells()
+        bingoViewModel.grid.apply {
+            clear()
 
-        assertEquals(5, winningTiles.size)
+            setCell(0, 0)
+            setCell(1, 0)
+            setCell(2, 0)
+            setCell(3, 0)
+            setCell(4, 0)
+
+            assertEquals("Check horizontal win 1", hasWon(), true)
+        }
     }
 
     @Test
     fun `check horizontal win 2`() {
-        val game = BingoGame(5, Array(50) { "test: $it" }.toList()).apply {
-            toggleField(0,0)
-            toggleField(1,0)
-            toggleField(2,0)
-            toggleField(3,0)
-//            toggleField(4,0)
+        bingoViewModel.grid.apply {
+            clear()
+
+            setCell(0, 3)
+            setCell(1, 3)
+            setCell(2, 3)
+            setCell(3, 3)
+            setCell(4, 3)
+
+            assertEquals("Check horizontal win 2", hasWon(), true)
         }
-        val winningTiles = game.getWinningCells()
-
-        assertEquals(0, winningTiles.size)
-    }
-
-    @Test
-    fun `check horizontal win 3`() {
-        val game = BingoGame(5, Array(50) { "test: $it" }.toList()).apply {
-            toggleField(0,0)
-            toggleField(1,0)
-            toggleField(2,0)
-            toggleField(3,0)
-            toggleField(4,0)
-
-            toggleField(0,3)
-            toggleField(1,3)
-            toggleField(2,3)
-            toggleField(3,3)
-            toggleField(4,3)
-        }
-        val winningTiles = game.getWinningCells()
-
-        assertEquals(10, winningTiles.size)
     }
 
     @Test
     fun `check vertical win 1`() {
-        val game = BingoGame(5, Array(50) { "test: $it" }.toList()).apply {
-            toggleField(0,0)
-            toggleField(0,1)
-            toggleField(0,2)
-            toggleField(0,3)
-            toggleField(0,4)
-        }
-        val winningTiles = game.getWinningCells()
+        bingoViewModel.grid.apply {
+            clear()
 
-        assertEquals(5, winningTiles.size)
+            setCell(0, 0)
+            setCell(0, 1)
+            setCell(0, 2)
+            setCell(0, 3)
+            setCell(0, 4)
+
+            assertEquals("Check vertical win 1", hasWon(), true)
+        }
     }
+
     @Test
     fun `check vertical win 2`() {
-        val game = BingoGame(5, Array(50) { "test: $it" }.toList()).apply {
-            toggleField(0,0)
-            toggleField(0,1)
-            toggleField(0,2)
-            toggleField(1,3)
-            toggleField(0,4)
+        bingoViewModel.grid.apply {
+            clear()
+
+            setCell(3, 0)
+            setCell(3, 1)
+            setCell(3, 2)
+            setCell(3, 3)
+            setCell(3, 4)
+
+            assertEquals("Check vertical win 2", hasWon(), true)
         }
-        val winningTiles = game.getWinningCells()
-
-        assertEquals(0, winningTiles.size)
-    }
-
-    @Test
-    fun `check vertical win 3`() {
-        val game = BingoGame(5, Array(50) { "test: $it" }.toList()).apply {
-            toggleField(0,0)
-            toggleField(0,1)
-            toggleField(0,2)
-            toggleField(0,3)
-            toggleField(0,4)
-
-            toggleField(4,0)
-            toggleField(4,1)
-            toggleField(4,2)
-            toggleField(4,3)
-            toggleField(4,4)
-        }
-        val winningTiles = game.getWinningCells()
-
-        assertEquals(10, winningTiles.size)
     }
 
     @Test
     fun `check diagonal win 1`() {
-        val game = BingoGame(5, Array(50) { "test: $it" }.toList()).apply {
-            toggleField(0,0)
-            toggleField(1,1)
-            toggleField(2,2)
-            toggleField(3,3)
-            toggleField(4,4)
+        bingoViewModel.grid.apply {
+            clear()
 
+            setCell(0, 0)
+            setCell(1, 1)
+            setCell(2, 2)
+            setCell(3, 3)
+            setCell(4, 4)
+
+            assertEquals("Check diagonal win 1", hasWon(), true)
         }
-        val winningTiles = game.getWinningCells()
-
-        assertEquals(5, winningTiles.size)
     }
 
     @Test
     fun `check diagonal win 2`() {
-        val game = BingoGame(5, Array(50) { "test: $it" }.toList()).apply {
-            toggleField(0,4)
-            toggleField(1,3)
-            toggleField(2,2)
-            toggleField(3,1)
-            toggleField(4,0)
+        bingoViewModel.grid.apply {
+            clear()
 
+            setCell(0, 4)
+            setCell(1, 3)
+            setCell(2, 2)
+            setCell(3, 1)
+            setCell(4, 0)
+
+            assertEquals("Check diagonal win 2", hasWon(), true)
         }
-        val winningTiles = game.getWinningCells()
-
-        assertEquals(5, winningTiles.size)
-    }
-    @Test
-    fun `check diagonal win 3`() {
-        val game = BingoGame(5, Array(50) { "test: $it" }.toList()).apply {
-            toggleField(0,0)
-            toggleField(1,1)
-//            toggleField(2,2)
-            toggleField(3,3)
-            toggleField(4,4)
-
-
-            toggleField(0,4)
-            toggleField(1,3)
-//            toggleField(2,2)
-            toggleField(3,1)
-            toggleField(4,0)
-
-        }
-        val winningTiles = game.getWinningCells()
-
-        assertEquals(0, winningTiles.size)
-    }
-
-
-    @Test
-    fun `check horizontal and vertical win 1`() {
-        val game = BingoGame(5, Array(50) { "test: $it" }.toList()).apply {
-            toggleField(0,0)
-            toggleField(0,1)
-            toggleField(0,2)
-            toggleField(0,3)
-            toggleField(0,4)
-
-//            toggleField(0,0) // This has already been toggled
-            toggleField(1,0)
-            toggleField(2,0)
-            toggleField(3,0)
-            toggleField(4,0)
-        }
-        val winningTiles = game.getWinningCells()
-
-        assertEquals(9, winningTiles.size)
     }
 
     @Test
-    fun `check horizontal, vertical and diagonal win 1`() {
-        val game = BingoGame(5, Array(50) { "test: $it" }.toList()).apply {
-            toggleField(0,0)
-            toggleField(0,1)
-            toggleField(0,2)
-            toggleField(0,3)
-            toggleField(0,4)
+    fun `check not a win 1`() {
+        bingoViewModel.grid.apply {
+            clear()
 
-            toggleField(1,0)
-            toggleField(2,0)
-            toggleField(3,0)
-            toggleField(4,0)
+            setCell(0, 0)
+            setCell(1, 0)
+            setCell(2, 1)
+            setCell(3, 0)
+            setCell(4, 0)
 
-            toggleField(1,3)
-            toggleField(2,2)
-            toggleField(3,1)
+            assertEquals("Check not a win 1", hasWon(), false)
         }
-        val winningTiles = game.getWinningCells()
+    }
 
-        assertEquals(12, winningTiles.size)
+    @Test
+    fun `check not a win 2`() {
+        bingoViewModel.grid.apply {
+            clear()
+
+            setCell(0, 0)
+            setCell(0, 1)
+            setCell(0, 2)
+            setCell(1, 3)
+            setCell(0, 4)
+
+            assertEquals("Check not a win 2", hasWon(), false)
+        }
+    }
+
+    @Test
+    fun `check not a win 3`() {
+        bingoViewModel.grid.apply {
+            clear()
+
+            setCell(0, 0)
+            setCell(1, 1)
+            setCell(2, 3)
+            setCell(3, 3)
+            setCell(4, 4)
+
+            assertEquals("Check not a win 3", hasWon(), false)
+        }
+    }
+
+    @Test
+    fun `check not a win 4`() {
+        bingoViewModel.grid.apply {
+            clear()
+
+            setCell(0, 4)
+            setCell(2, 3)
+            setCell(2, 2)
+            setCell(3, 1)
+            setCell(4, 0)
+
+            assertEquals("Check not a win 3", hasWon(), false)
+        }
+    }
+
+    @Test
+    fun `check cluster win 1`() {
+        bingoViewModel.grid.apply {
+            clear()
+
+            setCell(0, 0)
+            setCell(1, 0)
+            setCell(2, 0)
+            setCell(3, 0)
+            setCell(4, 0)
+
+            setCell(0, 1)
+            setCell(0, 2)
+            setCell(0, 3)
+            setCell(0, 4)
+
+            assertEquals("Check cluster win 1", hasWon(), true)
+        }
+    }
+
+    @Test
+    fun `check if unchecking works`() {
+        bingoViewModel.grid.apply {
+            clear()
+
+            setCell(0, 0)
+            setCell(1, 0)
+            setCell(2, 0)
+            setCell(3, 0)
+            setCell(4, 0)
+
+            setCell(4, 0, false)
+
+            assertEquals("Check unchecking", hasWon(), false)
+        }
     }
 }

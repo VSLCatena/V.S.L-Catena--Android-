@@ -14,7 +14,6 @@ import nl.vslcatena.vslcatena.R
 import nl.vslcatena.vslcatena.abstraction.firebase.ItemLoader
 import nl.vslcatena.vslcatena.abstraction.fragment.NeedsAuthentication
 import nl.vslcatena.vslcatena.abstraction.fragment.SingleItemFragment
-import nl.vslcatena.vslcatena.controllers.PromoItemFragmentDirections
 import nl.vslcatena.vslcatena.models.User
 import nl.vslcatena.vslcatena.util.extensions.observeOnce
 import nl.vslcatena.vslcatena.util.extensions.setImageFromFirebaseStorage

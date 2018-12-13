@@ -1,29 +1,21 @@
 package nl.vslcatena.vslcatena.modules.bingo
 
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
-import java.lang.IndexOutOfBoundsException
 
 class BingoViewModel : ViewModel() {
-    private val _grid = MutableLiveData<Array<Array<Boolean>>>()
-    val textGrid = MutableLiveData<Array<Array<String>>>()
+    var gridSize = 0
+    lateinit var grid: Array<Array<BingoCell>>
     val won = MutableLiveData<Boolean>()
 
-    var gridSize: Int = 0
-        private set
-
-    val grid: LiveData<Array<Array<Boolean>>>
-        get() = _grid
-
-    private val gridObserver = Observer<Array<Array<Boolean>>> {
+    private val gridObserver = Observer<Boolean> {
         won.value = checkIfWon()
     }
 
     fun initialize(textList: List<String>, newGridSize: Int) {
         // Check if we have enough texts to fill the grid
-        if (newGridSize * newGridSize < textList.size)
+        if ((newGridSize * newGridSize) > textList.size)
             throw IndexOutOfBoundsException("textList is smaller than the grid that needs to be filled")
 
         gridSize = newGridSize
@@ -33,34 +25,26 @@ class BingoViewModel : ViewModel() {
         textPool.shuffle()
 
         // Create a new list
-        _grid.value = Array(gridSize) {
-            Array(gridSize) { false }
+        grid = Array(gridSize) { x ->
+            Array(gridSize) { y ->
+                BingoCell(textPool[x * gridSize + y]).apply {
+                    isChecked.observeForever(gridObserver)
+                }
+            }
         }
-        textGrid.value = Array(gridSize) { x ->
-            // For every item in the textGrid we want to grab it from the textPool
-            Array(gridSize) { y -> textPool[x * gridSize + y] }
-        }
-
-        grid.observeForever(gridObserver)
     }
 
     override fun onCleared() {
-        grid.removeObserver(gridObserver)
+        grid.forEach {
+            it.forEach {
+                it.isChecked.removeObserver(gridObserver)
+            }
+        }
     }
+    fun isCellChecked(x: Int, y: Int) = grid[x][y].isChecked()
 
-    fun toggleCell(x: Int, y: Int) {
-        setCellChecked(x, y, !isCellChecked(x, y))
-    }
-
-    fun isCellChecked(x: Int, y: Int) = grid.value!![x][y]
-
-    fun setCellChecked(x: Int, y: Int, checked: Boolean) {
-        grid.value!![x][y] = checked
-        _grid.value = _grid.value // We do this just to trigger the observers
-    }
-
-    fun checkIfWon(): Boolean {
-        if (gridSize % 2 == 0) {
+    private fun checkIfWon(): Boolean {
+        if (gridSize % 2 != 0) {
             run diagonal1@{
                 for (x in 0 until gridSize)
                     if (!isCellChecked(x, x)) return@diagonal1
@@ -69,7 +53,7 @@ class BingoViewModel : ViewModel() {
 
             run diagonal2@{
                 for (x in 0 until gridSize)
-                    if (!isCellChecked(x, gridSize - x)) return@diagonal2
+                    if (!isCellChecked(x, gridSize - x - 1)) return@diagonal2
                 return true
             }
         }
@@ -87,5 +71,18 @@ class BingoViewModel : ViewModel() {
         }
 
         return false
+    }
+
+    data class BingoCell(val text: String, val isChecked: MutableLiveData<Boolean> = MutableLiveData()) {
+
+        fun toggle() {
+            isChecked.value = !isChecked()
+        }
+
+        fun setChecked(checked: Boolean) {
+            isChecked.value = checked
+        }
+
+        fun isChecked() = isChecked.value ?: false
     }
 }
