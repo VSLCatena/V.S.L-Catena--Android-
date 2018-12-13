@@ -10,7 +10,7 @@ import nl.vslcatena.vslcatena.R
 import nl.vslcatena.vslcatena.abstraction.firebase.ItemLoader
 import nl.vslcatena.vslcatena.abstraction.fragment.NeedsAuthentication
 import nl.vslcatena.vslcatena.abstraction.lists.PagedFirebaseListFragment
-import nl.vslcatena.vslcatena.models.User
+import nl.vslcatena.vslcatena.modules.login.User
 import nl.vslcatena.vslcatena.util.compenentHolders.PostHeaderViewHolder
 import nl.vslcatena.vslcatena.util.extensions.observeOnce
 import nl.vslcatena.vslcatena.util.extensions.setImageFromFirebaseStorage

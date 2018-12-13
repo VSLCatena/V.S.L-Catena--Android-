@@ -6,7 +6,8 @@ import androidx.fragment.app.Fragment
 import android.util.Log
 import androidx.navigation.fragment.findNavController
 import nl.vslcatena.vslcatena.NavGraphDirections
-import nl.vslcatena.vslcatena.util.TempLogInProvider
+import nl.vslcatena.vslcatena.modules.login.provider.LoginProvider
+import nl.vslcatena.vslcatena.modules.login.provider.TempLoginProvider
 
 abstract class BaseFragment : Fragment() {
 
@@ -23,7 +24,7 @@ abstract class BaseFragment : Fragment() {
     private fun userIsAuthenticated(): Boolean {
         //TODO this should be done via dependency inject, to make it more flexible and testable. Consider adding Dagger2.
 //        return FirebaseAuth.getInstance().currentUser != null
-        return TempLogInProvider.isAuthenticated
+        return LoginProvider.provider.getUser() != null
     }
 
     private fun handleUserAuth(){

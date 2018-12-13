@@ -12,9 +12,14 @@
     <!-- Strings related to login -->
     <string name="prompt_email">Gebruikersnaam</string>
     <string name="prompt_password">Wachtwoord</string>
+    <string name="login_forgot_password">Wachtwoord vergeten</string>
     <string name="action_sign_in">Log in</string>
     <string name="action_sign_in_short">Log in</string>
     <string name="error_incorrect_password">Onjuist wachtwoord</string>
     <string name="error_field_required">Dit veld is vereist</string>
     <string name="button_go_to_adventure">Ga naar activiteit</string>
+
+    <string name="preferences_category_basic">Basis instellingen</string>
+    <string name="preferences_dark_theme">Dark theme</string>
+    <string name="preferences_dark_theme_summary">Zet een donkere thema aan</string>
 </resources>

@@ -1,4 +1,4 @@
-package nl.vslcatena.vslcatena.models
+package nl.vslcatena.vslcatena.modules.login
 
 import nl.vslcatena.vslcatena.abstraction.firebase.BaseModel
 import nl.vslcatena.vslcatena.abstraction.firebase.DataReference

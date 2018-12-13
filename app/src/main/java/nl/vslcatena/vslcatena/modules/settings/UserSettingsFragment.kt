@@ -1,12 +1,7 @@
 package nl.vslcatena.vslcatena.modules.settings
 
-
 import android.os.Bundle
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-
+import androidx.preference.PreferenceFragmentCompat
 import nl.vslcatena.vslcatena.R
 
 /**
@@ -15,13 +10,10 @@ import nl.vslcatena.vslcatena.R
  *  - Manage subscriptions?
  *
  */
-class UserSettingsFragment : Fragment() {
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_user_settings, container, false)
+class UserSettingsFragment : PreferenceFragmentCompat() {
+    override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
+        setPreferencesFromResource(R.xml.preferences, rootKey)
     }
 
-
+    override fun preference
 }

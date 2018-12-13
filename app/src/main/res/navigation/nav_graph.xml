@@ -81,7 +81,6 @@
     <fragment
         android:id="@+id/userSettingsFragment"
         android:name="nl.vslcatena.vslcatena.modules.settings.UserSettingsFragment"
-        android:label="fragment_user_settings"
-        tools:layout="@layout/fragment_user_settings" />
+        android:label="fragment_user_settings" />
 
 </navigation>
