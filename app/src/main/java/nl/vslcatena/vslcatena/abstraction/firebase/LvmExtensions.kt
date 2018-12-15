@@ -3,7 +3,7 @@ package nl.vslcatena.vslcatena.abstraction.firebase
 import androidx.lifecycle.Observer
 import nl.vslcatena.vslcatena.abstraction.fragment.BaseFragment
 
-fun BaseFragment.getReference(reference: String): Reference.RawReference {
+fun BaseFragment.getReference(reference: String): RawReference {
     return LiveViewModel.of(this).getReference(reference)
 }
 

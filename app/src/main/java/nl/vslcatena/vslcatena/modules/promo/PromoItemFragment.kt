@@ -25,7 +25,8 @@ import java.util.*
  */
 @NeedsAuthentication
 class PromoItemFragment : SingleItemFragment<PromoItem>(PromoItem::class.java) {
-    lateinit var userLoader: ItemLoader<User>
+    private var userLoader: ItemLoader<User> = ItemLoader(User::class.java)
+
     override fun onItemRetrieved(item: PromoItem) {
         userLoader.getItem(item.metaData.postedBy)?.let {
             it.observeOnce(this, Observer {
@@ -52,23 +53,10 @@ class PromoItemFragment : SingleItemFragment<PromoItem>(PromoItem::class.java) {
         }
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        userLoader = ItemLoader.of(this, User::class.java)
-    }
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_promo_item, container, false)
-    }
-
-
-    companion object {
-        fun newInstance(itemId: String) =
-                PromoItemFragment().apply {
-                    SingleItemFragment.applyItem(this, itemId)
-                }
     }
 }
 

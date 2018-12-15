@@ -1,6 +1,5 @@
 package nl.vslcatena.vslcatena.modules.promo
 
-import android.os.Bundle
 import android.view.View
 import android.widget.TextView
 import androidx.lifecycle.Observer
@@ -21,13 +20,7 @@ import java.util.*
 class PromoListFragment : PagedFirebaseListFragment<PromoItem, PromoListFragment.PromoViewHolder>(
     PromoItem::class.java) {
     override val itemView = R.layout.promo_item
-    private lateinit var userLoader : ItemLoader<User>
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        userLoader = ItemLoader.of(this, User::class.java)
-    }
-
+    private val userLoader = ItemLoader(User::class.java)
 
     override fun onListItemClicked(item: PromoItem) {
         findNavController().navigate(

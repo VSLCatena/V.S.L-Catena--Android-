@@ -36,17 +36,27 @@ class BaseActivity : AppCompatActivity() {
         // We grab a list of menu items which we can then set as top-level items
         val menuItems = menuReader(nav_view.menu).map { it.itemId }
 
+        // The AppBarConfiguration that will manage the up and drawer button
         val appBarConfiguration = AppBarConfiguration(menuItems.toSet(), drawer_layout)
+
+        // Link the menus to the navController so that the navController handles the menu clicks
         toolbar.setupWithNavController(navController, appBarConfiguration)
         nav_view.setupWithNavController(navController)
 
     }
 
+    /**
+     * A simple function that reads through a menu and will recursively read out all the menu items
+     */
     private fun menuReader(menu: Menu): List<MenuItem> {
         val menuItems = ArrayList<MenuItem>()
+
+        // Go through every item in the menu
         for (i in 0 until menu.size()) {
             val item = menu.getItem(i)
+            // Add it to the list
             menuItems.add(item)
+            // If it has a subMenu recursively add all those items as well
             item.subMenu?.let {
                 menuItems.addAll(menuReader(it))
             }
@@ -64,6 +74,7 @@ class BaseActivity : AppCompatActivity() {
         return true
     }
 
+    // We want to close the drawer if it's open, otherwise we want our parent to handle it
     override fun onBackPressed() {
         if(drawer_layout.isDrawerOpen(nav_view))
             drawer_layout.closeDrawer(nav_view)

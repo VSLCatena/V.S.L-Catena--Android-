@@ -1,24 +1,26 @@
 package nl.vslcatena.vslcatena.abstraction.firebase
 
-import androidx.lifecycle.*
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
-import android.util.Log
-import com.google.firebase.database.*
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProviders
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.Query
 import java.lang.ref.WeakReference
 
 /**
  * Created by Thomas van den Bulk on 30-4-2018.
  */
 class LiveViewModel: ViewModel() {
-    private val references = HashMap<String, WeakReference<Reference.RawReference>>()
+    private val references = HashMap<String, WeakReference<RawReference>>()
 
-    fun get(query: Query): Reference.RawReference {
+    fun get(query: Query): RawReference {
         val path = query.path.wireFormat()
 
         var reference = references[path]?.get()
         if (reference == null) {
-            reference = Reference.RawReference(query)
+            reference = RawReference(query)
             references[path] = WeakReference(reference)
         }
 
@@ -50,27 +52,31 @@ class LiveViewModel: ViewModel() {
                     ?.listReference
         }
 
+
+        fun createQuery(reference: String, filter: (DatabaseReference) -> Query = { it }): Query {
+            val fbReference = FirebaseDatabase.getInstance().getReference(reference)
+            return filter.invoke(fbReference)
+        }
+
+
         class Provider(_viewModel: LiveViewModel) {
             private val viewModel = WeakReference(_viewModel)
-            private var enabledOnly = false
             private var filter: (DatabaseReference) -> Query = { it }
-
-            private fun createQuery(reference: String): Query {
-                val fbReference = FirebaseDatabase.getInstance().getReference(reference)
-                return if (enabledOnly) {
-                    fbReference.child("enabled").equalTo(true)
-                } else filter.invoke(fbReference)
-            }
 
             fun filter(filter: (DatabaseReference) -> Query): Provider {
                 this.filter = filter
                 return this
             }
 
+            fun enabledOnly(): Provider {
+                filter = { it.child("enabled").equalTo(true) }
+                return this
+            }
+
             fun getReference(
                 reference: String
-            ): Reference.RawReference {
-                return viewModel.get()!!.get(createQuery(reference))
+            ): RawReference {
+                return viewModel.get()!!.get(createQuery(reference, filter))
             }
         }
     }
