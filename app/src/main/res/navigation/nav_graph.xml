@@ -70,16 +70,13 @@
             android:name="itemId"
             app:argType="string"/>
     </fragment>
-    <activity
-        android:id="@+id/baseActivity"
-        android:name="nl.vslcatena.vslcatena.BaseActivity"
-        android:label="BaseActivity" /><action android:id="@+id/action_global_magazineFragment" app:destination="@id/magazineFragment" app:enterAnim="@anim/nav_default_enter_anim" app:exitAnim="@anim/nav_default_exit_anim" app:popEnterAnim="@anim/nav_default_pop_enter_anim" app:popExitAnim="@anim/nav_default_pop_exit_anim"/>
+    <action android:id="@+id/action_global_magazineFragment" app:destination="@id/magazineFragment" app:enterAnim="@anim/nav_default_enter_anim" app:exitAnim="@anim/nav_default_exit_anim" app:popEnterAnim="@anim/nav_default_pop_enter_anim" app:popExitAnim="@anim/nav_default_pop_exit_anim"/>
     <fragment
         android:id="@+id/loginFragment"
         android:name="nl.vslcatena.vslcatena.modules.login.LoginFragment"
         android:label="LoginFragment" /><action android:id="@+id/action_global_loginFragment" app:destination="@id/loginFragment" app:enterAnim="@anim/nav_default_enter_anim" app:exitAnim="@anim/nav_default_pop_exit_anim" app:popEnterAnim="@anim/nav_default_pop_enter_anim" app:popExitAnim="@anim/nav_default_pop_exit_anim"/>
     <fragment
-        android:id="@+id/userSettingsFragment"
+        android:id="@+id/settingsFragment"
         android:name="nl.vslcatena.vslcatena.modules.settings.UserSettingsFragment"
         android:label="fragment_user_settings" />
 

@@ -1,17 +1,18 @@
 package nl.vslcatena.vslcatena
 
 import android.os.Bundle
-import com.google.android.material.navigation.NavigationView
-import androidx.core.view.GravityCompat
-import androidx.appcompat.app.ActionBarDrawerToggle
-import androidx.appcompat.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
+import androidx.appcompat.app.ActionBarDrawerToggle
+import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
-import androidx.navigation.Navigation.findNavController
+import androidx.navigation.findNavController
+import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.onNavDestinationSelected
+import androidx.navigation.ui.setupWithNavController
 import kotlinx.android.synthetic.main.base.*
 
-class BaseActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
+class BaseActivity : AppCompatActivity() {
 
     lateinit var navController: NavController
 
@@ -20,14 +21,38 @@ class BaseActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         super.setContentView(R.layout.base)
         setSupportActionBar(toolbar)
 
+        navController = findNavController(R.id.nav_host)
+
+        supportActionBar?.apply {
+            setDisplayHomeAsUpEnabled(true)
+            setHomeAsUpIndicator(R.drawable.ic_menu)
+        }
+
         val toggle = ActionBarDrawerToggle(
                 this, drawer_layout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
         drawer_layout.addDrawerListener(toggle)
         toggle.syncState()
 
-        nav_view.setNavigationItemSelectedListener(this)
-        navController = findNavController(this, R.id.nav_host)
+        // We grab a list of menu items which we can then set as top-level items
+        val menuItems = menuReader(nav_view.menu).map { it.itemId }
 
+        val appBarConfiguration = AppBarConfiguration(menuItems.toSet(), drawer_layout)
+        toolbar.setupWithNavController(navController, appBarConfiguration)
+        nav_view.setupWithNavController(navController)
+
+    }
+
+    private fun menuReader(menu: Menu): List<MenuItem> {
+        val menuItems = ArrayList<MenuItem>()
+        for (i in 0 until menu.size()) {
+            val item = menu.getItem(i)
+            menuItems.add(item)
+            item.subMenu?.let {
+                menuItems.addAll(menuReader(it))
+            }
+        }
+
+        return menuItems
     }
 
     override fun onSupportNavigateUp()
@@ -39,46 +64,13 @@ class BaseActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         return true
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        when (item.itemId) {
-            R.id.action_settings -> return true
-            else -> return super.onOptionsItemSelected(item)
-        }
+    override fun onBackPressed() {
+        if(drawer_layout.isDrawerOpen(nav_view))
+            drawer_layout.closeDrawer(nav_view)
+        else super.onBackPressed()
     }
 
-    override fun onNavigationItemSelected(item: MenuItem): Boolean {
-        // Handle navigation view item clicks here.
-        when (item.itemId) {
-            R.id.nav_news -> {
-                navController.navigate(R.id.newsFragment)
-            }
-            R.id.nav_promo -> {
-                navController.navigate(R.id.promoFragment)
-            }
-            R.id.nav_magazines -> {
-                navController.navigate(NavGraphDirections.actionGlobalMagazineFragment(resources.getInteger(R.integer.magazineColumnCount)))
-            }
-            R.id.nav_rules -> {
-
-            }
-            R.id.nav_faq -> {
-
-            }
-            R.id.nav_bingo -> {
-                navController.navigate(R.id.bingoFragment)
-            }
-            R.id.nav_crying_wall -> {
-
-            }
-            R.id.nav_user_settings -> {
-                navController.navigate(R.id.userSettingsFragment)
-            }
-        }
-
-        drawer_layout.closeDrawer(GravityCompat.START)
-        return true
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return item.onNavDestinationSelected(navController) || super.onOptionsItemSelected(item)
     }
 }
