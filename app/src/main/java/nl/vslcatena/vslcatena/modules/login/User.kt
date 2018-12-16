@@ -6,13 +6,14 @@ import nl.vslcatena.vslcatena.util.Paths
 
 @DataReference("users")
 data class User(
-        override var id: String,
-        var name: String
+        override val id: String,
+        val name: String,
+        private val role: String
 ) : BaseModel {
 
+    fun role() = Role.getRoleFromString(role)
 
-    constructor(id: String): this(id, "")
-    constructor(): this("")
+    constructor(): this("", "", "")
 
     fun getThumbnailRef() = Paths.getStorageThumbnailPath(id)
 

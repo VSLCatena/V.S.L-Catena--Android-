@@ -2,6 +2,7 @@ package nl.vslcatena.vslcatena.modules.login.provider
 
 import androidx.lifecycle.MutableLiveData
 import kotlinx.coroutines.delay
+import nl.vslcatena.vslcatena.modules.login.Role
 import nl.vslcatena.vslcatena.modules.login.User
 import nl.vslcatena.vslcatena.util.Result
 
@@ -15,7 +16,7 @@ class TempLoginProvider: LoginProvider {
         if (username != "test" || password != "test")
             return Result.Failure(Exception("Invalid credentials"))
 
-        val newUser = User("00-000", "Test user")
+        val newUser = User("00-000", "Test user", Role.USER.value)
 
         currentUser.value = newUser
 

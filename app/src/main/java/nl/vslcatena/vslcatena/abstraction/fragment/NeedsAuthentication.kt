@@ -1,6 +1,7 @@
 package nl.vslcatena.vslcatena.abstraction.fragment
 
 import com.google.firebase.auth.FirebaseAuth
+import nl.vslcatena.vslcatena.modules.login.Role
 import kotlin.reflect.KClass
 
 /**
@@ -9,7 +10,7 @@ import kotlin.reflect.KClass
  */
 @Target(AnnotationTarget.CLASS)
 @Retention(AnnotationRetention.RUNTIME)
-annotation class NeedsAuthentication()
+annotation class NeedsAuthentication(val role: Role = Role.USER)
 
 
 

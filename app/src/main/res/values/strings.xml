@@ -22,4 +22,6 @@
     <string name="preferences_category_basic">Basis instellingen</string>
     <string name="preferences_dark_theme">Dark theme</string>
     <string name="preferences_dark_theme_summary">Zet een donkere thema aan</string>
+
+    <string name="auth_no_clearance">Je hebt niet genoeg rechten om hier toegang tot te krijgen!</string>
 </resources>
