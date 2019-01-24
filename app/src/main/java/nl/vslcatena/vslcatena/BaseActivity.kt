@@ -29,7 +29,12 @@ class BaseActivity : AppCompatActivity() {
         }
 
         val toggle = ActionBarDrawerToggle(
-                this, drawer_layout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
+            this,
+            drawer_layout,
+            toolbar,
+            R.string.navigation_drawer_open,
+            R.string.navigation_drawer_close
+        )
         drawer_layout.addDrawerListener(toggle)
         toggle.syncState()
 
@@ -65,8 +70,7 @@ class BaseActivity : AppCompatActivity() {
         return menuItems
     }
 
-    override fun onSupportNavigateUp()
-            = navController.navigateUp()
+    override fun onSupportNavigateUp() = navController.navigateUp()
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -76,7 +80,7 @@ class BaseActivity : AppCompatActivity() {
 
     // We want to close the drawer if it's open, otherwise we want our parent to handle it
     override fun onBackPressed() {
-        if(drawer_layout.isDrawerOpen(nav_view))
+        if (drawer_layout.isDrawerOpen(nav_view))
             drawer_layout.closeDrawer(nav_view)
         else super.onBackPressed()
     }

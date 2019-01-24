@@ -12,10 +12,13 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.fragment_bingo.*
 import nl.vslcatena.vslcatena.R
-import nl.vslcatena.vslcatena.abstraction.fragment.BaseFragment
-import nl.vslcatena.vslcatena.abstraction.fragment.NeedsAuthentication
+import nl.vslcatena.vslcatena.BaseFragment
+import nl.vslcatena.vslcatena.models.Identifier
+import nl.vslcatena.vslcatena.util.data.observeList
+import nl.vslcatena.vslcatena.util.login.NeedsAuthentication
 
 /**
  * A simple [Fragment] subclass.
@@ -29,17 +32,23 @@ class BingoFragment : BaseFragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         bingoViewModel = ViewModelProviders.of(this).get(BingoViewModel::class.java)
-        bingoViewModel.initialize(Array(50) { "test: $it" }.toList(), boardSize)
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?) =
-            inflater.inflate(R.layout.fragment_bingo, container, false)
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ) = inflater.inflate(R.layout.fragment_bingo, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        bingoGrid.apply {
-            numColumns = boardSize
-            adapter = BingoAdapter()
+        FirebaseFirestore.getInstance().collection("bingo").get().addOnCompleteListener { task ->
+            task.result?.let { snapshot ->
+                val bingoItems = snapshot.map { it.getString("text")!! }
+                bingoViewModel.initialize(bingoItems, boardSize)
+                bingoGrid.apply {
+                    numColumns = boardSize
+                    adapter = BingoAdapter()
+                }
+            }
         }
 
         bingoViewModel.won.observe(this, Observer {
@@ -48,7 +57,7 @@ class BingoFragment : BaseFragment() {
         })
     }
 
-    inner class BingoAdapter: BaseAdapter() {
+    inner class BingoAdapter : BaseAdapter() {
         override fun getCount(): Int = boardSize * boardSize
 
         override fun getItemId(position: Int) = 0L
@@ -61,7 +70,11 @@ class BingoFragment : BaseFragment() {
 
             val bingoView =
                 if (convertView == null)
-                    LayoutInflater.from(context!!).inflate(R.layout.bingo_field, parent, false)
+                    LayoutInflater.from(context!!).inflate(
+                        R.layout.fragment_bingo_field,
+                        parent,
+                        false
+                    )
                 else convertView
 
             bingoView.setOnClickListener {
@@ -74,7 +87,10 @@ class BingoFragment : BaseFragment() {
             bingoCell.isChecked.observe(
                 this@BingoFragment,
                 Observer {
-                    bingoView.setBackgroundColor(if (it == true) Color.GREEN else Color.WHITE)
+                    bingoView.setBackgroundResource(
+                        if (it == true) R.drawable.bingo_field_border_checked
+                        else R.drawable.bingo_field_border
+                    )
                 }
             )
 

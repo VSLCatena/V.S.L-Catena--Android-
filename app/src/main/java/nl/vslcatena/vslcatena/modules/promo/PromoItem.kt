@@ -1,8 +1,10 @@
 package nl.vslcatena.vslcatena.modules.promo
 
-import nl.vslcatena.vslcatena.abstraction.firebase.BaseModel
-import nl.vslcatena.vslcatena.abstraction.firebase.DataReference
-import nl.vslcatena.vslcatena.models.PostMetaData
+import nl.vslcatena.vslcatena.util.data.BaseModel
+import nl.vslcatena.vslcatena.util.data.DataReference
+import nl.vslcatena.vslcatena.models.Identifier
+import nl.vslcatena.vslcatena.util.componentholders.PostHeaderViewHolder
+import java.util.*
 
 /**
  * Model item for promo
@@ -15,10 +17,18 @@ import nl.vslcatena.vslcatena.models.PostMetaData
  * //TODO maybe change content from string to a new Content class (or an array) that can contain text and references to images. If this happens imageRef can be removed.
  */
 @DataReference("promo", "promo/%s")
-data class PromoItem(override val id: String,
-                     val imageRef: String,
-                     val adventureId: Int,
-                     val metaData: PostMetaData
-) :BaseModel{
-    constructor(): this("", "", -1, PostMetaData())
+data class PromoItem(
+    override val id: Identifier,
+    val imageRef: String,
+    val adventureId: Int,
+    val title: String,
+    val content: String,
+    val userId: Identifier,
+    val date: Date
+
+) : BaseModel, PostHeaderViewHolder.PostHeaderProvider {
+    constructor() : this(Identifier(""), "", -1, "", "", Identifier(""), Date())
+
+    override fun getDatePosted() = date
+    override fun getUserPostingId() = userId
 }

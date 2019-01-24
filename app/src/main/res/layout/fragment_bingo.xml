@@ -1,6 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<GridView
+<androidx.constraintlayout.widget.ConstraintLayout android:layout_width="match_parent"
+    android:layout_height="match_parent"
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/bingoGrid"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent" />
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <TextView
+        android:id="@+id/bingoTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        android:textAppearance="@android:style/TextAppearance.Material.Display1"
+        android:gravity="center"
+        android:text="@string/bingo_title" />
+
+    <GridView
+        android:id="@+id/bingoGrid"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/bingoTitle"
+        android:layout_margin="8dp"/>
+</androidx.constraintlayout.widget.ConstraintLayout>

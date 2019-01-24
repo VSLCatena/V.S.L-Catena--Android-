@@ -11,11 +11,11 @@ import androidx.fragment.app.FragmentActivity
  * //Todo Add option to show dialog why the permission is needed if the user blocks the permission request.
  */
 abstract class PermissionRequestHelper private constructor(
-        val fragment: Fragment? = null,
-        val activity: FragmentActivity? = null
-){
-    constructor(fragment: Fragment): this(fragment = fragment, activity = null)
-    constructor(activity: FragmentActivity): this(activity = activity, fragment = null)
+    val fragment: Fragment? = null,
+    val activity: FragmentActivity? = null
+) {
+    constructor(fragment: Fragment) : this(fragment = fragment, activity = null)
+    constructor(activity: FragmentActivity) : this(activity = activity, fragment = null)
 
     //Extra content that can be added to use in the onRequestHandled method.
     val content: MutableMap<String, Any> = HashMap()
@@ -23,7 +23,7 @@ abstract class PermissionRequestHelper private constructor(
     /**
      * Requests the given permissions using the given activity or fragment.
      */
-    fun requestPermission(permissions: Array<out String>, requestCode: Int){
+    fun requestPermission(permissions: Array<out String>, requestCode: Int) {
         fragment?.requestPermissions(permissions, requestCode)
         activity?.let { ActivityCompat.requestPermissions(it, permissions, requestCode) }
     }
@@ -31,6 +31,10 @@ abstract class PermissionRequestHelper private constructor(
     /**
      * Action that needs to be run when the request is completed. This must be called in the onRequestPermissionsResult method of the activity or fragment.
      */
-    abstract fun onRequestHandled(requestCode: Int,  permissions: Array<out String>, grantResults: IntArray)
+    abstract fun onRequestHandled(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    )
 
 }

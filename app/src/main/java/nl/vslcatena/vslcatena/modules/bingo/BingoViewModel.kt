@@ -41,6 +41,7 @@ class BingoViewModel : ViewModel() {
             }
         }
     }
+
     fun isCellChecked(x: Int, y: Int) = grid[x][y].isChecked()
 
     private fun checkIfWon(): Boolean {
@@ -58,13 +59,13 @@ class BingoViewModel : ViewModel() {
             }
         }
 
-        horizontal@for (x in 0 until gridSize) {
+        horizontal@ for (x in 0 until gridSize) {
             for (y in 0 until gridSize)
                 if (!isCellChecked(x, y)) continue@horizontal
             return true
         }
 
-        vertical@for (y in 0 until gridSize) {
+        vertical@ for (y in 0 until gridSize) {
             for (x in 0 until gridSize)
                 if (!isCellChecked(x, y)) continue@vertical
             return true
@@ -73,7 +74,10 @@ class BingoViewModel : ViewModel() {
         return false
     }
 
-    data class BingoCell(val text: String, val isChecked: MutableLiveData<Boolean> = MutableLiveData()) {
+    data class BingoCell(
+        val text: String,
+        val isChecked: MutableLiveData<Boolean> = MutableLiveData()
+    ) {
 
         fun toggle() {
             isChecked.value = !isChecked()

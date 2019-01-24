@@ -5,63 +5,53 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.RecyclerView
-import kotlinx.android.synthetic.main.home.*
+import com.google.firebase.firestore.Query
+import kotlinx.android.synthetic.main.recyclerview.*
 import nl.vslcatena.vslcatena.R
-import nl.vslcatena.vslcatena.abstraction.firebase.FirebasePagingAdapter
-import nl.vslcatena.vslcatena.abstraction.fragment.BaseFragment
-import nl.vslcatena.vslcatena.abstraction.fragment.NeedsAuthentication
+import nl.vslcatena.vslcatena.models.viewmodels.UserPool
+import nl.vslcatena.vslcatena.util.abstractions.FirestorePagingFragment
+import nl.vslcatena.vslcatena.util.componentholders.PostHeaderViewHolder
+import nl.vslcatena.vslcatena.util.data.DataCreator
+import nl.vslcatena.vslcatena.util.login.NeedsAuthentication
 
 @NeedsAuthentication
-class NewsListFragment : BaseFragment() {
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.home, container, false)
+class NewsListFragment : FirestorePagingFragment<News, NewsListFragment.NewsViewHolder>() {
+
+    lateinit var userPool: UserPool
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        userPool = ViewModelProviders.of(this).get(UserPool::class.java)
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+    override fun createItemViewHolder(view: View) = NewsViewHolder(view)
+    override fun getItemClass() = News::class.java
+    override fun getItemLayout() = R.layout.news_item
+    override fun createQuery() = DataCreator
+        .createQuery(News::class.java)
+        .orderBy("date", Query.Direction.DESCENDING)
 
-        // We create a new FirebasePagingAdapter object which will do all the loading of objects for us
-        object: FirebasePagingAdapter<News, NewsViewHolder>(context!!){
 
-            // The View the ViewHolder should display
-            override fun getView() = R.layout.list_item
-            // How the ViewHolder is created
-            override fun createViewHolder(view: View): NewsViewHolder =
-                NewsViewHolder(view)
-
-            // Then we bind the item to the viewholder
-            override fun onBindViewHolder(holder: NewsViewHolder, position: Int) {
-                getItem(position)?.let { news ->
-                    holder.apply {
-                        mTitleView.text = news.title
-                        mSubTitleView.apply {
-                            visibility = View.VISIBLE
-                            text = news.content
-                        }
-                        itemView.setOnClickListener {
-                            findNavController().navigate(
-                                NewsListFragmentDirections.actionNewsFragmentToNewsItemFragment(
-                                    news.id
-                                )
-                            )
-                        }
-                    }
-                } ?: holder.apply {
-                    // If a view is getting loaded it returns null, so we just set everything to empty
-                    // if that happens
-                    mTitleView.text = ""
-                    mSubTitleView.text = ""
-                }
-            }
-        }.bindTo(this, news_items, News::class.java)
-        // As last, we give the activity/fragment to bind it to, the recyclerview, and the class to load.
-    }
-
-    class NewsViewHolder(view: View): RecyclerView.ViewHolder(view) {
+    inner class NewsViewHolder(val view: View) : PostHeaderViewHolder<News>(userPool, view) {
         val mTitleView: TextView = view.findViewById(R.id.item_title)
-        val mSubTitleView: TextView = view.findViewById(R.id.item_subtitle)
+        val mSubTitleView: TextView = view.findViewById(R.id.item_content)
+
+        override fun bind(item: News) {
+            super.bind(item)
+
+            mTitleView.text = item.title
+            mSubTitleView.apply {
+                visibility = View.VISIBLE
+                text = item.content
+            }
+
+            view.setOnClickListener {
+                findNavController().navigate(
+                    NewsListFragmentDirections.actionNewsFragmentToNewsItemFragment(item.id.value)
+                )
+            }
+        }
     }
 }

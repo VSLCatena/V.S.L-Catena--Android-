@@ -6,6 +6,8 @@
     <string name="nav_header_desc">Logo</string>
     <string name="action_settings">Settings</string>
 
+    <string name="general_ok">OK</string>
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Not implemented yet</string>
     <string name="title_activity_login">Log in</string>
@@ -19,9 +21,15 @@
     <string name="error_field_required">Dit veld is vereist</string>
     <string name="button_go_to_adventure">Ga naar activiteit</string>
 
+    <string name="bingo_title">ALV BINGO HYPE!</string>
+
     <string name="preferences_category_basic">Basis instellingen</string>
     <string name="preferences_dark_theme">Dark theme</string>
-    <string name="preferences_dark_theme_summary">Zet een donkere thema aan</string>
+    <string name="preferences_dark_theme_summary">Wat elke app in onze ogen zou moeten hebben</string>
 
     <string name="auth_no_clearance">Je hebt niet genoeg rechten om hier toegang tot te krijgen!</string>
+
+    <string name="permission_request_title">Toegang verkrijgen</string>
+    <string name="permission_download_for_magazine_explanation">We moeten de ontketend toch echt ergens op slaan... Dus doe niet zo moeilijk en accepteer &lt;3</string>
+    <string name="permission_download_for_magazine_denied">Toegang geweigerd, we kunnen \'m niet downloaden :(</string>
 </resources>

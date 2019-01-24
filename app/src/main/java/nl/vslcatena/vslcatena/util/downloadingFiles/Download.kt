@@ -6,7 +6,6 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Environment
-import android.util.Log
 import nl.vslcatena.vslcatena.R
 import java.io.File
 
@@ -16,9 +15,10 @@ import java.io.File
  * @param filename The name the file should have when downloaded.
  * @param url The url the file should be downloaded from.
  */
-fun downloadFileFromUrl(context: Context, filename : String, url : String) {
+fun Context.downloadFileFromUrl(filename: String, url: String) {
     val uri = Uri.parse(url)
-    val downloadManager : DownloadManager = context.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
+    val downloadManager: DownloadManager =
+        getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
 
     val request = DownloadManager.Request(uri).apply {
         setAllowedNetworkTypes(DownloadManager.Request.NETWORK_WIFI or DownloadManager.Request.NETWORK_MOBILE)
@@ -26,7 +26,10 @@ fun downloadFileFromUrl(context: Context, filename : String, url : String) {
         setTitle(filename)
         setDescription("Downloading $filename")
         setVisibleInDownloadsUi(true)
-        setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, "${context.getString(R.string.app_name)}/$filename")
+        setDestinationInExternalPublicDir(
+            Environment.DIRECTORY_DOWNLOADS,
+            "${getString(R.string.app_name)}/$filename"
+        )
     }
     val downloadRef = downloadManager.enqueue(request)
 
@@ -52,7 +55,8 @@ class DownloadBroadcastReceiver : BroadcastReceiver() {
         if (DownloadManager.ACTION_DOWNLOAD_COMPLETE == action) {
             val reference = intent.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, -1)
 
-            val downloadManager: DownloadManager = context.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
+            val downloadManager: DownloadManager =
+                context.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
             val cursor = downloadManager.query(DownloadManager.Query().setFilterById(reference))
 
 
@@ -61,7 +65,8 @@ class DownloadBroadcastReceiver : BroadcastReceiver() {
                 if (cursor.getInt(index) == DownloadManager.STATUS_SUCCESSFUL) {
 
                     var downloadFilePath: String? = null
-                    val downloadFileLocalUri = cursor.getString(cursor.getColumnIndex(DownloadManager.COLUMN_LOCAL_URI))
+                    val downloadFileLocalUri =
+                        cursor.getString(cursor.getColumnIndex(DownloadManager.COLUMN_LOCAL_URI))
                     if (downloadFileLocalUri != null) {
                         val mFile = File(Uri.parse(downloadFileLocalUri).path)
                         downloadFilePath = mFile.absolutePath
@@ -70,13 +75,14 @@ class DownloadBroadcastReceiver : BroadcastReceiver() {
 
                     val descriptor = downloadManager.openDownloadedFile(reference)
                     downloadManager.addCompletedDownload(
-                            cursor.getString(cursor.getColumnIndex(DownloadManager.COLUMN_TITLE)),
-                            "description",
-                            true,
-                            downloadManager.getMimeTypeForDownloadedFile(reference),
-                            downloadFilePath,
-                            descriptor.statSize,
-                            true)
+                        cursor.getString(cursor.getColumnIndex(DownloadManager.COLUMN_TITLE)),
+                        "description",
+                        true,
+                        downloadManager.getMimeTypeForDownloadedFile(reference),
+                        downloadFilePath,
+                        descriptor.statSize,
+                        true
+                    )
                 }
             }
             cursor.close()

@@ -8,8 +8,8 @@
     <fragment
         android:id="@+id/newsFragment"
         android:name="nl.vslcatena.vslcatena.modules.news.NewsListFragment"
-        android:label="news_fragment"
-        tools:layout="@layout/home" >
+        android:label="Algemene mededelingen"
+        tools:layout="@layout/recyclerview">
         <action
             android:id="@+id/action_newsFragment_to_newsItemFragment"
             app:destination="@id/newsItemFragment" />
@@ -17,25 +17,24 @@
     <fragment
         android:id="@+id/promoFragment"
         android:name="nl.vslcatena.vslcatena.modules.promo.PromoListFragment"
-        android:label="fragment_list"
-        tools:layout="@layout/fragment_list" >
+        android:label="Promo"
+        tools:layout="@layout/fragment_list">
         <action
             android:id="@+id/action_promoFragment_to_promoItemFragment"
             app:destination="@+id/promoItemFragment"
             app:enterAnim="@anim/slide_in_right"
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_right"
-            />
+            app:popExitAnim="@anim/slide_out_right" />
     </fragment>
     <fragment
         android:id="@+id/bingoFragment"
         android:name="nl.vslcatena.vslcatena.modules.bingo.BingoFragment"
-        android:label="BingoFragment" ></fragment>
+        android:label="ALV Bingo"></fragment>
     <fragment
         android:id="@+id/magazineFragment"
         android:name="nl.vslcatena.vslcatena.modules.magazine.MagazineListFragment"
-        android:label="MagazineFragment" >
+        android:label="Ontketend">
         <argument
             android:name="columnCount"
             app:argType="integer" />
@@ -43,8 +42,8 @@
     <fragment
         android:id="@+id/promoItemFragment"
         android:name="nl.vslcatena.vslcatena.modules.promo.PromoItemFragment"
-        android:label="fragment_promo_item"
-        tools:layout="@layout/fragment_promo_item" >
+        android:label="Promo"
+        tools:layout="@layout/fragment_promo_item">
         <argument
             android:name="itemId"
             app:argType="string" />
@@ -55,7 +54,7 @@
     <fragment
         android:id="@+id/newsItemFragment"
         android:name="nl.vslcatena.vslcatena.modules.news.NewsItemFragment"
-        android:label="fragment_news_item"
+        android:label="Algemene mededeling"
         tools:layout="@layout/fragment_news_item">
         <argument
             android:name="itemId"
@@ -64,20 +63,20 @@
     <fragment
         android:id="@+id/adventureItemFragment"
         android:name="nl.vslcatena.vslcatena.modules.adventure.AdventureItemFragment"
-        android:label="fragment_adventure_item"
-        tools:layout="@layout/fragment_adventure_item" >
+        android:label="Activiteit"
+        tools:layout="@layout/fragment_adventure_item">
         <argument
             android:name="itemId"
-            app:argType="string"/>
+            app:argType="string" />
     </fragment>
     <action android:id="@+id/action_global_magazineFragment" app:destination="@id/magazineFragment" app:enterAnim="@anim/nav_default_enter_anim" app:exitAnim="@anim/nav_default_exit_anim" app:popEnterAnim="@anim/nav_default_pop_enter_anim" app:popExitAnim="@anim/nav_default_pop_exit_anim"/>
     <fragment
         android:id="@+id/loginFragment"
         android:name="nl.vslcatena.vslcatena.modules.login.LoginFragment"
-        android:label="LoginFragment" /><action android:id="@+id/action_global_loginFragment" app:destination="@id/loginFragment" app:enterAnim="@anim/nav_default_enter_anim" app:exitAnim="@anim/nav_default_pop_exit_anim" app:popEnterAnim="@anim/nav_default_pop_enter_anim" app:popExitAnim="@anim/nav_default_pop_exit_anim"/>
+        android:label="Login" /><action android:id="@+id/action_global_loginFragment" app:destination="@id/loginFragment" app:enterAnim="@anim/nav_default_enter_anim" app:exitAnim="@anim/nav_default_pop_exit_anim" app:popEnterAnim="@anim/nav_default_pop_enter_anim" app:popExitAnim="@anim/nav_default_pop_exit_anim"/>
     <fragment
         android:id="@+id/settingsFragment"
         android:name="nl.vslcatena.vslcatena.modules.settings.UserSettingsFragment"
-        android:label="fragment_user_settings" />
+        android:label="Instellingen" />
 
 </navigation>

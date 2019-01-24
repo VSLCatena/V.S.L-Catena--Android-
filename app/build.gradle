@@ -8,7 +8,7 @@ android {
     compileSdkVersion 28
     defaultConfig {
         applicationId "nl.vslcatena.vslcatena"
-        minSdkVersion 19
+        minSdkVersion 21
         targetSdkVersion 28
         versionCode 1
         versionName "1.0"
@@ -47,21 +47,20 @@ dependencies {
     implementation 'androidx.preference:preference:1.0.0'
 
     implementation 'com.google.firebase:firebase-core:16.0.6'
-    implementation 'com.google.firebase:firebase-database:16.0.5'
+    implementation 'com.google.firebase:firebase-firestore:17.1.5'
+    implementation 'com.firebaseui:firebase-ui-firestore:4.3.0'
     implementation 'com.google.firebase:firebase-storage:16.0.5'
     implementation 'com.google.firebase:firebase-auth:16.0.5'
     implementation 'com.firebaseui:firebase-ui-storage:4.1.0'
 
     implementation 'androidx.lifecycle:lifecycle-extensions:2.0.0'
-    implementation 'android.arch.navigation:navigation-fragment-ktx:1.0.0-alpha08'
-    implementation 'android.arch.navigation:navigation-ui-ktx:1.0.0-alpha08'
+    implementation 'android.arch.navigation:navigation-fragment-ktx:1.0.0-alpha11'
+    implementation 'android.arch.navigation:navigation-ui-ktx:1.0.0-alpha11'
     implementation 'androidx.paging:paging-runtime:2.0.0'
 
-
-    implementation 'com.github.bumptech.glide:glide:4.7.1'
-    implementation 'com.github.bumptech.glide:annotations:4.7.1'
-    kapt 'com.github.bumptech.glide:compiler:4.7.1'
-
+    implementation 'com.github.bumptech.glide:glide:4.8.0-SNAPSHOT'
+    kapt 'androidx.annotation:annotation:1.0.1'
+    kapt 'com.github.bumptech.glide:compiler:4.8.0-SNAPSHOT'
 
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test:runner:1.1.0'
@@ -76,3 +75,7 @@ dependencies {
 }
 
 apply plugin: 'com.google.gms.google-services'
+
+tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
+    kotlinOptions.freeCompilerArgs += ["-XXLanguage:+InlineClasses"]
+}

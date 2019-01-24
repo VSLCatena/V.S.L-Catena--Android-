@@ -19,7 +19,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import nl.vslcatena.vslcatena.R
-import nl.vslcatena.vslcatena.modules.login.provider.LoginProvider
+import nl.vslcatena.vslcatena.util.login.LoginProvider
 import nl.vslcatena.vslcatena.util.Result
 import kotlin.coroutines.CoroutineContext
 
@@ -32,7 +32,7 @@ class LoginFragment : Fragment(), CoroutineScope {
 
     lateinit var job: Job
     override val coroutineContext: CoroutineContext
-            get() = Dispatchers.Main + job
+        get() = Dispatchers.Main + job
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -45,8 +45,10 @@ class LoginFragment : Fragment(), CoroutineScope {
         job.cancel()
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         return inflater.inflate(R.layout.fragment_login, container, false)
     }
 
@@ -54,7 +56,13 @@ class LoginFragment : Fragment(), CoroutineScope {
         super.onViewCreated(view, savedInstanceState)
 
         sign_in_button.setOnClickListener { attemptLogin() }
-        forgot_password_button.setOnClickListener{ Toast.makeText(context, "Moet nog geimplementeerd worden", Toast.LENGTH_SHORT).show()}
+        forgot_password_button.setOnClickListener {
+            Toast.makeText(
+                context,
+                "Moet nog geimplementeerd worden",
+                Toast.LENGTH_SHORT
+            ).show()
+        }
         Toast.makeText(context, "Username: test, Password: test", Toast.LENGTH_LONG).show()
     }
 
@@ -86,7 +94,8 @@ class LoginFragment : Fragment(), CoroutineScope {
         launch {
             val result = LoginProvider.provider.authenticate(userNameString, passwordStr)
             if (result is Result.Success) {
-                val imm = activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                val imm =
+                    activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                 imm.hideSoftInputFromWindow(view?.windowToken, 0)
                 findNavController().popBackStack()
             } else {
@@ -106,14 +115,14 @@ class LoginFragment : Fragment(), CoroutineScope {
         val shortAnimTime = resources.getInteger(android.R.integer.config_shortAnimTime).toLong()
         login_progress.visibility = if (show) View.VISIBLE else View.GONE
         login_progress.animate()
-                .setDuration(shortAnimTime)
-                .alpha((if (show) 1 else 0).toFloat())
-                .setListener(object : AnimatorListenerAdapter() {
-                    override fun onAnimationEnd(animation: Animator) {
-                        if(login_progress!=null)
-                            login_progress.visibility = if (show) View.VISIBLE else View.GONE
-                    }
-                })
+            .setDuration(shortAnimTime)
+            .alpha((if (show) 1 else 0).toFloat())
+            .setListener(object : AnimatorListenerAdapter() {
+                override fun onAnimationEnd(animation: Animator) {
+                    if (login_progress != null)
+                        login_progress.visibility = if (show) View.VISIBLE else View.GONE
+                }
+            })
     }
 
 }

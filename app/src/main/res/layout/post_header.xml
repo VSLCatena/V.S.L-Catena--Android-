@@ -3,50 +3,50 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:layout_margin="8dp">
 
-    <ImageView
-        android:id="@+id/postHeaderUserImage"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginTop="8dp"
-        android:adjustViewBounds="true"
-        tools:src="@drawable/placeholder_thumbnail_128"
+    <androidx.cardview.widget.CardView
+        android:id="@+id/postHeaderUserImageHolder"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/postHeaderUserName"
-        app:layout_constraintHorizontal_chainStyle="spread"
-        app:layout_constraintHorizontal_weight="2"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:cardCornerRadius="15dp">
+
+        <ImageView
+            android:id="@+id/postHeaderUserImage"
+            android:layout_width="@dimen/header_user_image"
+            android:layout_height="@dimen/header_user_image"
+            tools:src="@drawable/placeholder_thumbnail_128"
+            android:scaleType="centerCrop"
+            android:adjustViewBounds="true" />
+    </androidx.cardview.widget.CardView>
 
     <TextView
         android:id="@+id/postHeaderUserName"
         android:layout_width="0dp"
-        android:layout_height="22dp"
-        android:layout_marginBottom="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        app:layout_constraintBottom_toTopOf="@+id/postHeaderPostDate"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintHorizontal_weight="8"
-        app:layout_constraintStart_toEndOf="@+id/postHeaderUserImage"
+        android:layout_height="wrap_content"
+        android:textAppearance="@android:style/TextAppearance.Material.Large"
         app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/postHeaderPostDate"
+        app:layout_constraintStart_toEndOf="@+id/postHeaderUserImageHolder"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintVertical_chainStyle="packed"
+        android:layout_marginStart="8dp"
         tools:text="Naam van persoon" />
 
     <TextView
         android:id="@+id/postHeaderPostDate"
         android:layout_width="0dp"
-        android:layout_height="16dp"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
-        tools:text="Datum van plaatsen"
+        android:layout_height="wrap_content"
+        android:textAppearance="@android:style/TextAppearance.Material.Caption"
+        tools:text="01-01-1970 00:00"
+        app:layout_constraintTop_toBottomOf="@+id/postHeaderUserName"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@id/postHeaderUserImageHolder"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="@+id/postHeaderUserName"
-        app:layout_constraintTop_toBottomOf="@+id/postHeaderUserName" />
+        android:layout_marginStart="8dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

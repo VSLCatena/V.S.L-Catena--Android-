@@ -1,62 +1,50 @@
 package nl.vslcatena.vslcatena.modules.promo
 
+import android.os.Bundle
 import android.view.View
 import android.widget.TextView
-import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.firestore.Query
 import nl.vslcatena.vslcatena.R
-import nl.vslcatena.vslcatena.abstraction.firebase.ItemLoader
-import nl.vslcatena.vslcatena.abstraction.fragment.NeedsAuthentication
-import nl.vslcatena.vslcatena.abstraction.lists.PagedFirebaseListFragment
-import nl.vslcatena.vslcatena.modules.login.User
-import nl.vslcatena.vslcatena.util.compenentHolders.PostHeaderViewHolder
-import nl.vslcatena.vslcatena.util.extensions.observeOnce
-import nl.vslcatena.vslcatena.util.extensions.setImageFromFirebaseStorage
-import java.text.DateFormat.getDateInstance
-import java.util.*
+import nl.vslcatena.vslcatena.models.viewmodels.UserPool
+import nl.vslcatena.vslcatena.util.abstractions.FirestorePagingFragment
+import nl.vslcatena.vslcatena.util.componentholders.PostHeaderViewHolder
+import nl.vslcatena.vslcatena.util.data.DataCreator
+import nl.vslcatena.vslcatena.util.login.NeedsAuthentication
 
 @NeedsAuthentication
-class PromoListFragment : PagedFirebaseListFragment<PromoItem, PromoListFragment.PromoViewHolder>(
-    PromoItem::class.java) {
-    override val itemView = R.layout.promo_item
-    private val userLoader = ItemLoader(User::class.java)
+class PromoListFragment : FirestorePagingFragment<PromoItem, PromoListFragment.PromoViewHolder>() {
+    private lateinit var userPool: UserPool
 
-    override fun onListItemClicked(item: PromoItem) {
-        findNavController().navigate(
-            PromoListFragmentDirections.actionPromoFragmentToPromoItemFragment(
-                item.id
-            )
-        )
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        userPool = ViewModelProviders.of(this).get(UserPool::class.java)
     }
 
-    override fun createViewHolder(view: View) = PromoViewHolder(view)
+    override fun getItemClass() = PromoItem::class.java
+    override fun getItemLayout() = R.layout.promo_item
+    override fun createItemViewHolder(view: View) = PromoViewHolder(view)
+    override fun createQuery() = DataCreator
+        .createQuery(PromoItem::class.java)
+        .orderBy("date", Query.Direction.DESCENDING)
 
-    override fun onBindViewHolder(holder: PromoViewHolder, position: Int, item: PromoItem) {
-        with(holder.headerViewHolder){
-            userLoader.getItem(item.metaData.postedBy)
-                ?.observeOnce(this@PromoListFragment, Observer {
-                    it?.let{
-                        mUserNameView.text = it.name
-                        mThumbnailView.setImageFromFirebaseStorage(context!!, it.getThumbnailRef())
-                    }
-                })
-            mDateView.text = getDateInstance().format(Date(item.metaData.postedTime))
-        }
+    inner class PromoViewHolder(view: View) : PostHeaderViewHolder<PromoItem>(userPool, view) {
 
+        val titleView: TextView = itemView.findViewById(R.id.title)
+        val contentView: TextView = itemView.findViewById(R.id.content)
 
-        holder.mContentView.text = item.metaData.content
-        holder.mTitleView.text = item.metaData.title
-    }
+        override fun bind(item: PromoItem) {
+            super.bind(item)
+            titleView.text = item.title
+            contentView.text = item.content
 
 
-    inner class PromoViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val headerViewHolder = PostHeaderViewHolder(view)
-        val mTitleView: TextView = itemView.findViewById(R.id.title)
-        val mContentView: TextView = itemView.findViewById(R.id.content)
-
-        override fun toString(): String {
-            return super.toString() + " '" + mContentView.text + "'"
+            view?.setOnClickListener {
+                findNavController().navigate(
+                    PromoListFragmentDirections.actionPromoFragmentToPromoItemFragment(item.id.value)
+                )
+            }
         }
     }
 
