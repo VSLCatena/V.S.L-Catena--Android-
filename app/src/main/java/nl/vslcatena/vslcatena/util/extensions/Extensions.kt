@@ -11,6 +11,8 @@ import com.bumptech.glide.Glide
 import com.google.android.gms.tasks.Task
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.runBlocking
+import java.text.SimpleDateFormat
+import java.util.*
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
@@ -52,6 +54,17 @@ fun <T> LiveData<T>.observeOnce(owner: LifecycleOwner, observer: Observer<T>) {
     })
 }
 
+suspend fun <T> LiveData<T>.awaitFirstObservation(): T? {
+    return suspendCoroutine { continuation ->
+        var observer: Observer<T>? = null
+        observer = Observer {
+            removeObserver(observer!!)
+            continuation.resume(it)
+        }
+        observeForever(observer)
+    }
+}
+
 fun ImageView.setImageFromFirebaseStorage(path: String) {
     Glide.with(context)
         .load(FirebaseStorage.getInstance().getReference(path))
@@ -65,3 +78,6 @@ suspend fun <T> Task<T>.await(): T? {
         }
     }
 }
+
+private val sdf = SimpleDateFormat("d MMMM yyyy hh:mm", Locale.getDefault())
+fun Date.formatReadable(): String = sdf.format(this)

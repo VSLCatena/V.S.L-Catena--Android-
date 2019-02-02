@@ -13,14 +13,18 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.fragment_login.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
+import nl.vslcatena.vslcatena.BaseFragment
 import nl.vslcatena.vslcatena.R
+import nl.vslcatena.vslcatena.models.Role
 import nl.vslcatena.vslcatena.util.login.LoginProvider
 import nl.vslcatena.vslcatena.util.Result
+import nl.vslcatena.vslcatena.util.login.AuthenticationLevel
 import kotlin.coroutines.CoroutineContext
 
 
@@ -28,7 +32,8 @@ import kotlin.coroutines.CoroutineContext
  * Fragment that handles the Login.
  *
  */
-class LoginFragment : Fragment(), CoroutineScope {
+@AuthenticationLevel(Role.ANONYMOUS)
+class LoginFragment : BaseFragment(), CoroutineScope {
 
     lateinit var job: Job
     override val coroutineContext: CoroutineContext
@@ -64,6 +69,18 @@ class LoginFragment : Fragment(), CoroutineScope {
             ).show()
         }
         Toast.makeText(context, "Username: test, Password: test", Toast.LENGTH_LONG).show()
+
+        if (FirebaseAuth.getInstance()?.currentUser != null) {
+            showProgress(true)
+            launch {
+                if (LoginProvider.doLoginFromFirebase().isSuccesful()) {
+                    showProgress(false)
+                    goToNext()
+                } else {
+                    showProgress(false)
+                }
+            }
+        }
     }
 
     /**
@@ -92,12 +109,12 @@ class LoginFragment : Fragment(), CoroutineScope {
         // perform the user login attempt.
         showProgress(true)
         launch {
-            val result = LoginProvider.provider.authenticate(userNameString, passwordStr)
+            val result = LoginProvider.authenticate(userNameString, passwordStr)
             if (result is Result.Success) {
                 val imm =
                     activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                 imm.hideSoftInputFromWindow(view?.windowToken, 0)
-                findNavController().popBackStack()
+                goToNext()
             } else {
                 Toast.makeText(
                     context!!,
@@ -108,21 +125,7 @@ class LoginFragment : Fragment(), CoroutineScope {
         }
     }
 
-    /**
-     * Shows the progress UI and hides the login form.
-     */
-    private fun showProgress(show: Boolean) {
-        val shortAnimTime = resources.getInteger(android.R.integer.config_shortAnimTime).toLong()
-        login_progress.visibility = if (show) View.VISIBLE else View.GONE
-        login_progress.animate()
-            .setDuration(shortAnimTime)
-            .alpha((if (show) 1 else 0).toFloat())
-            .setListener(object : AnimatorListenerAdapter() {
-                override fun onAnimationEnd(animation: Animator) {
-                    if (login_progress != null)
-                        login_progress.visibility = if (show) View.VISIBLE else View.GONE
-                }
-            })
+    private fun goToNext() {
+        findNavController().navigate(R.id.newsFragment)
     }
-
 }

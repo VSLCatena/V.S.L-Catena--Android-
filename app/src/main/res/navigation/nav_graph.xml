@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/newsFragment">
+    app:startDestination="@id/loginFragment">
 
     <fragment
         android:id="@+id/newsFragment"
@@ -13,12 +13,14 @@
         <action
             android:id="@+id/action_newsFragment_to_newsItemFragment"
             app:destination="@id/newsItemFragment" />
+        <action
+            android:id="@+id/action_newsFragment_to_newsEditItemFragment"
+            app:destination="@id/newsEditItemFragment" />
     </fragment>
     <fragment
         android:id="@+id/promoFragment"
         android:name="nl.vslcatena.vslcatena.modules.promo.PromoListFragment"
-        android:label="Promo"
-        tools:layout="@layout/fragment_list">
+        android:label="Promo">
         <action
             android:id="@+id/action_promoFragment_to_promoItemFragment"
             app:destination="@+id/promoItemFragment"
@@ -54,11 +56,13 @@
     <fragment
         android:id="@+id/newsItemFragment"
         android:name="nl.vslcatena.vslcatena.modules.news.NewsItemFragment"
-        android:label="Algemene mededeling"
-        tools:layout="@layout/fragment_news_item">
+        android:label="Algemene mededeling">
         <argument
             android:name="itemId"
             app:argType="string" />
+        <action
+            android:id="@+id/action_newsItemFragment_to_newsEditItemFragment"
+            app:destination="@id/newsEditItemFragment" />
     </fragment>
     <fragment
         android:id="@+id/adventureItemFragment"
@@ -78,5 +82,15 @@
         android:id="@+id/settingsFragment"
         android:name="nl.vslcatena.vslcatena.modules.settings.UserSettingsFragment"
         android:label="Instellingen" />
+    <fragment
+        android:id="@+id/newsEditItemFragment"
+        android:name="nl.vslcatena.vslcatena.modules.news.NewsEditItemFragment"
+        android:label="Nieuws bericht">
+        <argument
+            android:name="editId"
+            android:defaultValue="@null"
+            app:argType="string"
+            app:nullable="true" />
+    </fragment>
 
 </navigation>

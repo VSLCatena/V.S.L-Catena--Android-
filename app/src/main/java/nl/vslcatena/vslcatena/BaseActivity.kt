@@ -1,16 +1,27 @@
 package nl.vslcatena.vslcatena
 
+import android.animation.Animator
+import android.animation.AnimatorListenerAdapter
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
+import android.widget.TextView
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Observer
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.onNavDestinationSelected
 import androidx.navigation.ui.setupWithNavController
 import kotlinx.android.synthetic.main.base.*
+import nl.vslcatena.vslcatena.util.login.LoginProvider
+import android.app.Activity
+import android.view.inputmethod.InputMethodManager
+import androidx.core.content.ContextCompat.getSystemService
+
+
 
 class BaseActivity : AppCompatActivity() {
 
@@ -48,6 +59,20 @@ class BaseActivity : AppCompatActivity() {
         toolbar.setupWithNavController(navController, appBarConfiguration)
         nav_view.setupWithNavController(navController)
 
+
+        LoginProvider.currentUser.observe(this, Observer { user ->
+            drawer_layout.apply {
+                findViewById<TextView>(R.id.drawer_name).let {
+                    it.visibility = View.VISIBLE
+                    it.text = user?.name
+                }
+
+                findViewById<TextView>(R.id.drawer_user_id).let {
+                    it.visibility = View.VISIBLE
+                    it.text = user?.id?.value
+                }
+            }
+        })
     }
 
     /**
@@ -72,12 +97,6 @@ class BaseActivity : AppCompatActivity() {
 
     override fun onSupportNavigateUp() = navController.navigateUp()
 
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        menuInflater.inflate(R.menu.base, menu)
-        return true
-    }
-
     // We want to close the drawer if it's open, otherwise we want our parent to handle it
     override fun onBackPressed() {
         if (drawer_layout.isDrawerOpen(nav_view))
@@ -87,5 +106,32 @@ class BaseActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return item.onNavDestinationSelected(navController) || super.onOptionsItemSelected(item)
+    }
+
+
+    /**
+     * Shows the progress UI and hides the login form.
+     */
+    fun showProgress(show: Boolean) {
+        val shortAnimTime = resources.getInteger(android.R.integer.config_shortAnimTime).toLong()
+        login_progress.visibility = if (show) View.VISIBLE else View.GONE
+        login_progress.animate()
+            .setDuration(shortAnimTime)
+            .alpha((if (show) 1 else 0).toFloat())
+            .setListener(object : AnimatorListenerAdapter() {
+                override fun onAnimationEnd(animation: Animator) {
+                    if (login_progress != null)
+                        login_progress.visibility = if (show) View.VISIBLE else View.GONE
+                }
+            })
+    }
+
+    fun hideKeyboard() {
+        val imm = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+        //Find the currently focused view, so we can grab the correct window token from it.
+        //If no view currently has focus, create a new one, just so we can grab a window token from it
+        val view = currentFocus ?: View(this)
+
+        imm.hideSoftInputFromWindow(view.windowToken, 0)
     }
 }

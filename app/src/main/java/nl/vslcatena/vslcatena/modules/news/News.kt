@@ -1,5 +1,6 @@
 package nl.vslcatena.vslcatena.modules.news
 
+import com.google.firebase.firestore.Exclude
 import nl.vslcatena.vslcatena.util.data.BaseModel
 import nl.vslcatena.vslcatena.util.data.DataReference
 import nl.vslcatena.vslcatena.models.Identifier
@@ -11,14 +12,20 @@ import java.util.*
  */
 @DataReference("news", "news/%s")
 data class News(
-    override val id: Identifier,
+    @get:Exclude
+    @field:Exclude
+    override val id: Identifier?,
     val title: String,
     val content: String,
     val user: Identifier,
-    val date: Date
+    val date: Date,
+    val userLastEdited: Identifier = user,
+    val dateLastEdited: Date = date
 ) : BaseModel, PostHeaderViewHolder.PostHeaderProvider {
-    constructor() : this(Identifier(""), "", "", Identifier(""), Date())
+    constructor() : this(null, "", "", Identifier(""), Date())
 
-    override fun getUserPostingId() = user
-    override fun getDatePosted() = date
+    override fun userPostingId() = user
+    override fun datePosted() = date
+    override fun lastEditedUserId(): Identifier = userLastEdited
+    override fun lastEditedDate(): Date = dateLastEdited
 }

@@ -11,7 +11,7 @@ object Deserializer {
         val obj: T = clazz.newInstance()
 
         clazz.declaredFields.forEach { field ->
-            if (field.name == "id" && !dataDocument.contains(field.name)) {
+            if (field.name == "id" && (!dataDocument.contains(field.name) || dataDocument.get(field.name) == null)) {
                 field.isAccessible = true
                 field.set(obj, dataDocument.id)
                 return@forEach

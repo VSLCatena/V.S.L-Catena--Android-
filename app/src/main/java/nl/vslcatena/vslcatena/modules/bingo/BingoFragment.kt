@@ -1,7 +1,6 @@
 package nl.vslcatena.vslcatena.modules.bingo
 
 
-import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -16,16 +15,15 @@ import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.fragment_bingo.*
 import nl.vslcatena.vslcatena.R
 import nl.vslcatena.vslcatena.BaseFragment
-import nl.vslcatena.vslcatena.models.Identifier
-import nl.vslcatena.vslcatena.util.data.observeList
-import nl.vslcatena.vslcatena.util.login.NeedsAuthentication
+import nl.vslcatena.vslcatena.models.Role
+import nl.vslcatena.vslcatena.util.login.AuthenticationLevel
 
 /**
  * A simple [Fragment] subclass.
  *
  */
 
-@NeedsAuthentication
+@AuthenticationLevel(Role.USER)
 class BingoFragment : BaseFragment() {
     private lateinit var bingoViewModel: BingoViewModel
 

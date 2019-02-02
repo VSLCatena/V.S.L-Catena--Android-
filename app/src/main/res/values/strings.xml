@@ -4,9 +4,23 @@
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="nav_header_desc">Logo</string>
-    <string name="action_settings">Settings</string>
+    <string name="action_add">Voeg toe</string>
+    <string name="action_edit">Pas aan</string>
+    <string name="action_delete">Verwijder</string>
 
     <string name="general_ok">OK</string>
+    <string name="general_title">Titel</string>
+    <string name="general_content">Content</string>
+    <string name="general_post">Plaats</string>
+    <string name="general_yes">Ja</string>
+    <string name="general_no">Nee</string>
+
+    <string name="post_header_edited">Laatst aangepast op %s door %s</string>
+
+    <string name="news_new_item">Nieuwe nieuws item</string>
+    <string name="news_item_delete_successful">Nieuws item succesvol verwijderd</string>
+    <string name="news_item_delete_confirmation">Verwijderen van nieuws item</string>
+    <string name="news_item_delete_confirmation_content">Weet je zeker dat je de nieuws item \'%s\' wilt verwijderen?</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Not implemented yet</string>
@@ -20,6 +34,7 @@
     <string name="error_incorrect_password">Onjuist wachtwoord</string>
     <string name="error_field_required">Dit veld is vereist</string>
     <string name="button_go_to_adventure">Ga naar activiteit</string>
+
 
     <string name="bingo_title">ALV BINGO HYPE!</string>
 

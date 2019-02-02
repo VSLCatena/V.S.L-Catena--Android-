@@ -9,8 +9,9 @@ import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import nl.vslcatena.vslcatena.models.Role
 import nl.vslcatena.vslcatena.util.login.LoginProvider
-import nl.vslcatena.vslcatena.util.login.NeedsAuthentication
+import nl.vslcatena.vslcatena.util.login.AuthenticationLevel
 import java.util.*
 
 abstract class BaseFragment : Fragment() {
@@ -23,25 +24,36 @@ abstract class BaseFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         handleUserAuth()
+        hideKeyboard()
     }
 
     private fun handleUserAuth() {
-        val authentication = this::class.java.getAnnotation(NeedsAuthentication::class.java)
+        val authentication = this::class.java.getAnnotation(AuthenticationLevel::class.java)
 
         // If we don't need authentication, we skip checking
         if (authentication == null) {
-            if (BuildConfig.DEBUG)
-                Log.d(AUTH_LOG_TAG, "This fragment (${this::class.java}) doesn't need auth")
+            Toast.makeText(
+                context!!,
+                "All BaseFragments are REQUIRED to contain an AuthenticationLevel annotation. ${this::class.java} doesn't contain any.",
+                Toast.LENGTH_LONG
+            ).show()
+            activity!!.finish()
             return
         }
 
-        // Now we know we need authentication
+        // Do we need authentication at all?
+        if (authentication.role == Role.ANONYMOUS) {
+            if (BuildConfig.DEBUG)
+                Log.d(AUTH_LOG_TAG, "Authentication is not required here")
 
+            return
+        }
+        // Now we know we need authentication
         if (BuildConfig.DEBUG)
             Log.d(AUTH_LOG_TAG, "This fragment (${this::class.java}) needs auth")
 
         // We grab the logged in user
-        val user = LoginProvider.provider.getUser()
+        val user = LoginProvider.getUser()
 
         // If we aren't logged in, we want to redirect the user
         if (user == null) {
@@ -117,6 +129,18 @@ abstract class BaseFragment : Fragment() {
             block.invoke(true)
         }
         permissionRequestQueue[requestCode] = block
+    }
+
+
+    /**
+     * Shows the progress UI and hides the login form.
+     */
+    fun showProgress(show: Boolean) {
+        (activity as? BaseActivity)?.showProgress(show)
+    }
+
+    fun hideKeyboard() {
+        (activity as? BaseActivity)?.hideKeyboard()
     }
 
     companion object {

@@ -2,10 +2,7 @@ package nl.vslcatena.vslcatena.modules.magazine
 
 import android.Manifest
 import android.content.DialogInterface
-import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
@@ -14,28 +11,17 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.google.firebase.firestore.Query
 import com.google.firebase.storage.FirebaseStorage
-import kotlinx.android.synthetic.main.fragment_list.*
 import nl.vslcatena.vslcatena.R
+import nl.vslcatena.vslcatena.models.Role
 import nl.vslcatena.vslcatena.util.abstractions.FirestorePagingFragment
 import nl.vslcatena.vslcatena.util.data.DataCreator
 import nl.vslcatena.vslcatena.util.downloadingFiles.downloadFileFromUrl
-import nl.vslcatena.vslcatena.util.login.NeedsAuthentication
+import nl.vslcatena.vslcatena.util.login.AuthenticationLevel
 import java.text.SimpleDateFormat
-import java.util.*
 
 
-@NeedsAuthentication
+@AuthenticationLevel(Role.USER)
 class MagazineListFragment : FirestorePagingFragment<Magazine, MagazineListFragment.MagazineViewHolder>() {
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.fragment_list, container, false)
-    }
-
-    override fun getRecyclerView() = list
     override fun getItemClass() = Magazine::class.java
     override fun getItemLayout() = R.layout.magazine_item
     override fun createItemViewHolder(view: View) = MagazineViewHolder(view)

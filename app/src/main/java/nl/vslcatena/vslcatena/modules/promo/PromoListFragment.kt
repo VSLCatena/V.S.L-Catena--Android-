@@ -7,13 +7,14 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import com.google.firebase.firestore.Query
 import nl.vslcatena.vslcatena.R
+import nl.vslcatena.vslcatena.models.Role
 import nl.vslcatena.vslcatena.models.viewmodels.UserPool
 import nl.vslcatena.vslcatena.util.abstractions.FirestorePagingFragment
 import nl.vslcatena.vslcatena.util.componentholders.PostHeaderViewHolder
 import nl.vslcatena.vslcatena.util.data.DataCreator
-import nl.vslcatena.vslcatena.util.login.NeedsAuthentication
+import nl.vslcatena.vslcatena.util.login.AuthenticationLevel
 
-@NeedsAuthentication
+@AuthenticationLevel(Role.USER)
 class PromoListFragment : FirestorePagingFragment<PromoItem, PromoListFragment.PromoViewHolder>() {
     private lateinit var userPool: UserPool
 

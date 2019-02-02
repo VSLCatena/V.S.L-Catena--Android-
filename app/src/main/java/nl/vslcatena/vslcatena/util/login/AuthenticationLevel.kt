@@ -8,7 +8,7 @@ import nl.vslcatena.vslcatena.models.Role
  */
 @Target(AnnotationTarget.CLASS)
 @Retention(AnnotationRetention.RUNTIME)
-annotation class NeedsAuthentication(val role: Role = Role.USER)
+annotation class AuthenticationLevel(val role: Role)
 
 
 

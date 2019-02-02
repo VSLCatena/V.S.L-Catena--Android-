@@ -7,12 +7,13 @@ import android.view.View
 import android.view.ViewGroup
 import nl.vslcatena.vslcatena.BaseFragment
 import nl.vslcatena.vslcatena.R
-import nl.vslcatena.vslcatena.util.login.NeedsAuthentication
+import nl.vslcatena.vslcatena.models.Role
+import nl.vslcatena.vslcatena.util.login.AuthenticationLevel
 
 /**
  * Fragment for showing a single promo item.
  */
-@NeedsAuthentication
+@AuthenticationLevel(Role.USER)
 class PromoItemFragment : BaseFragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

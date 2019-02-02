@@ -2,7 +2,8 @@
 <resources>
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#FF4081</color>
+    <color name="colorAccent">#7300C5</color>
+    <color name="colorSecondary">@color/colorAccent</color>
 
     <!--https://www.materialui.co/colors-->
     <color name="grey_400">#BDBDBD</color>

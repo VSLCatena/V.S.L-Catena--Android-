@@ -6,7 +6,7 @@ import com.google.firebase.firestore.Query
 import nl.vslcatena.vslcatena.BaseFragment
 import nl.vslcatena.vslcatena.models.Identifier
 
-inline fun <reified T> BaseFragment.observeSingle(
+inline fun <reified T : BaseModel> BaseFragment.observeSingle(
     objectId: String? = "",
     observer: Observer<T>
 ): Reference.Single<T> {
@@ -17,7 +17,7 @@ inline fun <reified T> BaseFragment.observeSingle(
     return observeSingleId(id, observer)
 }
 
-inline fun <reified T> BaseFragment.observeSingleId(
+inline fun <reified T : BaseModel> BaseFragment.observeSingleId(
     objectId: Identifier? = Identifier(""),
     observer: Observer<T>
 ): Reference.Single<T> {
@@ -26,7 +26,7 @@ inline fun <reified T> BaseFragment.observeSingleId(
     }
 }
 
-inline fun <reified T: Any> BaseFragment.observeList(
+inline fun <reified T : BaseModel> BaseFragment.observeList(
     noinline filter: (CollectionReference) -> Query = { it },
     observer: Observer<List<T>>
 ): Reference.List<T> {

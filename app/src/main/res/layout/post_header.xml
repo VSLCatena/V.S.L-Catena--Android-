@@ -41,12 +41,27 @@
         android:id="@+id/postHeaderPostDate"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:textAppearance="@android:style/TextAppearance.Material.Caption"
+        android:textAppearance="@android:style/TextAppearance.Material.Small"
         tools:text="01-01-1970 00:00"
         app:layout_constraintTop_toBottomOf="@+id/postHeaderUserName"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/postHeaderEditText"
         app:layout_constraintStart_toEndOf="@id/postHeaderUserImageHolder"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginStart="8dp" />
+
+    <TextView
+        android:id="@+id/postHeaderEditText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/postHeaderPostDate"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@id/postHeaderUserImageHolder"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginStart="8dp"
+        tools:text="Laatst aangepast door Naam van persoon"
+        android:visibility="gone"
+        tools:visibility="visible"
+        android:textAppearance="@android:style/TextAppearance.Material.Caption"
+        android:textStyle="italic" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

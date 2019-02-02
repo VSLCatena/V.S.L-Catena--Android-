@@ -17,10 +17,9 @@ import nl.vslcatena.vslcatena.BaseFragment
 import nl.vslcatena.vslcatena.R
 import nl.vslcatena.vslcatena.models.Identifier
 import nl.vslcatena.vslcatena.util.data.BaseModel
-import nl.vslcatena.vslcatena.util.login.NeedsAuthentication
+import nl.vslcatena.vslcatena.util.login.AuthenticationLevel
 
 
-@NeedsAuthentication
 abstract class FirestorePagingFragment<T : BaseModel, B> : BaseFragment()
         where B : RecyclerView.ViewHolder, B : FirestorePagingFragment.Binder<T> {
 
@@ -32,7 +31,7 @@ abstract class FirestorePagingFragment<T : BaseModel, B> : BaseFragment()
 
     @CallSuper
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        // The "base query" is a query with no startAt/endAt/limit clauses that the adapter can use
+        // The "add_icon_menu query" is a query with no startAt/endAt/limit clauses that the adapter can use
         // to form smaller queries for each page.  It should only include where() and orderBy() clauses
         val baseQuery = createQuery()
 
@@ -112,7 +111,7 @@ abstract class FirestorePagingFragment<T : BaseModel, B> : BaseFragment()
             position: Int,
             item: T
         ) {
-            if (item.id == Identifier("")) {
+            if (item.id == null || item.id == Identifier("")) {
                 item::class.java.declaredFields
                     .find { it.name == "id" }
                     ?.apply {
