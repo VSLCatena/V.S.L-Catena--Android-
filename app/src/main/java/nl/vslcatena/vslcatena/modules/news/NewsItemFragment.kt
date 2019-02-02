@@ -61,7 +61,7 @@ class NewsItemFragment : BaseFragment() {
             item_content.text = it.content
             postHeaderPostDate.text = it.date.formatReadable()
 
-            if (it.date != it.dateLastEdited && it.lastEditedUserId() != Identifier("")) {
+            if (it.date != it.dateLastEdited) {
                 DataCreator.getSingleReference(User::class.java, it.lastEditedUserId())
                     .observeOnce(this, Observer { editUser ->
                         postHeaderEditText.visibility = View.VISIBLE

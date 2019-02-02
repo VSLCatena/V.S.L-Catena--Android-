@@ -5,7 +5,6 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.annotation.CallSuper
 import androidx.lifecycle.Observer
-import com.google.firebase.firestore.Exclude
 import nl.vslcatena.vslcatena.R
 import nl.vslcatena.vslcatena.models.Identifier
 import nl.vslcatena.vslcatena.models.User
@@ -16,7 +15,6 @@ import nl.vslcatena.vslcatena.util.data.DataCreator
 import nl.vslcatena.vslcatena.util.extensions.formatReadable
 import nl.vslcatena.vslcatena.util.extensions.observeOnce
 import nl.vslcatena.vslcatena.util.extensions.setImageFromFirebaseStorage
-import java.text.SimpleDateFormat
 import java.util.*
 
 /**
@@ -43,11 +41,15 @@ abstract class PostHeaderViewHolder<T : PostHeaderViewHolder.PostHeaderProvider>
     override fun bind(item: T) {
         dateView.text = item.datePosted().formatReadable()
         userPool.getUser(item.userPostingId()).observe(this, this)
-        if (item.datePosted() != item.lastEditedDate() && item.lastEditedUserId() != Identifier("")) {
+        if (item.datePosted() != item.lastEditedDate()) {
             userPool.getUser(item.lastEditedUserId()).observeOnce(this, Observer {
                 editedView.visibility = View.VISIBLE
                 editedView.text = editedView.context
-                    .getString(R.string.post_header_edited, item.lastEditedDate().formatReadable(), it.name)
+                    .getString(
+                        R.string.post_header_edited,
+                        item.lastEditedDate().formatReadable(),
+                        it.name
+                    )
             })
         }
     }
