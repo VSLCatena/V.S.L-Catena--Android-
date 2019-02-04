@@ -4,6 +4,7 @@ import nl.vslcatena.vslcatena.util.data.BaseModel
 import nl.vslcatena.vslcatena.util.data.DataReference
 import nl.vslcatena.vslcatena.models.Identifier
 import nl.vslcatena.vslcatena.util.componentholders.PostHeaderViewHolder
+import nl.vslcatena.vslcatena.util.login.UserProvider
 import java.util.*
 
 /**
@@ -17,21 +18,21 @@ import java.util.*
  */
 @DataReference("promo", "promo/%s")
 data class PromoItem(
-    override val id: Identifier,
-    val imageRef: String,
-    val adventureId: Int,
-    val title: String,
-    val content: String,
-    val user: Identifier,
-    val date: Date,
-    val userLastEdited: Identifier = user,
-    val dateLastEdited: Date = date
+    override val id: Identifier?,
+    var title: String,
+    var content: String,
+    val user: Identifier = UserProvider.getUser()!!.id,
+    val date: Date = Date(),
+    var imageRef: String? = null,
+    val adventureId: Int? = null,
+    override var userLastEdited: Identifier? = user,
+    override var dateLastEdited: Date? = date
 
 ) : BaseModel, PostHeaderViewHolder.PostHeaderProvider {
-    constructor() : this(Identifier(""), "", -1, "", "", Identifier(""), Date())
+    constructor() : this(Identifier(""), "", "")
 
     override fun datePosted() = date
     override fun userPostingId() = user
-    override fun lastEditedUserId(): Identifier = userLastEdited
-    override fun lastEditedDate(): Date = dateLastEdited
+    override fun lastEditedUserId(): Identifier? = userLastEdited
+    override fun lastEditedDate(): Date? = dateLastEdited
 }

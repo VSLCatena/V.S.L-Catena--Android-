@@ -10,7 +10,7 @@ import nl.vslcatena.vslcatena.util.extensions.await
 import nl.vslcatena.vslcatena.util.extensions.awaitFirstObservation
 import org.json.JSONObject
 
-object LoginProvider {
+object UserProvider {
 
     val currentUser = LiveDataWrapper<User>()
 

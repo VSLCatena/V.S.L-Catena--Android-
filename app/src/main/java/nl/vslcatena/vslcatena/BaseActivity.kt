@@ -16,11 +16,9 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.onNavDestinationSelected
 import androidx.navigation.ui.setupWithNavController
 import kotlinx.android.synthetic.main.base.*
-import nl.vslcatena.vslcatena.util.login.LoginProvider
+import nl.vslcatena.vslcatena.util.login.UserProvider
 import android.app.Activity
 import android.view.inputmethod.InputMethodManager
-import androidx.core.content.ContextCompat.getSystemService
-
 
 
 class BaseActivity : AppCompatActivity() {
@@ -60,7 +58,7 @@ class BaseActivity : AppCompatActivity() {
         nav_view.setupWithNavController(navController)
 
 
-        LoginProvider.currentUser.observe(this, Observer { user ->
+        UserProvider.currentUser.observe(this, Observer { user ->
             drawer_layout.apply {
                 findViewById<TextView>(R.id.drawer_name).let {
                     it.visibility = View.VISIBLE

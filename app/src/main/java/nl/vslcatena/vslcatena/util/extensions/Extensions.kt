@@ -11,9 +11,11 @@ import com.bumptech.glide.Glide
 import com.google.android.gms.tasks.Task
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.runBlocking
+import nl.vslcatena.vslcatena.util.Result
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.coroutines.resume
+import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
 
 //If this gets to big, split in multiple files.
@@ -71,10 +73,13 @@ fun ImageView.setImageFromFirebaseStorage(path: String) {
         .into(this)
 }
 
-suspend fun <T> Task<T>.await(): T? {
+suspend fun <T> Task<T>.await(): Result<T?> {
     return suspendCoroutine { continuation ->
         addOnCompleteListener { task ->
-            continuation.resume(task.result)
+            continuation.resume(
+                if (task.isSuccessful) Result.Success(task.result)
+                else Result.Failure<T?>(task.exception ?: UnknownError("Something went wrong"))
+            )
         }
     }
 }

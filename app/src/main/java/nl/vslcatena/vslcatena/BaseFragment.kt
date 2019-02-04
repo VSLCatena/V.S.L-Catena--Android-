@@ -10,7 +10,7 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import nl.vslcatena.vslcatena.models.Role
-import nl.vslcatena.vslcatena.util.login.LoginProvider
+import nl.vslcatena.vslcatena.util.login.UserProvider
 import nl.vslcatena.vslcatena.util.login.AuthenticationLevel
 import java.util.*
 
@@ -53,7 +53,7 @@ abstract class BaseFragment : Fragment() {
             Log.d(AUTH_LOG_TAG, "This fragment (${this::class.java}) needs auth")
 
         // We grab the logged in user
-        val user = LoginProvider.getUser()
+        val user = UserProvider.getUser()
 
         // If we aren't logged in, we want to redirect the user
         if (user == null) {

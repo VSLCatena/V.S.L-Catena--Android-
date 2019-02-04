@@ -84,11 +84,20 @@
         android:label="Instellingen" />
     <fragment
         android:id="@+id/newsEditItemFragment"
-        android:name="nl.vslcatena.vslcatena.modules.news.NewsEditItemFragment"
+        android:name="nl.vslcatena.vslcatena.modules.promo.NewsEditItemFragment"
         android:label="Nieuws bericht">
         <argument
             android:name="editId"
             android:defaultValue="@null"
+            app:argType="string"
+            app:nullable="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/promoEditItemFragment"
+        android:name="nl.vslcatena.vslcatena.modules.promo.PromoEditItemFragment"
+        android:label="PromoEditItemFragment" >
+        <argument
+            android:name="editId"
             app:argType="string"
             app:nullable="true" />
     </fragment>

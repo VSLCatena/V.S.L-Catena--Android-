@@ -15,17 +15,17 @@ data class News(
     @get:Exclude
     @field:Exclude
     override val id: Identifier?,
-    val title: String,
-    val content: String,
+    var title: String,
+    var content: String,
     val user: Identifier,
     val date: Date,
-    val userLastEdited: Identifier = user,
-    val dateLastEdited: Date = date
+    override var userLastEdited: Identifier? = user,
+    override var dateLastEdited: Date? = date
 ) : BaseModel, PostHeaderViewHolder.PostHeaderProvider {
     constructor() : this(null, "", "", Identifier(""), Date())
 
     override fun userPostingId() = user
     override fun datePosted() = date
-    override fun lastEditedUserId(): Identifier = userLastEdited
-    override fun lastEditedDate(): Date = dateLastEdited
+    override fun lastEditedUserId(): Identifier? = userLastEdited
+    override fun lastEditedDate(): Date? = dateLastEdited
 }

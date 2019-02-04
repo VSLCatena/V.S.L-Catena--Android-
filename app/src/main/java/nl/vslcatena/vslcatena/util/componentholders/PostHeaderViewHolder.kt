@@ -41,13 +41,14 @@ abstract class PostHeaderViewHolder<T : PostHeaderViewHolder.PostHeaderProvider>
     override fun bind(item: T) {
         dateView.text = item.datePosted().formatReadable()
         userPool.getUser(item.userPostingId()).observe(this, this)
-        if (item.datePosted() != item.lastEditedDate()) {
-            userPool.getUser(item.lastEditedUserId()).observeOnce(this, Observer {
+        val lastEditedId = item.lastEditedUserId()
+        if (lastEditedId != null && item.datePosted() != item.lastEditedDate()) {
+            userPool.getUser(lastEditedId).observeOnce(this, Observer {
                 editedView.visibility = View.VISIBLE
                 editedView.text = editedView.context
                     .getString(
                         R.string.post_header_edited,
-                        item.lastEditedDate().formatReadable(),
+                        item.lastEditedDate()?.formatReadable() ?: "",
                         it.name
                     )
             })
@@ -57,8 +58,8 @@ abstract class PostHeaderViewHolder<T : PostHeaderViewHolder.PostHeaderProvider>
     interface PostHeaderProvider {
         fun userPostingId(): Identifier
         fun datePosted(): Date
-        fun lastEditedUserId(): Identifier
-        fun lastEditedDate(): Date
+        fun lastEditedUserId(): Identifier?
+        fun lastEditedDate(): Date?
 
         fun userReference() =
             DataCreator.getSingleReference(User::class.java, userPostingId())

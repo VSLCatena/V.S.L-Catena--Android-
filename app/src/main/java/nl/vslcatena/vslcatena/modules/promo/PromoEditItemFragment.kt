@@ -1,4 +1,4 @@
-package nl.vslcatena.vslcatena.modules.news
+package nl.vslcatena.vslcatena.modules.promo
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -20,24 +20,24 @@ import nl.vslcatena.vslcatena.util.login.AuthenticationLevel
 import nl.vslcatena.vslcatena.util.login.UserProvider
 import java.util.*
 
-@AuthenticationLevel(Role.ADMIN)
-class NewsEditItemFragment : BaseCoroutineFragment() {
+@AuthenticationLevel(Role.USER)
+class PromoEditItemFragment : BaseCoroutineFragment() {
 
     private var editId: Identifier? = null
-    private var editItem: News? = null
+    private var editItem: PromoItem? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         if (arguments != null) {
-            editId = NewsEditItemFragmentArgs.fromBundle(arguments).editId?.let {
+            editId = PromoEditItemFragmentArgs.fromBundle(arguments).editId?.let {
                 Identifier(it)
             }
         }
 
         editId?.let { editId ->
             showProgress(true)
-            DataCreator.getSingleReference(News::class.java, editId)
+            DataCreator.getSingleReference(PromoItem::class.java, editId)
                 .observeOnce(this, Observer {
                     editItem = it
                     title.setText(it.title)
@@ -61,11 +61,11 @@ class NewsEditItemFragment : BaseCoroutineFragment() {
             post.isEnabled = false
 
             // We launch a coroutine to post the news item
-            launch { postNewsItem() }
+            launch { postPromoItem() }
         }
     }
 
-    suspend fun postNewsItem() {
+    suspend fun postPromoItem() {
         val newTitle = title.text?.toString()
         val newContent = content.text?.toString()
 
@@ -76,10 +76,10 @@ class NewsEditItemFragment : BaseCoroutineFragment() {
         }
 
         // If we are editing an item use that item, otherwise we create a new one
-        val newsItem = editItem ?: News(editId, "", "", UserProvider.getUser()!!.id, Date())
+        val promoItem = editItem ?: PromoItem(editId, "", "")
 
         // Change the things that need to be changed
-        newsItem.apply {
+        promoItem.apply {
             title = newTitle
             content = newContent
             userLastEdited = UserProvider.getUser()!!.id
@@ -87,7 +87,7 @@ class NewsEditItemFragment : BaseCoroutineFragment() {
         }
 
         // And then we await the result
-        val result = newsItem.save().await()
+        val result = promoItem.save().await()
 
 
         if (result.isSuccesful()) {

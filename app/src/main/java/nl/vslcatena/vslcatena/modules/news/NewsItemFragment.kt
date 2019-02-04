@@ -20,9 +20,8 @@ import nl.vslcatena.vslcatena.util.data.DataCreator
 import nl.vslcatena.vslcatena.util.extensions.formatReadable
 import nl.vslcatena.vslcatena.util.extensions.observeOnce
 import nl.vslcatena.vslcatena.util.extensions.setImageFromFirebaseStorage
-import nl.vslcatena.vslcatena.util.login.LoginProvider
+import nl.vslcatena.vslcatena.util.login.UserProvider
 import nl.vslcatena.vslcatena.util.login.AuthenticationLevel
-import java.text.SimpleDateFormat
 
 /**
  * Fragment for showing a single newsItem.
@@ -81,7 +80,7 @@ class NewsItemFragment : BaseFragment() {
         inflater.inflate(R.menu.edit_icon_menu, menu)
         inflater.inflate(R.menu.delete_icon_menu, menu)
 
-        LoginProvider.currentUser.observe(this, Observer {
+        UserProvider.currentUser.observe(this, Observer {
             if (it?.hasClearance(Role.ADMIN) == true) {
                 menu?.findItem(R.id.edit)?.isVisible = true
                 menu?.findItem(R.id.delete)?.isVisible = true

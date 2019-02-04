@@ -13,7 +13,7 @@ import nl.vslcatena.vslcatena.models.viewmodels.UserPool
 import nl.vslcatena.vslcatena.util.abstractions.FirestorePagingFragment
 import nl.vslcatena.vslcatena.util.componentholders.PostHeaderViewHolder
 import nl.vslcatena.vslcatena.util.data.DataCreator
-import nl.vslcatena.vslcatena.util.login.LoginProvider
+import nl.vslcatena.vslcatena.util.login.UserProvider
 import nl.vslcatena.vslcatena.util.login.AuthenticationLevel
 
 @AuthenticationLevel(Role.USER)
@@ -38,7 +38,7 @@ class NewsListFragment : FirestorePagingFragment<News, NewsListFragment.NewsView
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater) {
         inflater.inflate(R.menu.add_icon_menu, menu)
 
-        LoginProvider.currentUser.observe(this, Observer { user ->
+        UserProvider.currentUser.observe(this, Observer { user ->
             menu?.findItem(R.id.add)?.isVisible = user.hasClearance(Role.ADMIN)
         })
         super.onCreateOptionsMenu(menu, inflater)
@@ -46,7 +46,7 @@ class NewsListFragment : FirestorePagingFragment<News, NewsListFragment.NewsView
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         if (item?.itemId == R.id.add) {
-            if (LoginProvider.getUser()?.hasClearance(Role.ADMIN) == true) {
+            if (UserProvider.getUser()?.hasClearance(Role.ADMIN) == true) {
                 findNavController().navigate(R.id.newsEditItemFragment)
             }
             return true
