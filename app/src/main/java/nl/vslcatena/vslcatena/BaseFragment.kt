@@ -2,10 +2,12 @@ package nl.vslcatena.vslcatena
 
 
 import android.app.AlertDialog
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
@@ -59,7 +61,8 @@ abstract class BaseFragment : Fragment() {
         if (user == null) {
             if (BuildConfig.DEBUG)
                 Log.d(AUTH_LOG_TAG, "User is not logged in, redirecting to login page")
-            findNavController().navigate(NavGraphDirections.actionGlobalLoginFragment())
+            startActivity(Intent(context!!, LoginActivity::class.java))
+            (activity as? AppCompatActivity)?.finish()
             return
         }
 

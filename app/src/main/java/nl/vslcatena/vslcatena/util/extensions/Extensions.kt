@@ -27,26 +27,6 @@ fun Fragment.applyArguments(applyFunction: (bundle: Bundle) -> Unit) {
 }
 
 
-//Updates the values in a BaseModel subclass.
-// Removed Because it can't be observed
-//fun <T: BaseModel> BaseModel.updateDataFromFirebase(){
-//    FirebaseDatabase.getInstance().getReference("${this.javaClass.getAnnotation(DataReference::class.java)!!.listReference}/$id")
-//            .addListenerForSingleValueEvent(object : ValueEventListener {
-//                override fun onCancelled(p0: DatabaseError) {
-//
-//                }
-//
-//                override fun onDataChange(p0: DataSnapshot) {
-//                    val newData = Deserializer.deserializeObject(p0, this.javaClass)
-//                    this.javaClass.declaredFields.forEach {field ->
-//                        field.isAccessible = true
-//                        field.set(this@updateDataFromFirebase, field.get(newData))
-//                    }
-//                }
-//            })
-//}
-
-
 fun <T> LiveData<T>.observeOnce(owner: LifecycleOwner, observer: Observer<T>) {
     observe(owner, object : Observer<T> {
         override fun onChanged(data: T) {
@@ -84,5 +64,5 @@ suspend fun <T> Task<T>.await(): Result<T?> {
     }
 }
 
-private val sdf = SimpleDateFormat("d MMMM yyyy hh:mm", Locale.getDefault())
-fun Date.formatReadable(): String = sdf.format(this)
+fun Date.formatReadable(): String =
+    SimpleDateFormat("EEEE d MMMM yyyy HH:mm", Locale.getDefault()).format(this)

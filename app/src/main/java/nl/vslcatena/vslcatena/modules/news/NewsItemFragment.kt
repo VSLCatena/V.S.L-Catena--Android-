@@ -7,6 +7,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import kotlinx.android.synthetic.main.news_item.*
 import kotlinx.android.synthetic.main.post_header.*
@@ -14,14 +15,13 @@ import nl.vslcatena.vslcatena.BaseFragment
 import nl.vslcatena.vslcatena.R
 import nl.vslcatena.vslcatena.models.Identifier
 import nl.vslcatena.vslcatena.models.Role
-import nl.vslcatena.vslcatena.models.User
-import nl.vslcatena.vslcatena.util.LiveDataWrapper
+import nl.vslcatena.vslcatena.models.viewmodels.UserPool
+import nl.vslcatena.vslcatena.util.componentholders.PostHeaderViewHolder
 import nl.vslcatena.vslcatena.util.data.DataCreator
-import nl.vslcatena.vslcatena.util.extensions.formatReadable
 import nl.vslcatena.vslcatena.util.extensions.observeOnce
 import nl.vslcatena.vslcatena.util.extensions.setImageFromFirebaseStorage
-import nl.vslcatena.vslcatena.util.login.UserProvider
 import nl.vslcatena.vslcatena.util.login.AuthenticationLevel
+import nl.vslcatena.vslcatena.util.login.UserProvider
 
 /**
  * Fragment for showing a single newsItem.
@@ -30,11 +30,16 @@ import nl.vslcatena.vslcatena.util.login.AuthenticationLevel
 @AuthenticationLevel(Role.USER)
 class NewsItemFragment : BaseFragment() {
 
-    private val user = LiveDataWrapper<User>()
+    private lateinit var userPool: UserPool
     private lateinit var news: LiveData<News>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        userPool = ViewModelProviders.of(this).get(UserPool::class.java)
+        news = DataCreator.getSingleReference(
+            News::class.java,
+            Identifier(NewsItemFragmentArgs.fromBundle(arguments).itemId)
+        )
         setHasOptionsMenu(true)
     }
 
@@ -47,32 +52,20 @@ class NewsItemFragment : BaseFragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        news = DataCreator.getSingleReference(
-            News::class.java,
-            Identifier(NewsItemFragmentArgs.fromBundle(arguments).itemId)
-        )
-
+        val viewHolder = PostHeaderViewHolder<News>(userPool, view)
         // Hook the news user to the user observer
-        news.observeOnce(this, Observer { user.wrap(it.userReference()) })
-
         news.observe(this, Observer {
-            item_title.text = it.title
-            item_content.text = it.content
-            postHeaderPostDate.text = it.date.formatReadable()
+            title.text = it.title
+            content.text = it.content
 
-            if (it.date != it.dateLastEdited) {
-                DataCreator.getSingleReference(User::class.java, it.lastEditedUserId())
-                    .observeOnce(this, Observer { editUser ->
-                        postHeaderEditText.visibility = View.VISIBLE
-                        postHeaderEditText.text =
-                            getString(R.string.post_header_edited, it.dateLastEdited.formatReadable(), editUser.name)
-                    })
-            }
+            viewHolder.bind(it)
         })
 
-        user.observe(this, Observer {
-            postHeaderUserName.text = it.name
-            postHeaderUserImage.setImageFromFirebaseStorage(it.getThumbnailRef())
+        news.observeOnce(this, Observer { news ->
+            userPool.getUser(news.user).observeOnce(this, Observer {
+                postHeaderUserName.text = it.name
+                postHeaderUserImage.setImageFromFirebaseStorage(it.getThumbnailRef())
+            })
         })
     }
 
@@ -81,12 +74,9 @@ class NewsItemFragment : BaseFragment() {
         inflater.inflate(R.menu.delete_icon_menu, menu)
 
         UserProvider.currentUser.observe(this, Observer {
-            if (it?.hasClearance(Role.ADMIN) == true) {
-                menu?.findItem(R.id.edit)?.isVisible = true
-                menu?.findItem(R.id.delete)?.isVisible = true
-            } else {
-                menu?.findItem(R.id.edit)?.isVisible = false
-                menu?.findItem(R.id.delete)?.isVisible = false
+            (it?.hasClearance(Role.ADMIN) == true).let { hasClearance ->
+                menu?.findItem(R.id.edit)?.isVisible = hasClearance
+                menu?.findItem(R.id.delete)?.isVisible = hasClearance
             }
         })
 
@@ -111,26 +101,7 @@ class NewsItemFragment : BaseFragment() {
                             news.value?.title ?: "???"
                         )
                     )
-                    .setPositiveButton(R.string.general_yes) { _, _ ->
-                        news.value?.let { news ->
-                            if (news.id != null) {
-                                DataCreator.delete(news)
-                                    .addOnCompleteListener {
-                                        Toast.makeText(
-                                            context,
-                                            R.string.news_item_delete_successful,
-                                            Toast.LENGTH_LONG
-                                        ).show()
-                                        findNavController().popBackStack()
-                                    }
-                                    .addOnFailureListener {
-                                        Toast.makeText(context, it.message, Toast.LENGTH_LONG)
-                                            .show()
-                                    }
-
-                            }
-                        }
-                    }
+                    .setPositiveButton(R.string.general_yes) { _, _ -> delete() }
                     .setNegativeButton(R.string.general_no) { _, _ -> }
                     .show()
 
@@ -138,5 +109,24 @@ class NewsItemFragment : BaseFragment() {
             else -> return false
         }
         return true
+    }
+
+    private fun delete() {
+        news.value?.let { news ->
+            news.delete()
+                .addOnCompleteListener {
+                    Toast.makeText(
+                        context,
+                        R.string.news_item_delete_successful,
+                        Toast.LENGTH_LONG
+                    ).show()
+                    findNavController().popBackStack()
+                }
+                .addOnFailureListener {
+                    Toast.makeText(context, it.message, Toast.LENGTH_LONG)
+                        .show()
+                }
+
+        }
     }
 }

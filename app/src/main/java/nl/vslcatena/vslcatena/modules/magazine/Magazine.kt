@@ -1,5 +1,6 @@
 package nl.vslcatena.vslcatena.modules.magazine
 
+import com.google.firebase.Timestamp
 import nl.vslcatena.vslcatena.util.data.BaseModel
 import nl.vslcatena.vslcatena.util.data.DataReference
 import nl.vslcatena.vslcatena.models.Identifier
@@ -11,11 +12,11 @@ import java.util.*
 data class Magazine(
     override val id: Identifier,
     val title: String,
-    val publish_date: Date,
+    val publish_date: Timestamp,
     override var userLastEdited: Identifier? = UserProvider.getUser()?.id,
-    override var dateLastEdited: Date? = Date()
+    override var dateLastEdited: Timestamp? = Timestamp(Date())
 ) : BaseModel {
-    constructor() : this(Identifier(""), "", Date())
+    constructor() : this(Identifier(""), "", Timestamp(Date()))
 
     fun getCoverPictureRef() = Paths.getStorageMagazineCoverPath(id)
     fun getPdfRef() = Paths.getStorageMagazinePdfPath(id)

@@ -6,6 +6,7 @@ import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import nl.vslcatena.vslcatena.models.Identifier
+import java.lang.IllegalStateException
 
 object DataCreator {
 
@@ -60,13 +61,15 @@ object DataCreator {
         ).add(item)
     }
 
-    fun edit(item: BaseModel): Task<Void> {
+    fun edit(item: BaseModel): Task<out Any> {
         return FirebaseFirestore.getInstance().document(
             getSingleReferenceString(item)
         ).set(item)
     }
 
-    fun delete(item: BaseModel): Task<Void> {
+    fun delete(item: BaseModel): Task<out Any> {
+        if (item.id == null) throw IllegalStateException("Id is null")
+
         return FirebaseFirestore.getInstance().document(
             getSingleReferenceString(item)
         ).delete()

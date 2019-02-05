@@ -1,6 +1,7 @@
 package nl.vslcatena.vslcatena.util.data
 
 import com.google.android.gms.tasks.Task
+import com.google.firebase.Timestamp
 import com.google.firebase.firestore.Exclude
 import com.google.firebase.firestore.IgnoreExtraProperties
 import nl.vslcatena.vslcatena.models.Identifier
@@ -16,7 +17,8 @@ interface BaseModel : Serializable {
     @get:Exclude
     val id: Identifier?
     var userLastEdited: Identifier?
-    var dateLastEdited: Date?
+    var dateLastEdited: Timestamp?
 
-    fun save(): Task<out Any> = DataCreator.set(this)
+    fun save(): Task<out Any?> = DataCreator.set(this)
+    fun delete(): Task<out Any?> = DataCreator.delete(this)
 }

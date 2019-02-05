@@ -2,10 +2,12 @@ package nl.vslcatena.vslcatena
 
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
+import android.app.Activity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
@@ -15,10 +17,8 @@ import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.onNavDestinationSelected
 import androidx.navigation.ui.setupWithNavController
-import kotlinx.android.synthetic.main.base.*
+import kotlinx.android.synthetic.main.activity_base.*
 import nl.vslcatena.vslcatena.util.login.UserProvider
-import android.app.Activity
-import android.view.inputmethod.InputMethodManager
 
 
 class BaseActivity : AppCompatActivity() {
@@ -27,7 +27,7 @@ class BaseActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        super.setContentView(R.layout.base)
+        setContentView(R.layout.activity_base)
         setSupportActionBar(toolbar)
 
         navController = findNavController(R.id.nav_host)
@@ -59,16 +59,14 @@ class BaseActivity : AppCompatActivity() {
 
 
         UserProvider.currentUser.observe(this, Observer { user ->
-            drawer_layout.apply {
-                findViewById<TextView>(R.id.drawer_name).let {
-                    it.visibility = View.VISIBLE
-                    it.text = user?.name
-                }
+            findViewById<TextView>(R.id.drawer_name)?.let {
+                it.visibility = View.VISIBLE
+                it.text = user?.name
+            }
 
-                findViewById<TextView>(R.id.drawer_user_id).let {
-                    it.visibility = View.VISIBLE
-                    it.text = user?.id?.value
-                }
+            findViewById<TextView>(R.id.drawer_user_id)?.let {
+                it.visibility = View.VISIBLE
+                it.text = user?.email
             }
         })
     }
@@ -112,14 +110,14 @@ class BaseActivity : AppCompatActivity() {
      */
     fun showProgress(show: Boolean) {
         val shortAnimTime = resources.getInteger(android.R.integer.config_shortAnimTime).toLong()
-        login_progress.visibility = if (show) View.VISIBLE else View.GONE
-        login_progress.animate()
+        progress.visibility = if (show) View.VISIBLE else View.GONE
+        progress.animate()
             .setDuration(shortAnimTime)
             .alpha((if (show) 1 else 0).toFloat())
             .setListener(object : AnimatorListenerAdapter() {
                 override fun onAnimationEnd(animation: Animator) {
-                    if (login_progress != null)
-                        login_progress.visibility = if (show) View.VISIBLE else View.GONE
+                    if (progress != null)
+                        progress.visibility = if (show) View.VISIBLE else View.GONE
                 }
             })
     }

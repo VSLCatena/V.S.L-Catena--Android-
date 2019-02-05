@@ -1,56 +1,55 @@
-package nl.vslcatena.vslcatena.modules.login
+package nl.vslcatena.vslcatena
 
-
+import android.animation.Animator
+import android.animation.AnimatorListenerAdapter
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.text.TextUtils
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
-import androidx.navigation.fragment.findNavController
+import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
-import kotlinx.android.synthetic.main.fragment_login.*
+import kotlinx.android.synthetic.main.activity_login.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
-import nl.vslcatena.vslcatena.BaseCoroutineFragment
-import nl.vslcatena.vslcatena.R
-import nl.vslcatena.vslcatena.models.Role
-import nl.vslcatena.vslcatena.util.login.UserProvider
 import nl.vslcatena.vslcatena.util.Result
-import nl.vslcatena.vslcatena.util.login.AuthenticationLevel
+import nl.vslcatena.vslcatena.util.login.UserProvider
+import kotlin.coroutines.CoroutineContext
+
+class LoginActivity : AppCompatActivity(), CoroutineScope {
+
+    lateinit var job: Job
+    override val coroutineContext: CoroutineContext
+        get() = Dispatchers.Main + job
 
 
-/**
- * Fragment that handles the Login.
- *
- */
-@AuthenticationLevel(Role.ANONYMOUS)
-class LoginFragment : BaseCoroutineFragment() {
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.fragment_login, container, false)
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        job = Job()
+        setContentView(R.layout.activity_login)
 
         sign_in_button.setOnClickListener { launch { attemptLogin() } }
         forgot_password_button.setOnClickListener {
             Toast.makeText(
-                context,
+                this,
                 "Moet nog geimplementeerd worden",
                 Toast.LENGTH_SHORT
             ).show()
         }
-        Toast.makeText(context, "Username: test, Password: test", Toast.LENGTH_LONG).show()
+        Toast.makeText(this, "Username: test, Password: test", Toast.LENGTH_LONG).show()
 
         if (FirebaseAuth.getInstance()?.currentUser != null) {
             launch { attemptLoginByFirebase() }
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        job.cancel()
     }
 
     private suspend fun attemptLoginByFirebase() {
@@ -93,12 +92,12 @@ class LoginFragment : BaseCoroutineFragment() {
         val result = UserProvider.authenticate(userNameString, passwordStr)
         if (result is Result.Success) {
             val imm =
-                activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-            imm.hideSoftInputFromWindow(view?.windowToken, 0)
+                getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            imm.hideSoftInputFromWindow(currentFocus?.windowToken, 0)
             goToNext()
         } else {
             Toast.makeText(
-                context!!,
+                this,
                 result.getExceptionOrNull()?.message ?: "Unknown error",
                 Toast.LENGTH_LONG
             ).show()
@@ -106,7 +105,24 @@ class LoginFragment : BaseCoroutineFragment() {
 
     }
 
+    /**
+     * Shows the progress UI and hides the login form.
+     */
+    fun showProgress(show: Boolean) {
+        val shortAnimTime = resources.getInteger(android.R.integer.config_shortAnimTime).toLong()
+        login_progress.visibility = if (show) View.VISIBLE else View.GONE
+        login_progress.animate()
+            .setDuration(shortAnimTime)
+            .alpha((if (show) 1 else 0).toFloat())
+            .setListener(object : AnimatorListenerAdapter() {
+                override fun onAnimationEnd(animation: Animator) {
+                    if (login_progress != null)
+                        login_progress.visibility = if (show) View.VISIBLE else View.GONE
+                }
+            })
+    }
+
     private fun goToNext() {
-        findNavController().navigate(R.id.newsFragment)
+        startActivity(Intent(this, BaseActivity::class.java))
     }
 }

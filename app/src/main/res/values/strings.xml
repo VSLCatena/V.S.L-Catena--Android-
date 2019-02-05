@@ -15,12 +15,17 @@
     <string name="general_yes">Ja</string>
     <string name="general_no">Nee</string>
 
-    <string name="post_header_edited">Laatst aangepast op %s door %s</string>
+    <string name="post_header_edited">Laatst aangepast door: %s</string>
 
     <string name="news_new_item">Nieuwe nieuws item</string>
     <string name="news_item_delete_successful">Nieuws item succesvol verwijderd</string>
     <string name="news_item_delete_confirmation">Verwijderen van nieuws item</string>
     <string name="news_item_delete_confirmation_content">Weet je zeker dat je de nieuws item \'%s\' wilt verwijderen?</string>
+
+    <string name="promo_new_item">Nieuwe nieuws item</string>
+    <string name="promo_item_delete_successful">Nieuws item succesvol verwijderd</string>
+    <string name="promo_item_delete_confirmation">Verwijderen van nieuws item</string>
+    <string name="promo_item_delete_confirmation_content">Weet je zeker dat je de nieuws item \'%s\' wilt verwijderen?</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Not implemented yet</string>

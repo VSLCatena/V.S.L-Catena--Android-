@@ -5,25 +5,25 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.annotation.CallSuper
 import androidx.lifecycle.Observer
+import com.google.firebase.Timestamp
 import nl.vslcatena.vslcatena.R
 import nl.vslcatena.vslcatena.models.Identifier
 import nl.vslcatena.vslcatena.models.User
 import nl.vslcatena.vslcatena.models.viewmodels.UserPool
-import nl.vslcatena.vslcatena.util.abstractions.FirestorePagingFragment
+import nl.vslcatena.vslcatena.util.abstractions.BaseFirestorePagingFragment
 import nl.vslcatena.vslcatena.util.abstractions.LifecycleAwareViewHolder
 import nl.vslcatena.vslcatena.util.data.DataCreator
 import nl.vslcatena.vslcatena.util.extensions.formatReadable
 import nl.vslcatena.vslcatena.util.extensions.observeOnce
 import nl.vslcatena.vslcatena.util.extensions.setImageFromFirebaseStorage
-import java.util.*
 
 /**
  * ViewHolder for post_header.xml that can be used in different viewholders
  */
-abstract class PostHeaderViewHolder<T : PostHeaderViewHolder.PostHeaderProvider>(
+open class PostHeaderViewHolder<T : PostHeaderViewHolder.PostHeaderProvider>(
     private val userPool: UserPool,
     view: View
-) : LifecycleAwareViewHolder(view), Observer<User?>, FirestorePagingFragment.Binder<T> {
+) : LifecycleAwareViewHolder(view), Observer<User>, BaseFirestorePagingFragment.Binder<T> {
 
     val thumbnailView: ImageView = itemView.findViewById(R.id.postHeaderUserImage)
     val userNameView: TextView = itemView.findViewById(R.id.postHeaderUserName)
@@ -39,27 +39,23 @@ abstract class PostHeaderViewHolder<T : PostHeaderViewHolder.PostHeaderProvider>
 
     @CallSuper
     override fun bind(item: T) {
-        dateView.text = item.datePosted().formatReadable()
-        userPool.getUser(item.userPostingId()).observe(this, this)
+        dateView.text = item.datePosted().toDate().formatReadable()
+        userPool.getUser(item.userPostingId()).observeOnce(this, this)
         val lastEditedId = item.lastEditedUserId()
         if (lastEditedId != null && item.datePosted() != item.lastEditedDate()) {
             userPool.getUser(lastEditedId).observeOnce(this, Observer {
                 editedView.visibility = View.VISIBLE
                 editedView.text = editedView.context
-                    .getString(
-                        R.string.post_header_edited,
-                        item.lastEditedDate()?.formatReadable() ?: "",
-                        it.name
-                    )
+                    .getString(R.string.post_header_edited, it.name)
             })
         }
     }
 
     interface PostHeaderProvider {
         fun userPostingId(): Identifier
-        fun datePosted(): Date
+        fun datePosted(): Timestamp
         fun lastEditedUserId(): Identifier?
-        fun lastEditedDate(): Date?
+        fun lastEditedDate(): Timestamp?
 
         fun userReference() =
             DataCreator.getSingleReference(User::class.java, userPostingId())

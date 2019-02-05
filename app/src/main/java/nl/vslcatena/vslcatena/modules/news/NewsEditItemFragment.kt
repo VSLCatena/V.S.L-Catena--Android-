@@ -4,48 +4,22 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
-import androidx.lifecycle.Observer
-import androidx.navigation.fragment.findNavController
+import com.google.firebase.Timestamp
 import kotlinx.android.synthetic.main.fragment_news_edit.*
-import kotlinx.coroutines.launch
-import nl.vslcatena.vslcatena.BaseCoroutineFragment
 import nl.vslcatena.vslcatena.R
-import nl.vslcatena.vslcatena.models.Identifier
 import nl.vslcatena.vslcatena.models.Role
-import nl.vslcatena.vslcatena.util.data.DataCreator
+import nl.vslcatena.vslcatena.util.Result
+import nl.vslcatena.vslcatena.util.abstractions.EditItemFragment
 import nl.vslcatena.vslcatena.util.extensions.await
-import nl.vslcatena.vslcatena.util.extensions.observeOnce
 import nl.vslcatena.vslcatena.util.login.AuthenticationLevel
 import nl.vslcatena.vslcatena.util.login.UserProvider
 import java.util.*
 
 @AuthenticationLevel(Role.ADMIN)
-class NewsEditItemFragment : BaseCoroutineFragment() {
+class NewsEditItemFragment : EditItemFragment<News>() {
 
-    private var editId: Identifier? = null
-    private var editItem: News? = null
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        if (arguments != null) {
-            editId = NewsEditItemFragmentArgs.fromBundle(arguments).editId?.let {
-                Identifier(it)
-            }
-        }
-
-        editId?.let { editId ->
-            showProgress(true)
-            DataCreator.getSingleReference(News::class.java, editId)
-                .observeOnce(this, Observer {
-                    editItem = it
-                    title.setText(it.title)
-                    content.setText(it.content)
-                    showProgress(false)
-                })
-        }
-    }
+    override fun getItemClass() = News::class.java
+    override fun getSubmitButton() = post
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -55,56 +29,35 @@ class NewsEditItemFragment : BaseCoroutineFragment() {
         return inflater.inflate(R.layout.fragment_news_edit, container, false)
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        post.setOnClickListener {
-            post.isClickable = false
-            post.isEnabled = false
+    override fun onChanged(news: News?) {
+        if (news == null) return
 
-            // We launch a coroutine to post the news item
-            launch { postNewsItem() }
-        }
+        title.setText(news.title)
+        content.setText(news.content)
     }
 
-    suspend fun postNewsItem() {
+    override suspend fun doSubmit(): Result<out Any?> {
         val newTitle = title.text?.toString()
         val newContent = content.text?.toString()
 
         // We check if both title and content is filled in
         if (newTitle.isNullOrBlank() || newContent.isNullOrBlank()) {
-            Toast.makeText(context, "Je moet wel alles invullen!", Toast.LENGTH_LONG).show()
-            return
+            return Result.Failure(IllegalStateException("Je moet wel alles invullen!"))
         }
 
         // If we are editing an item use that item, otherwise we create a new one
-        val newsItem = editItem ?: News(editId, "", "", UserProvider.getUser()!!.id, Date())
+        val newsItem = editItem
+            ?: News(editId, "", "", UserProvider.getUser()!!.id, Timestamp(Date()))
 
         // Change the things that need to be changed
         newsItem.apply {
             title = newTitle
             content = newContent
             userLastEdited = UserProvider.getUser()!!.id
-            dateLastEdited = Date()
+            dateLastEdited = Timestamp(Date())
         }
 
         // And then we await the result
-        val result = newsItem.save().await()
-
-
-        if (result.isSuccesful()) {
-            // If we were successful we show a toast and we go back
-            Toast.makeText(context, "Succesvol geplaatst!", Toast.LENGTH_LONG)
-                .show()
-            findNavController().popBackStack()
-        } else {
-            // If we failed we show a toast telling what went wrong, and then re-enable the button
-            Toast.makeText(
-                context,
-                "Oops! Er ging iets fout: " + result.getExceptionOrNull()?.message,
-                Toast.LENGTH_LONG
-            )
-                .show()
-            post.isEnabled = true
-            post.isClickable = true
-        }
+        return newsItem.save().await()
     }
 }

@@ -13,7 +13,7 @@ import com.google.firebase.firestore.Query
 import com.google.firebase.storage.FirebaseStorage
 import nl.vslcatena.vslcatena.R
 import nl.vslcatena.vslcatena.models.Role
-import nl.vslcatena.vslcatena.util.abstractions.FirestorePagingFragment
+import nl.vslcatena.vslcatena.util.abstractions.BaseFirestorePagingFragment
 import nl.vslcatena.vslcatena.util.data.DataCreator
 import nl.vslcatena.vslcatena.util.downloadingFiles.downloadFileFromUrl
 import nl.vslcatena.vslcatena.util.login.AuthenticationLevel
@@ -21,7 +21,7 @@ import java.text.SimpleDateFormat
 
 
 @AuthenticationLevel(Role.USER)
-class MagazineListFragment : FirestorePagingFragment<Magazine, MagazineListFragment.MagazineViewHolder>() {
+class MagazineListFragment : BaseFirestorePagingFragment<Magazine, MagazineListFragment.MagazineViewHolder>() {
     override fun getItemClass() = Magazine::class.java
     override fun getItemLayout() = R.layout.magazine_item
     override fun createItemViewHolder(view: View) = MagazineViewHolder(view)
@@ -64,7 +64,7 @@ class MagazineListFragment : FirestorePagingFragment<Magazine, MagazineListFragm
     }
 
     inner class MagazineViewHolder(val view: View)
-        : RecyclerView.ViewHolder(view), FirestorePagingFragment.Binder<Magazine>
+        : RecyclerView.ViewHolder(view), BaseFirestorePagingFragment.Binder<Magazine>
     {
         val mCoverImageView: ImageView = itemView.findViewById(R.id.coverView)
         val mTitleView: TextView = itemView.findViewById(R.id.titleView)

@@ -4,47 +4,28 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
-import androidx.lifecycle.Observer
-import androidx.navigation.fragment.findNavController
-import kotlinx.android.synthetic.main.fragment_news_edit.*
-import kotlinx.coroutines.launch
-import nl.vslcatena.vslcatena.BaseCoroutineFragment
+import com.google.firebase.Timestamp
+import kotlinx.android.synthetic.main.fragment_promo_edit.*
 import nl.vslcatena.vslcatena.R
-import nl.vslcatena.vslcatena.models.Identifier
 import nl.vslcatena.vslcatena.models.Role
-import nl.vslcatena.vslcatena.util.data.DataCreator
+import nl.vslcatena.vslcatena.util.Result
+import nl.vslcatena.vslcatena.util.abstractions.EditItemFragment
 import nl.vslcatena.vslcatena.util.extensions.await
-import nl.vslcatena.vslcatena.util.extensions.observeOnce
 import nl.vslcatena.vslcatena.util.login.AuthenticationLevel
 import nl.vslcatena.vslcatena.util.login.UserProvider
 import java.util.*
 
 @AuthenticationLevel(Role.USER)
-class PromoEditItemFragment : BaseCoroutineFragment() {
+class PromoEditItemFragment : EditItemFragment<PromoItem>() {
 
-    private var editId: Identifier? = null
-    private var editItem: PromoItem? = null
+    override fun getItemClass() = PromoItem::class.java
+    override fun getSubmitButton() = post
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    override fun onChanged(promoItem: PromoItem?) {
+        if (promoItem == null) return
 
-        if (arguments != null) {
-            editId = PromoEditItemFragmentArgs.fromBundle(arguments).editId?.let {
-                Identifier(it)
-            }
-        }
-
-        editId?.let { editId ->
-            showProgress(true)
-            DataCreator.getSingleReference(PromoItem::class.java, editId)
-                .observeOnce(this, Observer {
-                    editItem = it
-                    title.setText(it.title)
-                    content.setText(it.content)
-                    showProgress(false)
-                })
-        }
+        title.setText(promoItem.title)
+        content.setText(promoItem.content)
     }
 
     override fun onCreateView(
@@ -52,27 +33,16 @@ class PromoEditItemFragment : BaseCoroutineFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_news_edit, container, false)
+        return inflater.inflate(R.layout.fragment_promo_edit, container, false)
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        post.setOnClickListener {
-            post.isClickable = false
-            post.isEnabled = false
-
-            // We launch a coroutine to post the news item
-            launch { postPromoItem() }
-        }
-    }
-
-    suspend fun postPromoItem() {
+    override suspend fun doSubmit(): Result<out Any?> {
         val newTitle = title.text?.toString()
         val newContent = content.text?.toString()
 
         // We check if both title and content is filled in
         if (newTitle.isNullOrBlank() || newContent.isNullOrBlank()) {
-            Toast.makeText(context, "Je moet wel alles invullen!", Toast.LENGTH_LONG).show()
-            return
+            return Result.Failure(IllegalStateException("Je moet wel alles invullen!"))
         }
 
         // If we are editing an item use that item, otherwise we create a new one
@@ -83,28 +53,10 @@ class PromoEditItemFragment : BaseCoroutineFragment() {
             title = newTitle
             content = newContent
             userLastEdited = UserProvider.getUser()!!.id
-            dateLastEdited = Date()
+            dateLastEdited = Timestamp(Date())
         }
 
         // And then we await the result
-        val result = promoItem.save().await()
-
-
-        if (result.isSuccesful()) {
-            // If we were successful we show a toast and we go back
-            Toast.makeText(context, "Succesvol geplaatst!", Toast.LENGTH_LONG)
-                .show()
-            findNavController().popBackStack()
-        } else {
-            // If we failed we show a toast telling what went wrong, and then re-enable the button
-            Toast.makeText(
-                context,
-                "Oops! Er ging iets fout: " + result.getExceptionOrNull()?.message,
-                Toast.LENGTH_LONG
-            )
-                .show()
-            post.isEnabled = true
-            post.isClickable = true
-        }
+        return promoItem.save().await()
     }
 }

@@ -1,5 +1,6 @@
 package nl.vslcatena.vslcatena.modules.promo
 
+import com.google.firebase.Timestamp
 import nl.vslcatena.vslcatena.util.data.BaseModel
 import nl.vslcatena.vslcatena.util.data.DataReference
 import nl.vslcatena.vslcatena.models.Identifier
@@ -22,17 +23,17 @@ data class PromoItem(
     var title: String,
     var content: String,
     val user: Identifier = UserProvider.getUser()!!.id,
-    val date: Date = Date(),
+    val date: Timestamp = Timestamp(Date()),
     var imageRef: String? = null,
     val adventureId: Int? = null,
     override var userLastEdited: Identifier? = user,
-    override var dateLastEdited: Date? = date
+    override var dateLastEdited: Timestamp? = date
 
 ) : BaseModel, PostHeaderViewHolder.PostHeaderProvider {
     constructor() : this(Identifier(""), "", "")
 
     override fun datePosted() = date
     override fun userPostingId() = user
-    override fun lastEditedUserId(): Identifier? = userLastEdited
-    override fun lastEditedDate(): Date? = dateLastEdited
+    override fun lastEditedUserId() = userLastEdited
+    override fun lastEditedDate() = dateLastEdited
 }

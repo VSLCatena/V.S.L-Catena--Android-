@@ -1,5 +1,6 @@
 package nl.vslcatena.vslcatena.modules.bingo
 
+import com.google.firebase.Timestamp
 import nl.vslcatena.vslcatena.util.data.BaseModel
 import nl.vslcatena.vslcatena.util.data.DataReference
 import nl.vslcatena.vslcatena.models.Identifier
@@ -16,7 +17,7 @@ data class BingoItem(
     override val id: Identifier,
     val content: String,
     override var userLastEdited: Identifier? = UserProvider.getUser()?.id,
-    override var dateLastEdited: Date? = Date()
+    override var dateLastEdited: Timestamp? = Timestamp(Date())
 ) : BaseModel {
     constructor() : this(Identifier(""), "")
 }
