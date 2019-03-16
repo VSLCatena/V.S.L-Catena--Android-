@@ -9,7 +9,7 @@ object Paths {
 
     //Magazines
     fun getStorageMagazineCoverPath(magazineId: Identifier) =
-        "magazines/cover/${magazineId}_cover.jpg"
+        "magazines/cover/${magazineId.value}_cover.jpg"
 
-    fun getStorageMagazinePdfPath(magazineId: Identifier) = "magazines/pdf/$magazineId.pdf"
+    fun getStorageMagazinePdfPath(magazineId: Identifier) = "magazines/pdf/${magazineId.value}.pdf"
 }

@@ -32,14 +32,14 @@ class MagazineListFragment : BaseFirestorePagingFragment<Magazine, MagazineListF
 
 
     private fun onMagazineClicked(magazine: Magazine) {
-        AlertDialog.Builder(context!!).apply {
-            setTitle("Ontekend downloaden?")
-            setMessage("Wil je de ontketend '${magazine.title}' downloaden?")
-            setPositiveButton("Ja"){ _: DialogInterface, _: Int ->
-                requestDownload(magazine)
-            }
-            setNegativeButton("Nee"){ _: DialogInterface, _: Int ->  }
-        }.show()
+        AlertDialog.Builder(context!!)
+                .setTitle("Ontketend downloaden?")
+                .setMessage("Wil je de ontketend '${magazine.title}' downloaden?")
+                .setPositiveButton("Ja"){ _: DialogInterface, _: Int ->
+                    requestDownload(magazine)
+                }
+                .setNegativeButton("Nee"){ _: DialogInterface, _: Int ->  }
+                .show()
     }
 
     private fun requestDownload(magazine: Magazine) {
@@ -66,23 +66,23 @@ class MagazineListFragment : BaseFirestorePagingFragment<Magazine, MagazineListF
     inner class MagazineViewHolder(val view: View)
         : RecyclerView.ViewHolder(view), BaseFirestorePagingFragment.Binder<Magazine>
     {
-        val mCoverImageView: ImageView = itemView.findViewById(R.id.coverView)
-        val mTitleView: TextView = itemView.findViewById(R.id.titleView)
-        val mDateView: TextView = itemView.findViewById(R.id.dateView)
+        private val mCoverImageView: ImageView = itemView.findViewById(R.id.coverView)
+        private val mTitleView: TextView = itemView.findViewById(R.id.titleView)
+        private val mDateView: TextView = itemView.findViewById(R.id.dateView)
 
         override fun bind(item: Magazine) {
             mTitleView.text = item.title
-            mDateView.text =  SimpleDateFormat("MMMM yyyy").format(item.publish_date)
-            Glide.with(this@MagazineListFragment)
-                .load(
-                    FirebaseStorage.getInstance()
-                        .getReference(item.getCoverPictureRef())
-                        .apply { println("path is $path") }
-                ).into(mCoverImageView)
-
+            mDateView.text =  SimpleDateFormat("MMMM yyyy").format(item.publish_date.toDate())
+            loadImage(item)
             view.setOnClickListener {
                 onMagazineClicked(item)
             }
+        }
+        private fun loadImage(item: Magazine){
+            Glide.with(this@MagazineListFragment).load(
+                    FirebaseStorage.getInstance()
+                            .getReference(item.getCoverPictureRef())
+            ).into(mCoverImageView)
         }
     }
 
