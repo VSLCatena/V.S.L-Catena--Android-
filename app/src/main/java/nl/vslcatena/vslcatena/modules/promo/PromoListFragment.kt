@@ -19,7 +19,7 @@ class PromoListFragment : FirestorePagingFragment<PromoItem, PromoListFragment.P
     override fun getItemLayout() = R.layout.promo_item
     override fun createItemViewHolder(view: View) = PromoViewHolder(view)
 
-    inner class PromoViewHolder(view: View) : PostHeaderViewHolder<PromoItem>(userPool, view) {
+    inner class PromoViewHolder(val view: View) : PostHeaderViewHolder<PromoItem>(userPool, view) {
 
         val titleView: TextView = itemView.findViewById(R.id.title)
         val contentView: TextView = itemView.findViewById(R.id.content)
@@ -30,7 +30,7 @@ class PromoListFragment : FirestorePagingFragment<PromoItem, PromoListFragment.P
             titleView.text = item.title
             contentView.text = item.content
 
-            view?.setOnClickListener {
+            view.setOnClickListener {
                 item.id?.let { id ->
                     findNavController().navigate(
                         PromoListFragmentDirections.actionPromoFragmentToPromoItemFragment(id.value)
