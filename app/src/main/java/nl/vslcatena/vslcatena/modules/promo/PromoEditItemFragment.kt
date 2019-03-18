@@ -29,7 +29,7 @@ import java.io.File
 class PromoEditItemFragment : EditItemFragment<PromoItem>() {
 
     //The uri of the selected image (if any)
-    var imageUri: Uri? = null
+    private var imageUri: Uri? = null
 
     override fun getItemClass() = PromoItem::class.java
     override fun getSubmitButton() = post
@@ -81,21 +81,16 @@ class PromoEditItemFragment : EditItemFragment<PromoItem>() {
 
         // And then we await the result
 
-        //using uuid for filename based upon https://stackoverflow.com/a/37444839
-        if(imageUri != null) {
-            //todo remove the old image (if any) from firestore?
-            val uuid = UUID.randomUUID().toString()
-            val extention = File(imageUri!!.path).extension
-            promoItem.imageRef = "$uuid.$extention"
-            val storage = FirebaseStorage.getInstance()
-                    .getReference("promo/${promoItem.imageRef}")
-            return storage.putFile(imageUri!!)
-                    .continueWith { promoItem.save() }
-                    .await()
+        val result = promoItem.save().await()
+        return if(imageUri != null && result.getValueOrNull() is PromoItem){
+            val promoItemResult = result.getValueOrNull() as PromoItem
+            val fileExtention = File(imageUri!!.path).extension
+            FirebaseStorage.getInstance()
+                    .getReference(Paths.getStoragePromoImage(promoItemResult.id!!, fileExtention))
+                    .putFile(imageUri!!).await()
         } else {
-            return promoItem.save().await()
+            result
         }
-
     }
 
 
