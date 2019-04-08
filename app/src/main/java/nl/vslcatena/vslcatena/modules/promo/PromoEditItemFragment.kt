@@ -15,9 +15,7 @@ import nl.vslcatena.vslcatena.util.login.AuthenticationLevel
 import nl.vslcatena.vslcatena.util.login.UserProvider
 import java.util.*
 import android.content.Intent
-import android.app.Activity.RESULT_OK
 import android.net.Uri
-import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.storage.FirebaseStorage
 import nl.vslcatena.vslcatena.util.Paths
 import nl.vslcatena.vslcatena.util.selectingFiles.letUserPickImage
@@ -80,14 +78,23 @@ class PromoEditItemFragment : EditItemFragment<PromoItem>() {
         }
 
         // And then we await the result
-
+        // If we have an image to upload, upload it.
+        // Todo: Do the uploading async or have a loading circle appear.
         val result = promoItem.save().await()
-        return if(imageUri != null && result.getValueOrNull() is PromoItem){
-            val promoItemResult = result.getValueOrNull() as PromoItem
-            val fileExtention = File(imageUri!!.path).extension
+        return if(imageUri != null){
+            val promoItemResult = (result.getValueOrNull() as PromoItem?)?: promoItem
+            val fileExtension = File(imageUri!!.path).extension
+            val path = Paths.getStoragePromoImage(UserProvider.getUser()!!.id, promoItemResult.id!!, fileExtension)
+
+            // save the image to firebase
             FirebaseStorage.getInstance()
-                    .getReference(Paths.getStoragePromoImage(promoItemResult.id!!, fileExtention))
+                    .getReference(path)
                     .putFile(imageUri!!).await()
+
+            // update the image url to firebase
+            promoItemResult.imageRef = path
+            promoItemResult.save().await()
+
         } else {
             result
         }

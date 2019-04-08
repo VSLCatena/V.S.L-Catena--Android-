@@ -12,4 +12,7 @@ object Paths {
         "magazines/cover/${magazineId.value}_cover.jpg"
 
     fun getStorageMagazinePdfPath(magazineId: Identifier) = "magazines/pdf/${magazineId.value}.pdf"
+    fun getStoragePromoImage(userId: Identifier, id: Identifier, fileExtension: String) = "promo/${userId.value}/${id.value}.$fileExtension"
+
+
 }
