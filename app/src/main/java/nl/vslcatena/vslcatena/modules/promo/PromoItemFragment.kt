@@ -47,7 +47,7 @@ class PromoItemFragment : BaseFragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.promo_item, container, false)
+        return inflater.inflate(R.layout.fragment_promo_item, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -56,7 +56,7 @@ class PromoItemFragment : BaseFragment() {
         promoItem.observe(this, Observer {
             title.text = it.title
             content.text = it.content
-
+            it.imageRef?.let { it1 -> promoImage.setImageFromFirebaseStorage(it1) }
             viewHolder.bind(it)
         })
 
