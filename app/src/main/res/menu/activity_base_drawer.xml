@@ -59,7 +59,7 @@
         android:title="Instellingen">
         <menu>
             <item
-                android:id="@+id/nav_user_settings"
+                android:id="@+id/settingsFragment"
                 android:icon="@drawable/ic_menu_camera"
                 android:title="Gebruikersinstellingen" />
         </menu>
