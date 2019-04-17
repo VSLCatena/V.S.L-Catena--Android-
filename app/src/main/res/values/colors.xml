@@ -7,4 +7,8 @@
 
     <!--https://www.materialui.co/colors-->
     <color name="grey_400">#BDBDBD</color>
+
+
+    <color name="transparent_grey">#BFBFBFCC</color>
+
 </resources>
