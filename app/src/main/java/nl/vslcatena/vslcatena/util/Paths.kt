@@ -5,7 +5,7 @@ import nl.vslcatena.vslcatena.models.Identifier
 object Paths {
 
     //Users
-    fun getStorageThumbnailPath(userId: Identifier) = "thumbnails/${userId.value}.jpg"
+    fun getStorageThumbnailPath(userId: Identifier) = "profile/${userId.value}/thumbnail.jpg"
 
     //Magazines
     fun getStorageMagazineCoverPath(magazineId: Identifier) =

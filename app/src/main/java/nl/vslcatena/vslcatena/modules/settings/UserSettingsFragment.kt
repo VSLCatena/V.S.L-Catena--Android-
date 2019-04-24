@@ -19,6 +19,9 @@ import nl.vslcatena.vslcatena.util.selectingFiles.onUserPickedImage
  *  - Change his profile picture
  *  - Manage subscriptions?
  *
+ *
+ * For the view go to: fragment_settings.xml
+ * This view is loaded using a style in values/styles.xml
  */
 class UserSettingsFragment : PreferenceFragmentCompat() {
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
@@ -53,6 +56,7 @@ class UserSettingsFragment : PreferenceFragmentCompat() {
                         .putFile(imageUri!!)
                         .addOnSuccessListener { Toast.makeText(this.context, "profile picture uploaded succesfully", Toast.LENGTH_LONG).show() }
                         .addOnFailureListener { Toast.makeText(this.context, "profile picture upload failed", Toast.LENGTH_LONG).show()}
+
 
             }
         }

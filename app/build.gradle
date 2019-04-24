@@ -58,6 +58,9 @@ dependencies {
     implementation 'android.arch.navigation:navigation-ui-ktx:1.0.0-alpha11'
     implementation 'androidx.paging:paging-runtime:2.0.0'
 
+    implementation 'androidx.core:core-ktx:1.0.0'
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+
     implementation 'com.github.bumptech.glide:glide:4.8.0-SNAPSHOT'
     kapt 'androidx.annotation:annotation:1.0.1'
     kapt 'com.github.bumptech.glide:compiler:4.8.0-SNAPSHOT'
