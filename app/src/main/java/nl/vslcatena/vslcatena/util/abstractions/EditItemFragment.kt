@@ -5,10 +5,11 @@ import android.view.View
 import android.widget.Toast
 import androidx.annotation.CallSuper
 import androidx.lifecycle.Observer
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.button.MaterialButton
 import kotlinx.coroutines.launch
-import nl.vslcatena.vslcatena.BaseCoroutineFragment
+import nl.vslcatena.vslcatena.BaseFragment
 import nl.vslcatena.vslcatena.models.Identifier
 import nl.vslcatena.vslcatena.modules.news.NewsEditItemFragmentArgs
 import nl.vslcatena.vslcatena.util.Result
@@ -16,7 +17,7 @@ import nl.vslcatena.vslcatena.util.data.BaseModel
 import nl.vslcatena.vslcatena.util.data.DataCreator
 import nl.vslcatena.vslcatena.util.extensions.observeOnce
 
-abstract class EditItemFragment<T : BaseModel> : BaseCoroutineFragment(), Observer<T> {
+abstract class EditItemFragment<T : BaseModel> : BaseFragment(), Observer<T> {
 
     protected var editId: Identifier? = null
     protected var editItem: T? = null
@@ -55,7 +56,7 @@ abstract class EditItemFragment<T : BaseModel> : BaseCoroutineFragment(), Observ
             button.isEnabled = false
         }
 
-        launch {
+        lifecycleScope.launch {
             val result = doSubmit()
 
             if (result.isSuccesful()) {

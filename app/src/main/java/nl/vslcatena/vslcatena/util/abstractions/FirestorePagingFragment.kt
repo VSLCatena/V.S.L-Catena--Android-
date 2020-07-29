@@ -26,7 +26,7 @@ abstract class FirestorePagingFragment<T : BaseModel, B> : BaseFirestorePagingFr
         userPool = ViewModelProviders.of(this).get(UserPool::class.java)
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater) {
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.add_icon_menu, menu)
 
         UserProvider.currentUser.observe(this, Observer { user ->
@@ -35,7 +35,7 @@ abstract class FirestorePagingFragment<T : BaseModel, B> : BaseFirestorePagingFr
         super.onCreateOptionsMenu(menu, inflater)
     }
 
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item?.itemId == R.id.add) {
             if (UserProvider.getUser()?.hasClearance(requiredAddRole()) == true) {
                 findNavController().navigate(addNavigationId())

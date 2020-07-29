@@ -16,6 +16,7 @@ import nl.vslcatena.vslcatena.models.Role
 import nl.vslcatena.vslcatena.util.abstractions.BaseFirestorePagingFragment
 import nl.vslcatena.vslcatena.util.data.DataCreator
 import nl.vslcatena.vslcatena.util.downloadingFiles.downloadFileFromUrl
+import nl.vslcatena.vslcatena.util.extensions.formatReadable
 import nl.vslcatena.vslcatena.util.login.AuthenticationLevel
 import java.text.SimpleDateFormat
 
@@ -72,12 +73,13 @@ class MagazineListFragment : BaseFirestorePagingFragment<Magazine, MagazineListF
 
         override fun bind(item: Magazine) {
             mTitleView.text = item.title
-            mDateView.text =  SimpleDateFormat("MMMM yyyy").format(item.publish_date.toDate())
+            mDateView.text =  item.publish_date.formatReadable()
             loadImage(item)
             view.setOnClickListener {
                 onMagazineClicked(item)
             }
         }
+
         private fun loadImage(item: Magazine){
             Glide.with(this@MagazineListFragment).load(
                     FirebaseStorage.getInstance()

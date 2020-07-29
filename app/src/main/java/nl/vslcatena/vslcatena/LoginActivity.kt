@@ -11,12 +11,14 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.OAuthProvider
 import kotlinx.android.synthetic.main.activity_login.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import nl.vslcatena.vslcatena.util.Result
+import nl.vslcatena.vslcatena.util.extensions.await
 import nl.vslcatena.vslcatena.util.login.UserProvider
 import kotlin.coroutines.CoroutineContext
 

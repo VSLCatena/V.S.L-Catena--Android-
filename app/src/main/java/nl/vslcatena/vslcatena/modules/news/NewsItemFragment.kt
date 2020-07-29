@@ -64,12 +64,12 @@ class NewsItemFragment : BaseFragment() {
         news.observeOnce(this, Observer { news ->
             userPool.getUser(news.user).observeOnce(this, Observer {
                 postHeaderUserName.text = it.name
-                postHeaderUserImage.setImageFromFirebaseStorage(it.getThumbnailRef())
+                postHeaderUserImage.setImageFromFirebaseStorage(it.getProfileImage())
             })
         })
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater) {
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.edit_icon_menu, menu)
         inflater.inflate(R.menu.delete_icon_menu, menu)
 
@@ -83,7 +83,7 @@ class NewsItemFragment : BaseFragment() {
         super.onCreateOptionsMenu(menu, inflater)
     }
 
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item?.itemId) {
             R.id.edit -> {
                 findNavController().navigate(

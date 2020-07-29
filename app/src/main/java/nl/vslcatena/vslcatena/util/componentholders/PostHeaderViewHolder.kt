@@ -34,12 +34,12 @@ open class PostHeaderViewHolder<T : PostHeaderViewHolder.PostHeaderProvider>(
         if (user == null) return
 
         userNameView.text = user.name
-        thumbnailView.setImageFromFirebaseStorage(user.getThumbnailRef())
+        thumbnailView.setImageFromFirebaseStorage(user.getProfileImage())
     }
 
     @CallSuper
     override fun bind(item: T) {
-        dateView.text = item.datePosted().toDate().formatReadable()
+        dateView.text = item.datePosted().formatReadable()
         userPool.getUser(item.userPostingId()).observeOnce(this, this)
         val lastEditedId = item.lastEditedUserId()
         if (lastEditedId != null && item.datePosted() != item.lastEditedDate()) {

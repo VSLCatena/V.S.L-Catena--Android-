@@ -34,7 +34,6 @@ class UserSettingsFragment : PreferenceFragmentCompat() {
         UserProvider.getUser()?.let {
             username.text = it.name
             userId.text = "LIT-nummer?"
-            userId.text = it.email
             profileImage.setImageFromFirebaseStorage(Paths.getStorageThumbnailPath(it.id))
 
             profileImage.setOnClickListener {

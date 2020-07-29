@@ -6,6 +6,9 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
@@ -23,6 +26,18 @@ abstract class BaseFragment : Fragment() {
         handleUserAuth()
     }
 
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        return onCreateViewId()?.let {
+            inflater.inflate(it, container, false)
+        } ?: return super.onCreateView(inflater, container, savedInstanceState)
+    }
+
+    open fun onCreateViewId(): Int? = null
+
     override fun onResume() {
         super.onResume()
         handleUserAuth()
@@ -35,11 +50,12 @@ abstract class BaseFragment : Fragment() {
         // If we don't need authentication, we skip checking
         if (authentication == null) {
             Toast.makeText(
-                context!!,
+                requireContext(),
                 "All BaseFragments are REQUIRED to contain an AuthenticationLevel annotation. ${this::class.java} doesn't contain any.",
                 Toast.LENGTH_LONG
             ).show()
-            activity!!.finish()
+
+            requireActivity().finish()
             return
         }
 
@@ -61,7 +77,7 @@ abstract class BaseFragment : Fragment() {
         if (user == null) {
             if (BuildConfig.DEBUG)
                 Log.d(AUTH_LOG_TAG, "User is not logged in, redirecting to login page")
-            startActivity(Intent(context!!, LoginActivity::class.java))
+            startActivity(Intent(requireContext(), LoginActivity::class.java))
             (activity as? AppCompatActivity)?.finish()
             return
         }
@@ -70,7 +86,7 @@ abstract class BaseFragment : Fragment() {
         if (!user.role().hasClearance(authentication.role)) {
             if (BuildConfig.DEBUG)
                 Log.d(AUTH_LOG_TAG, "User is logged in but doesn't have enough clearance")
-            Toast.makeText(context!!, R.string.auth_no_clearance, Toast.LENGTH_LONG).show()
+            Toast.makeText(requireContext(), R.string.auth_no_clearance, Toast.LENGTH_LONG).show()
             findNavController().popBackStack()
             return
         }
@@ -87,7 +103,7 @@ abstract class BaseFragment : Fragment() {
     ): Boolean {
         if (
             permissions.all {
-                ContextCompat.checkSelfPermission(context!!, it) ==
+                ContextCompat.checkSelfPermission(requireContext(), it) ==
                         PackageManager.PERMISSION_GRANTED
             }
         ) return true
@@ -115,7 +131,7 @@ abstract class BaseFragment : Fragment() {
         grantResults: IntArray
     ) {
         val wasSuccessful = permissions.all {
-            ContextCompat.checkSelfPermission(context!!, it) == PackageManager.PERMISSION_GRANTED
+            ContextCompat.checkSelfPermission(requireContext(), it) == PackageManager.PERMISSION_GRANTED
         }
         permissionRequestQueue[requestCode]?.invoke(wasSuccessful)
     }

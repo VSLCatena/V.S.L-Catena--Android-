@@ -9,6 +9,7 @@ import android.widget.BaseAdapter
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.google.firebase.firestore.FirebaseFirestore
@@ -25,17 +26,9 @@ import nl.vslcatena.vslcatena.util.login.AuthenticationLevel
 
 @AuthenticationLevel(Role.USER)
 class BingoFragment : BaseFragment() {
-    private lateinit var bingoViewModel: BingoViewModel
+    private val bingoViewModel: BingoViewModel by viewModels()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        bingoViewModel = ViewModelProviders.of(this).get(BingoViewModel::class.java)
-    }
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ) = inflater.inflate(R.layout.fragment_bingo, container, false)
+    override fun onCreateViewId() = R.layout.fragment_bingo
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         FirebaseFirestore.getInstance().collection("bingo").get().addOnCompleteListener { task ->

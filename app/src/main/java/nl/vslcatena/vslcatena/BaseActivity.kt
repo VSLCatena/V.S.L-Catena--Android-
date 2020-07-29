@@ -63,11 +63,6 @@ class BaseActivity : AppCompatActivity() {
                 it.visibility = View.VISIBLE
                 it.text = user?.name
             }
-
-            findViewById<TextView>(R.id.drawer_user_id)?.let {
-                it.visibility = View.VISIBLE
-                it.text = user?.email
-            }
         })
     }
 

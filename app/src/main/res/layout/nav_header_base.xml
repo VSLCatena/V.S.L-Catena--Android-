@@ -29,12 +29,4 @@
         tools:visibility="visible"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
 
-    <TextView
-        android:id="@+id/drawer_user_id"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:visibility="gone"
-        tools:visibility="visible"
-        tools:text="00-000" />
-
 </LinearLayout>

@@ -63,12 +63,12 @@ class PromoItemFragment : BaseFragment() {
         promoItem.observeOnce(this, Observer { item ->
             userPool.getUser(item.user).observeOnce(this, Observer {
                 postHeaderUserName.text = it.name
-                postHeaderUserImage.setImageFromFirebaseStorage(it.getThumbnailRef())
+                postHeaderUserImage.setImageFromFirebaseStorage(it.getProfileImage())
             })
         })
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater) {
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.edit_icon_menu, menu)
         inflater.inflate(R.menu.delete_icon_menu, menu)
 
@@ -82,7 +82,7 @@ class PromoItemFragment : BaseFragment() {
         super.onCreateOptionsMenu(menu, inflater)
     }
 
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item?.itemId) {
             R.id.edit -> {
                 findNavController().navigate(
