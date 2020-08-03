@@ -1,127 +1,73 @@
 package nl.vslcatena.vslcatena
 
-import android.animation.Animator
-import android.animation.AnimatorListenerAdapter
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.text.TextUtils
-import android.view.View
-import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.google.android.gms.tasks.Task
+import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.OAuthProvider
 import kotlinx.android.synthetic.main.activity_login.*
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
-import nl.vslcatena.vslcatena.util.Result
-import nl.vslcatena.vslcatena.util.extensions.await
-import nl.vslcatena.vslcatena.util.login.UserProvider
-import kotlin.coroutines.CoroutineContext
 
-class LoginActivity : AppCompatActivity(), CoroutineScope {
 
-    lateinit var job: Job
-    override val coroutineContext: CoroutineContext
-        get() = Dispatchers.Main + job
-
+class LoginActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        job = Job()
         setContentView(R.layout.activity_login)
 
-        sign_in_button.setOnClickListener { launch { attemptLogin() } }
-        forgot_password_button.setOnClickListener {
-            Toast.makeText(
-                this,
-                "Moet nog geimplementeerd worden",
-                Toast.LENGTH_SHORT
-            ).show()
-        }
-        Toast.makeText(this, "Username: test, Password: test", Toast.LENGTH_LONG).show()
-
-        if (FirebaseAuth.getInstance()?.currentUser != null) {
-            launch { attemptLoginByFirebase() }
-        }
+        sign_in_button.setOnClickListener { login() }
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        job.cancel()
-    }
+    override fun onResume() {
+        super.onResume()
 
-    private suspend fun attemptLoginByFirebase() {
-        showProgress(true)
-        if (UserProvider.doLoginFromFirebase().isSuccesful()) {
-            showProgress(false)
+        if (FirebaseAuth.getInstance().currentUser != null) {
             goToNext()
-        } else {
-            showProgress(false)
-        }
-
-    }
-
-    /**
-     * Attempts to sign in or register the account specified by the login form.
-     * If there are form errors (invalid email, missing fields, etc.), the
-     * errors are presented and no actual login attempt is made.
-     */
-    private suspend fun attemptLogin() {
-        // Reset errors.
-        username.error = null
-        password.error = null
-
-        // Store values at the time of the login attempt.
-        val userNameString = username.text.toString()
-        val passwordStr = password.text.toString()
-
-
-        // Check if username is filled in.
-        if (TextUtils.isEmpty(userNameString)) {
-            username.error = getString(R.string.error_field_required)
-            username.requestFocus()
             return
         }
 
-        // Show a progress spinner, and kick off a background task to
-        // perform the user login attempt.
-        showProgress(true)
-
-        val result = UserProvider.authenticate(userNameString, passwordStr)
-        if (result is Result.Success) {
-            val imm =
-                getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-            imm.hideSoftInputFromWindow(currentFocus?.windowToken, 0)
-            goToNext()
-        } else {
-            Toast.makeText(
-                this,
-                result.getExceptionOrNull()?.message ?: "Unknown error",
-                Toast.LENGTH_LONG
-            ).show()
-        }
-
+        checkIfLoggingIn()
     }
 
-    /**
-     * Shows the progress UI and hides the login form.
-     */
-    fun showProgress(show: Boolean) {
-        val shortAnimTime = resources.getInteger(android.R.integer.config_shortAnimTime).toLong()
-        login_progress.visibility = if (show) View.VISIBLE else View.GONE
-        login_progress.animate()
-            .setDuration(shortAnimTime)
-            .alpha((if (show) 1 else 0).toFloat())
-            .setListener(object : AnimatorListenerAdapter() {
-                override fun onAnimationEnd(animation: Animator) {
-                    if (login_progress != null)
-                        login_progress.visibility = if (show) View.VISIBLE else View.GONE
-                }
-            })
+    private fun login() {
+        val oauthProvider = OAuthProvider.newBuilder("microsoft.com")
+            .addCustomParameter("tenant", "2ea9aa7a-5a05-49cb-8307-63467188daa2")
+            .build()
+
+        FirebaseAuth.getInstance().startActivityForSignInWithProvider(this, oauthProvider)
+            .addOnCanceledListener {
+                Toast.makeText(this, "Not logged in", Toast.LENGTH_LONG).show()
+            }
+            .addOnCompleteListener {
+                Toast.makeText(this, it.toString(), Toast.LENGTH_LONG).show()
+            }
+    }
+
+    private fun checkIfLoggingIn() {
+        // If there are no pending results, we return immediately
+        val pendingResultTask: Task<AuthResult> = FirebaseAuth.getInstance().pendingAuthResult
+            ?: return
+
+        // There's something already here! Finish the sign-in for your user.
+        pendingResultTask
+            .addOnSuccessListener {
+                // User is signed in.
+                // IdP data available in
+                // authResult.getAdditionalUserInfo().getProfile().
+                // The OAuth access token can also be retrieved:
+                // authResult.getCredential().getAccessToken().
+                // The OAuth ID token can also be retrieved:
+                // authResult.getCredential().getIdToken().
+                goToNext()
+            }.addOnFailureListener {
+                Toast.makeText(
+                    this,
+                    getString(R.string.general_error, it.message),
+                    Toast.LENGTH_LONG
+                ).show()
+            }
     }
 
     private fun goToNext() {

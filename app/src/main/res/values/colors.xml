@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorPrimaryVariant">#303F9F</color>
+    <color name="colorOnPrimary">#EEE</color>
     <color name="colorAccent">#7300C5</color>
     <color name="colorSecondary">@color/colorAccent</color>
+    <color name="colorOnSecondary">#EEE</color>
 
     <!--https://www.materialui.co/colors-->
     <color name="grey_400">#BDBDBD</color>

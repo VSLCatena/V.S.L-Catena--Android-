@@ -35,6 +35,7 @@ class NewsItemFragment : BaseFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val arguments = arguments ?: return // TODO
         userPool = ViewModelProviders.of(this).get(UserPool::class.java)
         news = DataCreator.getSingleReference(
             News::class.java,

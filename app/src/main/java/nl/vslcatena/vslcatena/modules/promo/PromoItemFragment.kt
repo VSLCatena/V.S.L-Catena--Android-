@@ -35,6 +35,7 @@ class PromoItemFragment : BaseFragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         userPool = ViewModelProviders.of(this).get(UserPool::class.java)
+        val arguments = arguments ?: return // TODO
         promoItem = DataCreator.getSingleReference(
             PromoItem::class.java,
             Identifier(PromoItemFragmentArgs.fromBundle(arguments).itemId)

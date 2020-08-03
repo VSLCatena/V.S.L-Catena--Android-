@@ -26,6 +26,7 @@ abstract class EditItemFragment<T : BaseModel> : BaseFragment(), Observer<T> {
         super.onCreate(savedInstanceState)
 
         if (arguments != null) {
+            val arguments = arguments ?: return // TODO
             editId = NewsEditItemFragmentArgs.fromBundle(arguments).editId?.let {
                 Identifier(it)
             }

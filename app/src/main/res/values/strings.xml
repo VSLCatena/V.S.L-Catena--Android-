@@ -14,6 +14,7 @@
     <string name="general_post">Plaats</string>
     <string name="general_yes">Ja</string>
     <string name="general_no">Nee</string>
+    <string name="general_error">Er ging iets fout: %s</string>
 
     <string name="post_header_edited">Laatst aangepast door: %s</string>
 
@@ -34,8 +35,7 @@
     <string name="prompt_email">Gebruikersnaam</string>
     <string name="prompt_password">Wachtwoord</string>
     <string name="login_forgot_password">Wachtwoord vergeten</string>
-    <string name="action_sign_in">Log in</string>
-    <string name="action_sign_in_short">Log in</string>
+    <string name="action_sign_in">Log in met Catena account</string>
     <string name="error_incorrect_password">Onjuist wachtwoord</string>
     <string name="error_field_required">Dit veld is vereist</string>
     <string name="button_go_to_adventure">Ga naar activiteit</string>

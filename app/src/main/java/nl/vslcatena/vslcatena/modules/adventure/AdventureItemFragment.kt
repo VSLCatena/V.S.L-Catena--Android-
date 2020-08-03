@@ -23,6 +23,7 @@ class AdventureItemFragment : BaseFragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        val arguments = arguments ?: return
         observeSingle<Adventure>(
             AdventureItemFragmentArgs.fromBundle(arguments).itemId,
             Observer {
